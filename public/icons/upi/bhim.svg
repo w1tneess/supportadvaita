@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <!-- Official BHIM Brand Mark -->
+  <rect width="192" height="192" rx="40" fill="#FFFFFF"/>
+  <g transform="translate(42, 28) scale(3.4)">
+    <!-- Orange primary chevron -->
+    <path d="M12.5 0L24.8 17.5L12.5 35H0L12.3 17.5L0 0H12.5Z" fill="#F47920"/>
+    <!-- Green companion chevron -->
+    <path d="M20.5 0L32.8 17.5L20.5 35H15.5L24.8 17.5L15.5 0H20.5Z" fill="#007934"/>
+  </g>
+</svg>

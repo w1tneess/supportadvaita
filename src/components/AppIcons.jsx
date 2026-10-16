@@ -1,33 +1,34 @@
 import React, { useState } from 'react'
 
 /**
- * Official Google Play Store app icon assets for Indian payment apps
+ * UPI Payment App Icons — app-icon-style SVGs with official brand colors
+ * Stored in /icons/upi/ as clean vector SVGs for crisp Retina rendering
  */
 const APP_ICON_MAP = {
   gpay: {
-    src: '/apps/gpay.svg',
+    src: '/icons/upi/gpay.svg',
     alt: 'Google Pay',
   },
   phonepe: {
-    src: '/apps/phonepe.png',
+    src: '/icons/upi/phonepe.svg',
     alt: 'PhonePe',
   },
   paytm: {
-    src: '/apps/paytm.svg',
+    src: '/icons/upi/paytm.svg',
     alt: 'Paytm',
   },
   bhim: {
-    src: '/apps/bhim.svg',
+    src: '/icons/upi/bhim.svg',
     alt: 'BHIM UPI',
   },
   cred: {
-    src: '/apps/cred.png',
+    src: '/icons/upi/cred.svg',
     alt: 'CRED',
   },
   fampay: {
-    src: '/apps/fampay.svg',
+    src: '/icons/upi/fampay.svg',
     alt: 'FamPay',
-    tile: 'bg-black',
+    tile: 'bg-neutral-900',
   },
 }
 
@@ -50,7 +51,7 @@ export function AppIconRenderer({ appId, className = "w-6 h-6" }) {
       src={app.src}
       alt={app.alt}
       onError={() => setError(true)}
-      className={`${className} object-contain rounded-md select-none pointer-events-none shadow-2xs`}
+      className={`${className} object-contain select-none pointer-events-none`}
       loading="eager"
       decoding="async"
     />
@@ -58,4 +59,4 @@ export function AppIconRenderer({ appId, className = "w-6 h-6" }) {
 }
 
 // Brand logos need a fixed tile (not theme-dependent) so official colors stay legible in light and dark.
-export const appTileClass = (appId) => APP_ICON_MAP[appId]?.tile || 'bg-white'
+export const appTileClass = (appId) => APP_ICON_MAP[appId]?.tile || ''

@@ -270,8 +270,8 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
         </div>
       </header>
 
-      {/* Primary Page Container */}
-      <main className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-20 space-y-20 sm:space-y-28">
+      {/* Primary Page Container - max-w-5xl for balanced editorial density */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-16 sm:space-y-24">
 
         {/* SECTION A: Hero & Narrative Header */}
         <section className="space-y-6">
@@ -282,207 +282,215 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif tracking-tight leading-[1.1] text-neutral-950 dark:text-neutral-50 max-w-3xl">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif tracking-tight leading-tight sm:leading-[1.12] text-neutral-950 dark:text-neutral-50 max-w-3xl">
             Sponsor public research, digital archives, and open software.
           </h1>
 
-          <p className="text-lg sm:text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl leading-relaxed font-normal">
+          <p className="text-[15px] sm:text-base text-neutral-700 dark:text-neutral-300 max-w-2xl leading-relaxed font-normal">
             I am Advaita Chandra, a 16-year-old student, independent researcher, and developer based in West Bengal, India. Outside of my school curriculum, I build open-source utilities, investigate philosophical and historical records, and curate free digital archives.
           </p>
 
           <div className="pt-2 border-l-2 border-neutral-300 dark:border-neutral-700 pl-4 py-1">
-            <p className="font-serif italic text-base sm:text-lg text-neutral-800 dark:text-neutral-300 leading-snug">
+            <p className="font-serif italic text-base sm:text-lg text-neutral-800 dark:text-neutral-200 leading-snug">
               "Building open digital archives, cultural preservation tools, and free educational software without institutional gates."
             </p>
           </div>
         </section>
 
         {/* SECTION B: Unified Support / Sponsorship Module (Split View) */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-start">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
           
-          {/* Left Column: Contribution Configurator (7 cols) */}
-          <div className="lg:col-span-7 space-y-6">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-serif text-neutral-900 dark:text-neutral-100 tracking-tight">
-                Support the Research
-              </h2>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-                Choose a contribution tier or specify a custom amount. 100% directly funds infrastructure, books, and archive uptime with zero intermediary platform cuts.
-              </p>
-            </div>
+          {/* Left Column: Contribution Configurator (7 cols on md+) */}
+          <div className="md:col-span-7 flex flex-col justify-between bg-white dark:bg-[#14171A] border border-neutral-300 dark:border-[#22262B] rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-serif text-neutral-950 dark:text-neutral-50 tracking-tight">
+                  Support the Research
+                </h2>
+                <p className="text-[15px] text-neutral-700 dark:text-neutral-300 mt-1 leading-relaxed">
+                  Choose a contribution tier or specify a custom amount. 100% directly funds infrastructure, books, and archive uptime with zero intermediary platform cuts.
+                </p>
+              </div>
 
-            {/* Tiered Amount Selection (Clean Pills) */}
-            <div className="space-y-3">
-              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                Select Amount (INR)
-              </label>
+              {/* Tiered Amount Selection (Responsive 2x2 grid on mobile) */}
+              <div className="space-y-3">
+                <label className="text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+                  Select Amount (INR)
+                </label>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                {presetTiers.map((tier) => {
-                  const isSelected = !isCustom && amount === tier.value
-                  return (
-                    <button
-                      key={tier.value}
-                      type="button"
-                      onClick={() => {
-                        setAmount(tier.value)
-                        setIsCustom(false)
-                      }}
-                      className={`relative p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
-                        isSelected
-                          ? 'border-neutral-900 dark:border-neutral-100 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-950 shadow-sm'
-                          : 'border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:border-neutral-300 dark:hover:border-neutral-700 text-neutral-800 dark:text-neutral-200'
-                      }`}
-                    >
-                      {tier.badge && (
-                        <span
-                          className={`absolute -top-2 right-2 px-1.5 py-0.5 rounded text-[10px] font-medium tracking-wide uppercase ${
-                            isSelected
-                              ? 'bg-amber-400 text-neutral-950 font-semibold'
-                              : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
-                          }`}
-                        >
-                          {tier.badge}
-                        </span>
-                      )}
-                      <div className="text-lg font-semibold tracking-tight">{tier.label}</div>
-                      <div
-                        className={`text-xs mt-0.5 ${
-                          isSelected ? 'opacity-80' : 'text-neutral-500 dark:text-neutral-400'
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {presetTiers.map((tier) => {
+                    const isSelected = !isCustom && amount === tier.value
+                    return (
+                      <button
+                        key={tier.value}
+                        type="button"
+                        onClick={() => {
+                          setAmount(tier.value)
+                          setIsCustom(false)
+                        }}
+                        className={`relative p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[74px] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
+                          isSelected
+                            ? 'border-neutral-950 dark:border-neutral-100 bg-neutral-950 dark:bg-neutral-100 text-white dark:text-neutral-950 shadow-sm'
+                            : 'border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:border-neutral-400 dark:hover:border-neutral-600 text-neutral-900 dark:text-neutral-100'
                         }`}
                       >
-                        ~{tier.usd} USD
-                      </div>
-                    </button>
-                  )
-                })}
-              </div>
+                        {tier.badge && (
+                          <span
+                            className={`absolute top-2 right-2 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase pointer-events-none ${
+                              isSelected
+                                ? 'bg-amber-400 text-neutral-950'
+                                : 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800/60'
+                            }`}
+                          >
+                            {tier.badge}
+                          </span>
+                        )}
+                        <div className="text-lg font-semibold tracking-tight">{tier.label}</div>
+                        <div
+                          className={`text-xs mt-0.5 font-mono ${
+                            isSelected ? 'text-neutral-300 dark:text-neutral-700' : 'text-neutral-600 dark:text-neutral-400'
+                          }`}
+                        >
+                          ~{tier.usd} USD
+                        </div>
+                      </button>
+                    )
+                  })}
+                </div>
 
-              {/* Custom Amount Button & Input */}
-              <div className="pt-1">
-                {!isCustom ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsCustom(true)
-                      setCustomAmount('')
-                    }}
-                    className="text-xs font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 underline underline-offset-4 cursor-pointer"
-                  >
-                    + Or enter a custom amount
-                  </button>
-                ) : (
-                  <div className="flex items-center gap-2 mt-2">
-                    <div className="relative flex-1">
-                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 font-medium">
-                        ₹
-                      </span>
-                      <input
-                        type="number"
-                        min="1"
-                        max="100000"
-                        placeholder="Enter custom amount (e.g. 250)"
-                        value={customAmount}
-                        onChange={(e) => setCustomAmount(e.target.value)}
-                        className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:focus:ring-neutral-100"
-                        autoFocus
-                      />
-                    </div>
+                {/* Custom Amount Button & Input */}
+                <div className="pt-1">
+                  {!isCustom ? (
                     <button
                       type="button"
                       onClick={() => {
-                        setIsCustom(false)
-                        setAmount(150)
+                        setIsCustom(true)
+                        setCustomAmount('')
                       }}
-                      className="px-3 py-2.5 rounded-xl text-xs font-medium text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 cursor-pointer"
+                      className="text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white underline underline-offset-4 cursor-pointer"
                     >
-                      Reset
+                      + Or enter a custom amount
                     </button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Optional Donor Details (Understated Inputs) */}
-            <div className="space-y-3 pt-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                Optional Note & Handle
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <input
-                  type="text"
-                  placeholder="Your Name or @handle"
-                  value={donorName}
-                  onChange={(e) => setDonorName(e.target.value)}
-                  maxLength={30}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:focus:ring-neutral-100"
-                />
-                <input
-                  type="text"
-                  placeholder="Short note (optional)"
-                  value={donorNote}
-                  onChange={(e) => setDonorNote(e.target.value)}
-                  maxLength={50}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:focus:ring-neutral-100"
-                />
-              </div>
-            </div>
-
-            {/* Dynamic Primary Execution Call-to-Action */}
-            <div className="pt-2">
-              <a
-                href={upiUri}
-                className="w-full py-4 px-6 rounded-xl bg-neutral-950 hover:bg-neutral-800 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-neutral-950 font-semibold text-base flex items-center justify-between transition-all shadow-md active:scale-[0.99] cursor-pointer"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Smartphone className="w-5 h-5 text-neutral-300 dark:text-neutral-700" />
-                  <span>
-                    Pay {activeAmount ? `₹${activeAmount} INR` : 'Custom Amount'} via Any UPI App
-                  </span>
-                </div>
-                <div className="flex items-center gap-1 text-xs opacity-90 font-normal">
-                  {usdValue && <span>(~${usdValue} USD)</span>}
-                  <ArrowUpRight className="w-4 h-4 ml-1" />
-                </div>
-              </a>
-            </div>
-
-            {/* Direct 1-Tap App Launcher Row */}
-            <div className="space-y-2 pt-1">
-              <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
-                <span>Or open directly in your preferred app:</span>
-                <span className="text-[11px]">1-tap launch</span>
-              </div>
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                {appPayLinks.map((app) => {
-                  const href = isAndroid ? app.androidIntent : app.scheme
-                  return (
-                    <a
-                      key={app.id}
-                      href={href}
-                      className="p-2 rounded-xl border border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:bg-neutral-50 dark:hover:bg-[#1C2024] flex flex-col items-center justify-center gap-1.5 transition-all text-center group cursor-pointer"
-                      title={`Launch and pay in ${app.name}`}
-                    >
-                      <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 group-hover:scale-105 transition-transform">
-                        <AppIconRenderer appId={app.id} className="w-full h-full" />
+                  ) : (
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="relative flex-1">
+                        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-600 dark:text-neutral-400 font-medium">
+                          ₹
+                        </span>
+                        <input
+                          type="number"
+                          min="1"
+                          max="100000"
+                          placeholder="Enter custom amount (e.g. 250)"
+                          value={customAmount}
+                          onChange={(e) => setCustomAmount(e.target.value)}
+                          className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                          autoFocus
+                        />
                       </div>
-                      <span className="text-[11px] font-medium text-neutral-700 dark:text-neutral-300 truncate w-full">
-                        {app.shortName}
-                      </span>
-                    </a>
-                  )
-                })}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsCustom(false)
+                          setAmount(150)
+                        }}
+                        className="px-3 py-2.5 rounded-xl text-xs font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-neutral-100 cursor-pointer"
+                      >
+                        Reset
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
+
+              {/* Optional Donor Details (Understated Inputs) */}
+              <div className="space-y-3 pt-1">
+                <label className="text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+                  Optional Note & Handle
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <input
+                    type="text"
+                    placeholder="Your Name or @handle"
+                    value={donorName}
+                    onChange={(e) => setDonorName(e.target.value)}
+                    maxLength={30}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Short note (optional)"
+                    value={donorNote}
+                    onChange={(e) => setDonorNote(e.target.value)}
+                    maxLength={50}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+              </div>
+
+              {/* Dynamic Primary Execution Call-to-Action with Rich Interactive States */}
+              <div className="pt-2">
+                <a
+                  href={upiUri}
+                  className="w-full py-4 px-6 rounded-xl bg-neutral-950 hover:bg-neutral-800 active:bg-black text-white dark:bg-white dark:hover:bg-neutral-100 dark:active:bg-neutral-200 dark:text-neutral-950 font-semibold text-base flex items-center justify-between transition-all duration-150 shadow-md hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#14171A] active:scale-[0.99] cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Smartphone className="w-5 h-5 text-neutral-300 dark:text-neutral-700" />
+                    <span>
+                      Pay {activeAmount ? `₹${activeAmount} INR` : 'Custom Amount'} via Any UPI App
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-xs opacity-90 font-mono">
+                    {usdValue && <span>(~${usdValue} USD)</span>}
+                    <ArrowUpRight className="w-4 h-4 ml-1" />
+                  </div>
+                </a>
+              </div>
+
+              {/* Direct 1-Tap App Launcher Row */}
+              <div className="space-y-2 pt-1">
+                <div className="flex items-center justify-between text-xs text-neutral-600 dark:text-neutral-400">
+                  <span>Or open directly in your preferred app:</span>
+                  <span className="text-[11px] font-mono">1-tap launch</span>
+                </div>
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                  {appPayLinks.map((app) => {
+                    const href = isAndroid ? app.androidIntent : app.scheme
+                    return (
+                      <a
+                        key={app.id}
+                        href={href}
+                        className="p-2 rounded-xl border border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:bg-neutral-50 dark:hover:bg-[#1C2024] hover:border-neutral-400 dark:hover:border-neutral-600 flex flex-col items-center justify-center gap-1.5 transition-all text-center group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                        title={`Launch and pay in ${app.name}`}
+                      >
+                        <div className="w-6 h-6 rounded-md overflow-hidden shrink-0 group-hover:scale-105 transition-transform">
+                          <AppIconRenderer appId={app.id} className="w-full h-full" />
+                        </div>
+                        <span className="text-[11px] font-medium text-neutral-700 dark:text-neutral-300 truncate w-full">
+                          {app.shortName}
+                        </span>
+                      </a>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Micro Trust Banner */}
+            <div className="pt-2 border-t border-neutral-100 dark:border-[#22262B] text-xs text-neutral-600 dark:text-neutral-400 flex items-center justify-between">
+              <span>Direct P2P transfer</span>
+              <span>100% directly funds infrastructure • 0% fees</span>
             </div>
           </div>
 
-          {/* Right Column: Direct Scan & VPA Container (5 cols) */}
-          <div className="lg:col-span-5 bg-white dark:bg-[#14171A] border border-neutral-200 dark:border-[#22262B] rounded-2xl p-6 sm:p-7 space-y-6 shadow-sm">
+          {/* Right Column: Direct Scan & VPA Container (5 cols, hidden on small screens) */}
+          <div className="hidden md:flex md:col-span-5 flex-col justify-between bg-white dark:bg-[#14171A] border border-neutral-300 dark:border-[#22262B] rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
             
             {/* Header & Copyable VPA */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                <span className="text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
                   Scan to Pay (Desktop / QR)
                 </span>
                 <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
@@ -494,18 +502,18 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
               {/* Copyable UPI Bar */}
               <div
                 onClick={() => handleCopy(PAYMENT_CONFIG.upiId)}
-                className="flex items-center justify-between p-3 rounded-xl bg-neutral-50 dark:bg-[#0B0D0E] border border-neutral-200 dark:border-[#22262B] cursor-pointer hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors group"
+                className="flex items-center justify-between p-3 rounded-xl bg-neutral-50 dark:bg-[#0B0D0E] border border-neutral-300 dark:border-[#22262B] cursor-pointer hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors group"
                 title="Click to copy UPI address"
               >
                 <div className="flex flex-col min-w-0">
-                  <span className="text-[10px] text-neutral-500 uppercase tracking-wider">
+                  <span className="text-[10px] text-neutral-500 uppercase tracking-wider font-mono">
                     Virtual Payment Address (VPA)
                   </span>
                   <span className="font-mono text-sm font-semibold text-neutral-900 dark:text-neutral-100 truncate">
                     {PAYMENT_CONFIG.upiId}
                   </span>
                 </div>
-                <div className="p-2 rounded-lg bg-white dark:bg-[#14171A] border border-neutral-200 dark:border-[#22262B] text-neutral-700 dark:text-neutral-300 group-hover:text-neutral-950 dark:group-hover:text-white transition-colors shrink-0 ml-2">
+                <div className="p-2 rounded-lg bg-white dark:bg-[#14171A] border border-neutral-300 dark:border-[#22262B] text-neutral-700 dark:text-neutral-300 group-hover:text-neutral-950 dark:group-hover:text-white transition-colors shrink-0 ml-2">
                   {copied ? (
                     <Check className="w-4 h-4 text-emerald-500" />
                   ) : (
@@ -519,7 +527,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
             <div className="flex flex-col items-center justify-center p-5 rounded-xl bg-white border border-neutral-200 shadow-inner">
               {qrSvg ? (
                 <div
-                  className="w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center select-none"
+                  className="w-48 h-48 sm:w-52 sm:h-52 flex items-center justify-center select-none"
                   dangerouslySetInnerHTML={{ __html: qrSvg }}
                 />
               ) : (
@@ -528,10 +536,10 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                 </div>
               )}
               <div className="mt-3 text-center">
-                <span className="text-xs font-medium text-neutral-800">
+                <span className="text-xs font-semibold text-neutral-900">
                   Dynamic UPI QR for {activeAmount ? `₹${activeAmount}` : 'Custom'}
                 </span>
-                <p className="text-[11px] text-neutral-500">
+                <p className="text-[11px] text-neutral-600 mt-0.5">
                   Scan with GPay, PhonePe, Paytm, BHIM, or any banking app
                 </p>
               </div>
@@ -543,7 +551,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                 <button
                   type="button"
                   onClick={handleDownloadQr}
-                  className="flex-1 py-2.5 px-3 rounded-xl border border-neutral-200 dark:border-[#22262B] text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#1C2024] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  className="flex-1 py-2.5 px-3 rounded-xl border border-neutral-300 dark:border-[#22262B] text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#1C2024] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <QrCode className="w-3.5 h-3.5" />
                   <span>Download QR</span>
@@ -551,19 +559,19 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                 <button
                   type="button"
                   onClick={handleShare}
-                  className="flex-1 py-2.5 px-3 rounded-xl border border-neutral-200 dark:border-[#22262B] text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#1C2024] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  className="flex-1 py-2.5 px-3 rounded-xl border border-neutral-300 dark:border-[#22262B] text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#1C2024] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <Share2 className="w-3.5 h-3.5" />
                   <span>Share Page</span>
                 </button>
               </div>
 
-              <div className="text-[12px] text-neutral-500 dark:text-neutral-400 leading-relaxed space-y-1.5 border-t border-neutral-100 dark:border-[#22262B] pt-3">
+              <div className="text-[12px] text-neutral-600 dark:text-neutral-400 leading-relaxed space-y-1.5 border-t border-neutral-100 dark:border-[#22262B] pt-3">
                 <p className="flex items-start gap-1.5">
                   <span className="text-emerald-500 mt-0.5">•</span>
                   <span>Direct P2P transfer • 100% directly funds infrastructure • 0% platform fees.</span>
                 </p>
-                <p className="flex items-start gap-1.5 text-neutral-400 dark:text-neutral-500">
+                <p className="flex items-start gap-1.5 text-neutral-500 dark:text-neutral-400 text-[11px]">
                   <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
                   <span>
                     International cards unavailable as Advaita is 16 and a legal minor. UPI serves as the primary direct interoperable rail.
@@ -576,13 +584,13 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
         </section>
 
         {/* SECTION C: Selected Work & Repositories */}
-        <section className="space-y-6 pt-6">
-          <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-neutral-200 dark:border-[#22262B] pb-4">
+        <section className="space-y-6 pt-4">
+          <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-neutral-300 dark:border-[#22262B] pb-4">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-serif text-neutral-900 dark:text-neutral-100 tracking-tight">
+              <h2 className="text-2xl sm:text-3xl font-serif text-neutral-950 dark:text-neutral-50 tracking-tight">
                 Selected Work & Digital Archives
               </h2>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+              <p className="text-[15px] text-neutral-700 dark:text-neutral-300 mt-1 leading-relaxed">
                 Public software repositories, digital notebooks, and empirical datasets built independently.
               </p>
             </div>
@@ -590,52 +598,52 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
               href="https://github.com/w1tneess"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 inline-flex items-center gap-1"
+              className="text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-neutral-100 inline-flex items-center gap-1"
             >
               <span>View GitHub</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
             {featuredProjects.map((project, idx) => (
               <div
                 key={idx}
-                className="p-5 sm:p-6 rounded-2xl border border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:border-neutral-300 dark:hover:border-neutral-700 hover:shadow-sm transition-all group flex flex-col justify-between"
+                className="p-6 sm:p-7 rounded-2xl border border-neutral-300 dark:border-[#262A30] bg-white dark:bg-[#14171A] hover:border-neutral-400 dark:hover:border-neutral-600 hover:shadow-md transition-all group flex flex-col justify-between"
               >
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                    <span className="text-xs font-mono uppercase tracking-wider text-neutral-600 dark:text-neutral-400 font-semibold">
                       {project.tag}
                     </span>
-                    <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-neutral-600 dark:text-neutral-400">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-neutral-700 dark:text-neutral-300">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                       {project.status}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-serif font-medium text-neutral-900 dark:text-neutral-100 group-hover:text-black dark:group-hover:text-white transition-colors">
+                  <h3 className="text-xl font-serif font-medium text-neutral-950 dark:text-neutral-50 group-hover:text-black dark:group-hover:text-white transition-colors">
                     {project.title}
                   </h3>
 
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal">
+                  <p className="text-[15px] text-neutral-700 dark:text-neutral-300 leading-relaxed font-normal">
                     {project.description}
                   </p>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-neutral-100 dark:border-[#22262B] flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
-                  <span className="font-mono text-[11px] truncate max-w-[55%]">{project.stack}</span>
+                <div className="pt-4 mt-5 border-t border-neutral-200 dark:border-[#22262B] flex items-center justify-between text-xs text-neutral-600 dark:text-neutral-400">
+                  <span className="font-mono text-xs truncate max-w-[55%]">{project.stack}</span>
                   <div className="flex items-center gap-3 shrink-0">
                     {project.repoUrl && (
                       <a
                         href={project.repoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"
+                        className="inline-flex items-center gap-1 text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white transition-colors"
                         title="View GitHub Repository"
                       >
                         <Github className="w-3.5 h-3.5" />
-                        <span className="text-[11px] font-medium">Code</span>
+                        <span className="text-xs font-medium">Code</span>
                       </a>
                     )}
                     {project.liveUrl && (
@@ -643,10 +651,10 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-neutral-900 dark:text-neutral-100 font-semibold hover:underline underline-offset-2 transition-all"
+                        className="inline-flex items-center gap-1 text-neutral-950 dark:text-neutral-50 font-semibold hover:underline underline-offset-2 transition-all"
                         title="View Live Platform"
                       >
-                        <span className="text-[11px]">Live</span>
+                        <span className="text-xs">Live</span>
                         <ArrowUpRight className="w-3.5 h-3.5" />
                       </a>
                     )}
@@ -657,50 +665,99 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
           </div>
         </section>
 
-        {/* SECTION D: Operational Transparency (Ledger) */}
-        <section className="space-y-6 pt-6">
-          <div className="border-b border-neutral-200 dark:border-[#22262B] pb-4">
-            <h2 className="text-2xl sm:text-3xl font-serif text-neutral-900 dark:text-neutral-100 tracking-tight">
-              Operational Transparency
-            </h2>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-              Real monthly maintenance and infrastructure costs required to sustain these public tools.
-            </p>
+        {/* SECTION D: Operational Transparency (Structured Table & Progress Indicator) */}
+        <section className="space-y-6 pt-4">
+          <div className="border-b border-neutral-300 dark:border-[#22262B] pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-serif text-neutral-950 dark:text-neutral-50 tracking-tight">
+                Operational Transparency
+              </h2>
+              <p className="text-[15px] text-neutral-700 dark:text-neutral-300 mt-1 leading-relaxed">
+                Itemized real monthly maintenance and infrastructure costs required to sustain these public tools.
+              </p>
+            </div>
+            <div className="text-left sm:text-right font-mono shrink-0">
+              <span className="text-xs uppercase tracking-wider text-neutral-500 block">Monthly Target</span>
+              <span className="text-lg font-bold text-neutral-950 dark:text-neutral-50">₹2,079 / mo</span>
+            </div>
           </div>
 
-          <div className="border border-neutral-200 dark:border-[#22262B] rounded-2xl overflow-hidden bg-white dark:bg-[#14171A]">
-            <div className="divide-y divide-neutral-200 dark:divide-[#22262B]">
-              {ledgerCosts.map((cost, idx) => (
-                <div
-                  key={idx}
-                  className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-neutral-50/50 dark:hover:bg-[#1C2024]/40 transition-colors"
-                >
-                  <div className="space-y-0.5">
-                    <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                      {cost.category}
-                    </div>
-                    <div className="text-xs text-neutral-500 dark:text-neutral-400">
-                      {cost.purpose}
-                    </div>
-                  </div>
-                  <div className="flex items-baseline sm:flex-col sm:items-end gap-1.5 sm:gap-0 shrink-0">
-                    <span className="font-mono text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                      {cost.cost}
-                    </span>
-                    <span className="text-[11px] text-neutral-500">
-                      {cost.usd} USD {cost.note ? `• ${cost.note}` : ''}
-                    </span>
-                  </div>
-                </div>
-              ))}
+          {/* Monthly Funding Progress Indicator */}
+          <div className="p-5 rounded-2xl border border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] space-y-3 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-neutral-950 dark:text-neutral-50">Monthly Operational Coverage</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold border border-emerald-500/20">
+                  Target: ₹2,079
+                </span>
+              </div>
+              <span className="font-mono text-neutral-600 dark:text-neutral-400 text-xs">
+                Community Funded Rail • Transparent Ledger
+              </span>
+            </div>
+
+            {/* Progress Bar Track */}
+            <div className="w-full h-2.5 rounded-full bg-neutral-100 dark:bg-neutral-800 overflow-hidden relative border border-neutral-200 dark:border-neutral-700/60">
+              <div 
+                className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-500"
+                style={{ width: `${Math.min(100, Math.round((activeAmount / 2079) * 100))}%` }}
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-[11px] font-mono text-neutral-500 dark:text-neutral-400">
+              <span>Selected Contribution: ₹{activeAmount} ({Math.min(100, Math.round((activeAmount / 2079) * 100))}% of monthly baseline)</span>
+              <span>Baseline Deficit Managed via Personal Savings</span>
+            </div>
+          </div>
+
+          {/* Itemized Table Container */}
+          <div className="border border-neutral-300 dark:border-[#22262B] rounded-2xl overflow-hidden bg-white dark:bg-[#14171A] shadow-xs">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-neutral-200 dark:border-[#22262B] bg-neutral-50/80 dark:bg-[#0E1012] text-xs font-mono uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+                    <th className="py-3 px-5 sm:px-6 font-semibold">Infrastructure Item</th>
+                    <th className="py-3 px-5 sm:px-6 font-semibold hidden sm:table-cell">Function & Scope</th>
+                    <th className="py-3 px-5 sm:px-6 font-semibold text-right">Monthly Cost</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-200 dark:divide-[#22262B] text-sm">
+                  {ledgerCosts.map((cost, idx) => (
+                    <tr 
+                      key={idx}
+                      className="hover:bg-neutral-50/60 dark:hover:bg-[#1C2024]/40 transition-colors"
+                    >
+                      <td className="py-4 px-5 sm:px-6">
+                        <div className="font-medium text-neutral-950 dark:text-neutral-50 text-[15px]">
+                          {cost.category}
+                        </div>
+                        <div className="text-xs text-neutral-600 dark:text-neutral-400 sm:hidden mt-0.5">
+                          {cost.purpose}
+                        </div>
+                      </td>
+                      <td className="py-4 px-5 sm:px-6 text-neutral-600 dark:text-neutral-400 text-xs hidden sm:table-cell leading-relaxed">
+                        {cost.purpose}
+                      </td>
+                      <td className="py-4 px-5 sm:px-6 text-right shrink-0">
+                        <div className="font-mono text-sm font-bold text-neutral-950 dark:text-neutral-50">
+                          {cost.cost}
+                        </div>
+                        <div className="text-[11px] font-mono text-neutral-500">
+                          {cost.usd} USD
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
             <div className="p-4 sm:p-5 bg-neutral-50 dark:bg-[#0B0D0E] border-t border-neutral-200 dark:border-[#22262B] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <span className="text-xs text-neutral-600 dark:text-neutral-400 font-medium">
+              <span className="text-xs text-neutral-700 dark:text-neutral-300 font-medium">
                 Baseline student operating infrastructure target
               </span>
               <span className="font-mono text-sm font-bold text-neutral-950 dark:text-neutral-50">
-                ~₹2,079 / month (~$24.90 USD)
+                ₹2,079 / month (~$24.90 USD)
               </span>
             </div>
           </div>

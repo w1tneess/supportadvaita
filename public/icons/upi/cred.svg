@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <!-- CRED App Icon - Official Black with Crisp Polygon Shield -->
+  <rect width="192" height="192" rx="40" fill="#0F1015"/>
+  <g transform="translate(48, 36) scale(0.5)">
+    <!-- CRED mathematical geometric polygon shield -->
+    <path d="M96 0L0 44V108C0 160 41 208 96 220C151 208 192 160 192 108V44L96 0Z" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M96 32L24 65V108C24 146 55 183 96 194C137 183 168 146 168 108V65L96 32Z" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linejoin="round" opacity="0.4"/>
+    <polygon points="96,72 136,112 96,152 56,112" fill="#FFFFFF"/>
+  </g>
+</svg>
