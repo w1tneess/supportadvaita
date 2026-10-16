@@ -160,15 +160,6 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
       status: 'Active',
     },
     {
-      title: 'supportadvaita',
-      description: 'High-craft editorial personal sponsorship platform and zero-platform-fee peer-to-peer UPI contribution rail with dynamic QR generation and deep-link launcher.',
-      tag: 'Payment Infrastructure',
-      stack: 'React 19 • Vite • Tailwind • UPI Interoperability',
-      repoUrl: 'https://github.com/w1tneess/supportadvaita',
-      liveUrl: 'https://support.advaitachandra.in',
-      status: 'Production',
-    },
-    {
       title: 'Terrorism in India Dataset (1947–2026)',
       description: 'Longitudinal empirical data visualization examining conflict incident reports across seven decades, marking reporting gaps and historical absences explicitly.',
       tag: 'Empirical Research',
