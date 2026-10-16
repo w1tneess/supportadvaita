@@ -790,30 +790,28 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
               </ul>
             </div>
 
-            {/* Col 3: Community & Badges (3 cols) */}
+            {/* Col 3: Direct Settlement (3 cols) */}
             <div className="md:col-span-3 space-y-2.5">
               <span className="text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-200 block">
-                Patron Resources
+                Direct Settlement
               </span>
               <div className="space-y-2 text-xs">
                 <button
                   type="button"
-                  onClick={onOpenBadges}
-                  className="w-full text-left py-2 px-2.5 rounded-lg border border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:bg-neutral-50 dark:hover:bg-[#1C2024] text-neutral-700 dark:text-neutral-300 transition-all flex items-center justify-between group cursor-pointer"
-                >
-                  <span className="font-medium text-[11px]">Get README Badges</span>
-                  <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </button>
-                <button
-                  type="button"
                   onClick={() => handleCopy(PAYMENT_CONFIG.upiId)}
-                  className="w-full text-left py-2 px-2.5 rounded-lg border border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:bg-neutral-50 dark:hover:bg-[#1C2024] text-neutral-700 dark:text-neutral-300 transition-all flex items-center justify-between group cursor-pointer"
+                  className="w-full text-left py-2.5 px-3 rounded-lg border border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:bg-neutral-50 dark:hover:bg-[#1C2024] text-neutral-700 dark:text-neutral-300 transition-all flex items-center justify-between group cursor-pointer"
+                  title="Click to copy UPI ID"
                 >
-                  <span className="font-mono text-[11px]">Copy advaita@fam</span>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-neutral-400">Virtual Payment Address</span>
+                    <span className="font-mono text-xs font-semibold text-neutral-900 dark:text-neutral-100">
+                      {PAYMENT_CONFIG.upiId}
+                    </span>
+                  </div>
                   {copied ? (
-                    <Check className="w-3 h-3 text-emerald-500" />
+                    <Check className="w-4 h-4 text-emerald-500 shrink-0" />
                   ) : (
-                    <Copy className="w-3 h-3 opacity-70 group-hover:opacity-100" />
+                    <Copy className="w-4 h-4 opacity-70 group-hover:opacity-100 shrink-0" />
                   )}
                 </button>
               </div>
