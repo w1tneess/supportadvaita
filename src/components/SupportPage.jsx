@@ -275,13 +275,6 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
 
         {/* SECTION A: Hero & Narrative Header */}
         <section className="space-y-6">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              Independent Student Researcher & Builder • Age 16
-            </span>
-          </div>
-
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif tracking-tight leading-tight sm:leading-[1.12] text-neutral-950 dark:text-neutral-50 max-w-3xl">
             Sponsor public research, digital archives, and open software.
           </h1>
