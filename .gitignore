@@ -24,3 +24,4 @@ bun.lockb
 *.njsproj
 *.sln
 *.sw?
+.agents/

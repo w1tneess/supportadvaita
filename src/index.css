@@ -8,7 +8,15 @@
   }
 
   body {
-    transition: background-color 0.25s ease, color 0.25s ease;
+    transition: background-color 0.25s cubic-bezier(0.22, 1, 0.36, 1), color 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Accessible high-contrast focus rings */
+  :focus-visible {
+    outline: 2px solid #C2956A;
+    outline-offset: 2px;
   }
 }
 
@@ -20,7 +28,7 @@
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* Custom scrollbars */
+/* Custom micro-scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -29,9 +37,15 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(120, 115, 110, 0.25);
+  background: rgba(120, 115, 110, 0.2);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(120, 115, 110, 0.45);
+  background: rgba(120, 115, 110, 0.4);
+}
+
+/* Fluid hardware-accelerated button active tap */
+.active-press {
+  transform: scale(0.98);
+  transition: transform 0.08s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
