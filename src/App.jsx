@@ -11,7 +11,7 @@ import PostPaymentNote from './components/PostPaymentNote.jsx'
 import ProjectsShowcase from './components/ProjectsShowcase.jsx'
 import EmbedBadgesModal from './components/EmbedBadgesModal.jsx'
 import Toast from './components/Toast.jsx'
-import { ShieldCheck, ArrowUpRight, Smartphone, QrCode, Copy, Check, Sparkles, Heart } from 'lucide-react'
+import { ShieldCheck, ArrowUpRight, Smartphone, QrCode } from 'lucide-react'
 
 export default function App() {
   const { theme, setTheme, resolvedTheme } = useTheme()
@@ -23,7 +23,6 @@ export default function App() {
   const [isBadgeModalOpen, setIsBadgeModalOpen] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
   const [toastVisible, setToastVisible] = useState(false)
-  const [copiedBadge, setCopiedBadge] = useState(false)
 
   const showToast = (msg) => {
     setToastMessage(msg)
@@ -37,16 +36,6 @@ export default function App() {
         showToast(`Copied ${textToCopy} to clipboard!`)
       }).catch(() => {
         showToast(`Copied to clipboard`)
-      })
-    }
-  }
-
-  const handleCopyBadge = () => {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(PAYMENT_CONFIG.embedBadges.markdown).then(() => {
-        setCopiedBadge(true)
-        showToast('README Markdown badge copied!')
-        setTimeout(() => setCopiedBadge(false), 2200)
       })
     }
   }
@@ -74,18 +63,17 @@ export default function App() {
       {/* Toast Notification */}
       <Toast message={toastMessage} visible={toastVisible} />
 
-      {/* Embed Badges & Links Modal */}
+      {/* Embed Badges Modal (Opens strictly from subtle footer link) */}
       <EmbedBadgesModal
         isOpen={isBadgeModalOpen}
         onClose={() => setIsBadgeModalOpen(false)}
-        onCopy={(txt) => showToast('Badge code copied to clipboard!')}
+        onCopy={() => showToast('Badge code copied to clipboard!')}
       />
 
       {/* Primary Application Workspace */}
       <div className="flex-1">
-        {/* Full-Width Executive Header */}
+        {/* Full-Width Executive Header (Completely clean, zero badge clutter) */}
         <Header
-          onOpenBadgeModal={() => setIsBadgeModalOpen(true)}
           theme={theme}
           setTheme={setTheme}
         />
@@ -159,7 +147,7 @@ export default function App() {
               />
             </div>
 
-            {/* Right Column: Sticky Interactive Terminal & Patron Badges (5 cols on desktop) */}
+            {/* Right Column: Sticky Interactive Terminal (5 cols on desktop, completely clean) */}
             <div className={`space-y-6 lg:col-span-5 xl:col-span-5 lg:sticky lg:top-8 ${mobileTab === 'pay' ? 'hidden lg:block' : 'block'}`}>
               {/* Interactive Dynamic QR Terminal */}
               <QrCard
@@ -171,56 +159,6 @@ export default function App() {
                 onCopyUpi={handleCopyUpi}
                 resolvedTheme={resolvedTheme}
               />
-
-              {/* Desktop Quick Badge & Repo Integration Card */}
-              <div className="p-1.5 sm:p-2 rounded-[28px] bg-black/[0.03] dark:bg-white/[0.03] ring-1 ring-black/[0.06] dark:ring-white/[0.08] shadow-sm">
-                <div className="p-5 rounded-[calc(28px-0.375rem)] bg-white dark:bg-[#141311] shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)] space-y-3 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A]" />
-                      <span className="text-xs font-bold text-[#1D1D1F] dark:text-[#F8F6F0]">
-                        GitHub README Badge
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setIsBadgeModalOpen(true)}
-                      className="text-[11px] font-mono-code text-[#B8860B] dark:text-[#C2956A] hover:underline cursor-pointer"
-                    >
-                      More formats →
-                    </button>
-                  </div>
-
-                  <p className="text-[11px] text-[#6E6E73] dark:text-[#8E8A83] leading-relaxed">
-                    Embed this badge directly in your open-source repositories or blog footers to link here:
-                  </p>
-
-                  <div className="p-3 rounded-xl bg-[#F8F8FA] dark:bg-[#0E0D0C] border border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between shadow-inner">
-                    <img
-                      src={PAYMENT_CONFIG.embedBadges.shieldUrl}
-                      alt="Support Advaita Chandra"
-                      className="h-6 rounded shadow-xs"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleCopyBadge}
-                      className="px-3 py-1 rounded-lg bg-white dark:bg-[#1A1815] hover:bg-black/[0.03] dark:hover:bg-[#25221D] border border-black/[0.08] dark:border-white/[0.08] text-xs font-mono-code font-semibold text-[#1D1D1F] dark:text-[#F8F6F0] flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active-press"
-                    >
-                      {copiedBadge ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-500" />
-                          <span>Copied!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3 h-3 text-[#B8860B] dark:text-[#C2956A]" />
-                          <span>Copy Markdown</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </div>
 
               {/* Direct Peer-to-Peer Integrity Seal */}
               <div className="p-1.5 rounded-[24px] bg-black/[0.03] dark:bg-white/[0.03] ring-1 ring-black/[0.05] dark:ring-white/[0.08]">
@@ -236,7 +174,7 @@ export default function App() {
           </div>
 
           {/* Full-Width Open Projects & Research Portfolio */}
-          <ProjectsShowcase onOpenBadgeModal={() => setIsBadgeModalOpen(true)} />
+          <ProjectsShowcase />
         </main>
       </div>
 
@@ -248,7 +186,7 @@ export default function App() {
         upiId={PAYMENT_CONFIG.upiId}
       />
 
-      {/* Executive Footer */}
+      {/* Executive Footer with subtle, discreet Embed Badge link */}
       <footer className="border-t border-black/[0.06] dark:border-white/[0.08] py-8 mt-16 bg-white/60 dark:bg-[#0C0B0A]/80 backdrop-blur-md transition-colors">
         <div className="max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#86868B] dark:text-[#736F68]">
           <div className="flex items-center gap-2.5">
@@ -278,11 +216,13 @@ export default function App() {
               <span>GitHub</span>
               <ArrowUpRight className="w-3 h-3" />
             </a>
+            {/* Subtle, discreet footer modal trigger */}
             <button
+              type="button"
               onClick={() => setIsBadgeModalOpen(true)}
-              className="text-[#B8860B] dark:text-[#C2956A] hover:underline cursor-pointer font-medium active-press"
+              className="hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0] transition-colors cursor-pointer"
             >
-              Embed Badges
+              Embed Badge
             </button>
           </div>
         </div>

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { PAYMENT_CONFIG } from '../config/payment.js'
 import ThemeToggle from './ThemeToggle.jsx'
-import { Globe, Github, Twitter, Instagram, Sparkles, ShieldCheck, MapPin, GraduationCap, ArrowUpRight, CheckCircle2 } from 'lucide-react'
+import { Globe, Github, Twitter, Instagram, ShieldCheck, MapPin, GraduationCap, ArrowUpRight, CheckCircle2 } from 'lucide-react'
 
-export default function Header({ onOpenBadgeModal, theme, setTheme }) {
+export default function Header({ theme, setTheme }) {
   const [imgError, setImgError] = useState(false)
 
   const iconMap = {
@@ -28,21 +28,9 @@ export default function Header({ onOpenBadgeModal, theme, setTheme }) {
             <span className="text-[#86868B] dark:text-[#736F68] hidden sm:inline">• Direct Peer-to-Peer UPI</span>
           </div>
 
-          {/* Right controls: Theme Toggle + Badges modal launcher */}
-          <div className="flex items-center gap-2.5 pr-1">
+          {/* Right controls: Theme Toggle Only (Completely clean, zero badge clutter) */}
+          <div className="flex items-center pr-1">
             <ThemeToggle theme={theme} setTheme={setTheme} />
-
-            <button
-              type="button"
-              onClick={onOpenBadgeModal}
-              className="group inline-flex items-center gap-2 pl-3.5 pr-1.5 py-1.5 rounded-full text-xs font-medium text-[#424245] dark:text-[#F8F6F0] bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] transition-all cursor-pointer shadow-sm active-press"
-              title="Get repository badges and embed code"
-            >
-              <span className="font-semibold text-[11px] sm:text-xs">Badges & Embeds</span>
-              <span className="w-5 h-5 rounded-full bg-[#B8860B]/10 dark:bg-[#C2956A]/20 flex items-center justify-center transition-transform group-hover:scale-105 group-hover:translate-x-0.5">
-                <Sparkles className="w-3 h-3 text-[#B8860B] dark:text-[#C2956A]" />
-              </span>
-            </button>
           </div>
         </div>
 

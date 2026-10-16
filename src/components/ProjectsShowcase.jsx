@@ -1,8 +1,8 @@
 import React from 'react'
 import { PAYMENT_CONFIG } from '../config/payment.js'
-import { ExternalLink, ArrowUpRight, Code, Laptop, BookOpen, LineChart, Receipt, Sparkles, ShieldCheck } from 'lucide-react'
+import { ExternalLink, Code, Laptop, BookOpen, LineChart, Receipt } from 'lucide-react'
 
-export default function ProjectsShowcase({ onOpenBadgeModal }) {
+export default function ProjectsShowcase() {
   const getIcon = (type) => {
     switch (type) {
       case 'Website': return <Laptop className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A]" />
@@ -14,36 +14,23 @@ export default function ProjectsShowcase({ onOpenBadgeModal }) {
 
   return (
     <section className="mt-14 pt-8 border-t border-black/[0.06] dark:border-white/[0.08] space-y-10 transition-colors">
-      {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#B8860B]/10 dark:bg-[#C2956A]/10 border border-[#B8860B]/20 dark:border-[#C2956A]/20 mb-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#B8860B] dark:bg-[#C2956A]"></span>
-            <span className="text-[9.5px] font-mono-code font-bold uppercase tracking-[0.2em] text-[#B8860B] dark:text-[#C2956A]">
-              Open Research & Software Portfolio
-            </span>
-          </div>
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#1D1D1F] dark:text-[#F8F6F0] tracking-tight">
-            What Your Contribution Fuels
-          </h2>
-          <p className="text-xs sm:text-sm text-[#6E6E73] dark:text-[#8E8A83] mt-1">
-            Independent software, epistemological archives, and utilities built and maintained by Advaita
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={onOpenBadgeModal}
-          className="group self-start sm:self-auto inline-flex items-center gap-2 pl-3.5 pr-1.5 py-1.5 rounded-full text-xs font-mono-code text-[#1D1D1F] dark:text-[#F8F6F0] bg-black/[0.03] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] border border-black/[0.06] dark:border-white/[0.08] transition-all cursor-pointer shadow-xs active-press"
-        >
-          <span>Get Repository Badges</span>
-          <span className="w-5 h-5 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center transition-transform group-hover:scale-105 group-hover:translate-x-0.5">
-            <ArrowUpRight className="w-3 h-3 text-[#B8860B] dark:text-[#C2956A]" />
+      {/* Clean Section Header (No badge button clutter) */}
+      <div>
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#B8860B]/10 dark:bg-[#C2956A]/10 border border-[#B8860B]/20 dark:border-[#C2956A]/20 mb-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#B8860B] dark:bg-[#C2956A]"></span>
+          <span className="text-[9.5px] font-mono-code font-bold uppercase tracking-[0.2em] text-[#B8860B] dark:text-[#C2956A]">
+            Open Research & Software Portfolio
           </span>
-        </button>
+        </div>
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#1D1D1F] dark:text-[#F8F6F0] tracking-tight">
+          What Your Contribution Fuels
+        </h2>
+        <p className="text-xs sm:text-sm text-[#6E6E73] dark:text-[#8E8A83] mt-1">
+          Independent software, epistemological archives, and utilities built and maintained by Advaita
+        </p>
       </div>
 
-      {/* Responsive Bento Grid: 2 columns on tablet, 2 or 4 on desktop */}
+      {/* Responsive Bento Grid: 2 columns on tablet and desktop */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
         {PAYMENT_CONFIG.projects.map((proj) => {
           return (
