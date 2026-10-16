@@ -8,7 +8,7 @@ import Toast from './components/Toast.jsx'
  * Renders the high-craft, editorial SupportPage with theme management.
  */
 export default function App() {
-  const { theme, setTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme()
   const [toastMessage, setToastMessage] = useState('')
   const [toastVisible, setToastVisible] = useState(false)
 
@@ -19,10 +19,10 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FBFBFA] dark:bg-[#0B0D0E] text-[#111827] dark:text-[#F3F4F6] transition-colors duration-200">
+    <div className="min-h-dvh bg-[#FBFBFA] dark:bg-[#0B0D0E] text-[#111827] dark:text-[#F3F4F6] transition-colors duration-200">
       <Toast message={toastMessage} visible={toastVisible} />
       <SupportPage
-        theme={theme}
+        theme={resolvedTheme}
         setTheme={setTheme}
       />
     </div>

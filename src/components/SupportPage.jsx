@@ -461,10 +461,10 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                       <a
                         key={app.id}
                         href={href}
-                        className="p-2 rounded-xl border border-zinc-200 dark:border-zinc-700/60 bg-zinc-100 dark:bg-zinc-800/80 hover:bg-zinc-200/80 dark:hover:bg-zinc-700/80 hover:border-zinc-300 dark:hover:border-zinc-600 flex flex-col items-center justify-center gap-1.5 transition-all text-center group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 hover:scale-105"
+                        className="px-1.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700/60 bg-zinc-50 dark:bg-zinc-800/60 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 flex flex-col items-center justify-center gap-2 transition-all text-center group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 hover:-translate-y-0.5"
                         title={`Launch and pay in ${app.name}`}
                       >
-                        <div className="w-6 h-6 rounded-md overflow-hidden shrink-0 transition-transform">
+                        <div className="w-10 h-10 rounded-[10px] overflow-hidden shrink-0 ring-1 ring-black/10 dark:ring-white/15 shadow-sm">
                           <AppIconRenderer appId={app.id} className="w-full h-full" />
                         </div>
                         <span className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 truncate w-full">
@@ -484,8 +484,8 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
             </div>
           </div>
 
-          {/* Right Column: Direct Scan & VPA Container (5 cols, hidden on small screens) */}
-          <div className="hidden md:flex md:col-span-5 flex-col justify-between bg-white dark:bg-[#121214] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
+          {/* Right Column: Direct Scan & VPA Container (5 cols, stacked below on mobile) */}
+          <div className="flex md:col-span-5 flex-col justify-between bg-white dark:bg-[#121214] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
             
             {/* Header & Copyable VPA */}
             <div className="space-y-3">
