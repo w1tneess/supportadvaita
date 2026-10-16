@@ -15,7 +15,8 @@ import {
   BookOpen,
   Server,
   Terminal,
-  Info
+  Info,
+  Github
 } from 'lucide-react'
 import { PAYMENT_CONFIG } from '../config/payment.js'
 import { generateQrSvg, generateQrPng } from '../lib/qrcode.js'
@@ -132,35 +133,48 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
 
   const featuredProjects = [
     {
-      title: 'Advaita Chandra Digital Archive',
-      description: 'Public digital garden, research essays, data architecture essays, and open historical source documents.',
-      tag: 'Web Archive',
-      stack: 'React 19 • Tailwind • Cloudflare',
-      url: 'https://advaitachandra.in',
+      title: 'declutter',
+      description: 'Windows desktop application that safely declutters disordered folders: sorts files by type, identifies duplicates via cryptographic hashes, flags stale/oversized files, and previews every operation before moving.',
+      tag: 'Python Utility',
+      stack: 'Python • Hash Verification • CLI',
+      repoUrl: 'https://github.com/w1tneess/declutter',
+      liveUrl: 'https://declutter.advaitachandra.in/',
+      status: 'Active v1.2',
+    },
+    {
+      title: 'Osho Archival Documentary',
+      description: 'Interactive documentary platform and evidence-graded archive deconstructing Osho and Rajneeshpuram. Built from 5,000+ discourse recordings, FBI vault documents, and Wasco County court records with interactive maps and timelines.',
+      tag: 'Investigative Archive',
+      stack: 'Next.js • TypeScript • Tailwind • Primary Archive',
+      repoUrl: 'https://github.com/w1tneess/osho-documentary',
+      liveUrl: 'https://oshodocumentary.advaitachandra.in/',
+      status: 'Public Archive',
+    },
+    {
+      title: 'advaitachandra.in',
+      description: 'Personal site, research notebook, and digital garden featuring essays on epistemological philosophy, software systems architecture, and documentary street photography. Built for fast offline reading.',
+      tag: 'Digital Garden',
+      stack: 'React 19 • Vite • Tailwind • Supabase',
+      repoUrl: 'https://github.com/w1tneess/advaita-website',
+      liveUrl: 'https://www.advaitachandra.in/',
       status: 'Active',
     },
     {
-      title: 'Deho Probaho',
-      description: 'Cognitive state & biological rhythm exploratory visualization engine built with minimalist, local-first principles.',
-      tag: 'Open Source',
-      stack: 'TypeScript • WebGL • Canvas',
-      url: 'https://github.com/w1tneess',
-      status: 'In Development',
-    },
-    {
-      title: 'Declutter',
-      description: 'Lightweight desktop utility that categorizes disordered research folders, flags stale files, and eliminates duplicates.',
-      tag: 'System Utility',
-      stack: 'Python • Hash Verification • CLI',
-      url: 'https://github.com/w1tneess/declutter',
-      status: 'Public v1.2',
+      title: 'supportadvaita',
+      description: 'High-craft editorial personal sponsorship platform and zero-platform-fee peer-to-peer UPI contribution rail with dynamic QR generation and deep-link launcher.',
+      tag: 'Payment Infrastructure',
+      stack: 'React 19 • Vite • Tailwind • UPI Interoperability',
+      repoUrl: 'https://github.com/w1tneess/supportadvaita',
+      liveUrl: 'https://support.advaitachandra.in',
+      status: 'Production',
     },
     {
       title: 'Terrorism in India Dataset (1947–2026)',
-      description: 'Longitudinal empirical dataset reconciling seven decades of conflict incidents, explicitly marking historical reporting absences.',
-      tag: 'Data Research',
-      stack: 'Python • Historical Reconciliation',
-      url: 'https://advaitachandra.in/projects',
+      description: 'Longitudinal empirical data visualization examining conflict incident reports across seven decades, marking reporting gaps and historical absences explicitly.',
+      tag: 'Empirical Research',
+      stack: 'Python • Data Reconciliation • History',
+      repoUrl: 'https://github.com/w1tneess',
+      liveUrl: 'https://advaitachandra.in/projects',
       status: 'Completed',
     },
   ]
@@ -594,11 +608,8 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {featuredProjects.map((project, idx) => (
-              <a
+              <div
                 key={idx}
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="p-5 sm:p-6 rounded-2xl border border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:border-neutral-300 dark:hover:border-neutral-700 hover:shadow-sm transition-all group flex flex-col justify-between"
               >
                 <div className="space-y-3">
@@ -622,10 +633,35 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                 </div>
 
                 <div className="pt-4 mt-4 border-t border-neutral-100 dark:border-[#22262B] flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
-                  <span className="font-mono text-[11px]">{project.stack}</span>
-                  <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  <span className="font-mono text-[11px] truncate max-w-[55%]">{project.stack}</span>
+                  <div className="flex items-center gap-3 shrink-0">
+                    {project.repoUrl && (
+                      <a
+                        href={project.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"
+                        title="View GitHub Repository"
+                      >
+                        <Github className="w-3.5 h-3.5" />
+                        <span className="text-[11px] font-medium">Code</span>
+                      </a>
+                    )}
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-neutral-900 dark:text-neutral-100 font-semibold hover:underline underline-offset-2 transition-all"
+                        title="View Live Platform"
+                      >
+                        <span className="text-[11px]">Live</span>
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </a>
+              </div>
             ))}
           </div>
         </section>
