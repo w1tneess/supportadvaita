@@ -4,16 +4,16 @@ import { User, MessageSquare } from 'lucide-react'
 export default function NoteField({ name, setName, note, setNote }) {
   return (
     <div className="space-y-3">
-      {/* Microscopic Eyebrow */}
+      {/* Microscopic Eyebrow with Indian Touch */}
       <div className="flex items-center justify-between">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#B8860B]/10 dark:bg-[#C2956A]/10 border border-[#B8860B]/20 dark:border-[#C2956A]/20">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#B8860B]/10 dark:bg-[#C2956A]/10 border border-[#B8860B]/20 dark:border-[#C2956A]/20">
           <span className="w-1.5 h-1.5 rounded-full bg-[#B8860B] dark:bg-[#C2956A]"></span>
-          <span className="text-[9px] font-mono-code font-bold uppercase tracking-[0.2em] text-[#B8860B] dark:text-[#C2956A]">
-            Step 02 • Sender & Personal Note
+          <span className="text-[10px] font-mono-code font-bold uppercase tracking-[0.2em] text-[#B8860B] dark:text-[#C2956A]">
+            चरण ०२ • Sender & Sandesh (संदेश)
           </span>
         </div>
         <span className="text-[11px] font-mono-code text-[#86868B] dark:text-[#736F68]">
-          optional
+          ऐच्छिक (optional)
         </span>
       </div>
 
@@ -26,7 +26,7 @@ export default function NoteField({ name, setName, note, setNote }) {
             </div>
             <input
               type="text"
-              placeholder="Your name or handle"
+              placeholder="Your name / आपका नाम"
               value={name}
               onChange={(e) => setName(e.target.value)}
               maxLength={30}
@@ -43,7 +43,7 @@ export default function NoteField({ name, setName, note, setNote }) {
             </div>
             <input
               type="text"
-              placeholder="Note or book recommendation"
+              placeholder="e.g. Chai pe charcha, keep building!"
               value={note}
               onChange={(e) => setNote(e.target.value)}
               maxLength={40}
@@ -53,7 +53,7 @@ export default function NoteField({ name, setName, note, setNote }) {
         </div>
       </div>
       <p className="text-[11px] text-[#86868B] dark:text-[#736F68]">
-        Pre-fills your UPI transaction note so Advaita knows who this contribution is from.
+        Pre-fills your UPI transaction note so Advaita knows who this Sahyog is from.
       </p>
     </div>
   )

@@ -33,48 +33,73 @@ export const PAYMENT_CONFIG = {
     { item: 'Photography Storage & Gear Upkeep', cost: '₹300 / month', desc: 'RAW photograph backups, camera maintenance, and storage disks' }
   ],
 
-  // Grounded, meaningful tiers
+  // Grounded, meaningful Indian Sahyog & Shagun tiers
   tiers: [
     {
       id: 'chai',
-      amount: 50,
-      label: 'A Cup of Chai',
-      desc: 'Late-night debugging and reading fuel after school hours',
-      tag: '₹50',
+      amount: 51,
+      devanagari: '५१',
+      label: 'Kulhad Chai',
+      hindiName: 'कुल्हड़ चाय',
+      desc: 'Late-night debugging & reading fuel after Class 10 school hours',
+      tag: '₹51',
       icon: 'Coffee',
       popular: false,
     },
     {
       id: 'book',
-      amount: 150,
-      label: 'Book & Paper Fund',
-      desc: 'Contributes to a physical philosophy or tech text',
-      tag: '₹150',
+      amount: 101,
+      devanagari: '१०१',
+      label: 'Kitab Sahyog',
+      hindiName: 'किताब सहयोग',
+      desc: 'Contributes to a physical philosophy or computer science book',
+      tag: '₹101',
       icon: 'BookOpen',
       popular: true,
     },
     {
       id: 'server',
-      amount: 500,
-      label: 'Server & Domain Month',
-      desc: 'Covers one full month of cloud droplets, database, and domain uptime',
-      tag: '₹500',
+      amount: 251,
+      devanagari: '२५१',
+      label: 'Server Seva',
+      hindiName: 'सर्वर सेवा',
+      desc: 'Covers personal domain uptime & cloud worker droplets for a month',
+      tag: '₹251',
       icon: 'Server',
       popular: false,
     },
     {
-      id: 'patron',
-      amount: 1000,
-      label: 'Patron of Independent Work',
-      desc: 'Substantial backing toward hardware upkeep and open-source tooling',
-      tag: '₹1,000',
+      id: 'vidya',
+      amount: 501,
+      devanagari: '५०१',
+      label: 'Vidya Sahyog',
+      hindiName: 'विद्या सहयोग',
+      desc: 'Substantial student backing for open-source research and tools',
+      tag: '₹501',
       icon: 'Sparkles',
+      popular: false,
+    },
+    {
+      id: 'patron',
+      amount: 1101,
+      devanagari: '११०१',
+      label: 'Maha Sahyog',
+      hindiName: 'महा सहयोग',
+      desc: 'True patron of independent writing, evidence archives & code',
+      tag: '₹1,101',
+      icon: 'GraduationCap',
       popular: false,
     },
   ],
 
-  // Quick increment buttons
-  quickIncrements: [50, 100, 200, 500],
+  // Quick increment buttons with traditional Shagun amounts
+  quickIncrements: [
+    { value: 1, label: '+₹1 Shagun' },
+    { value: 51, label: '+₹51' },
+    { value: 101, label: '+₹101' },
+    { value: 251, label: '+₹251' },
+    { value: 501, label: '+₹501' },
+  ],
 
   // Real projects built by Advaita
   projects: [
@@ -162,26 +187,37 @@ export const PAYMENT_CONFIG = {
     }
   },
 
-  // Rupee words converter
+  // Rupee words converter with Hindi/Devanagari cultural touch
   numberToRupeeWords: (num) => {
     if (!num || isNaN(num) || num <= 0) return ''
     const n = Math.floor(num)
     const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen']
     const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']
 
-    if (n < 20) return `${ones[n]} Rupees`
-    if (n < 100) return `${tens[Math.floor(n / 10)]}${n % 10 ? ' ' + ones[n % 10] : ''} Rupees`
-    if (n < 1000) {
+    let eng = ''
+    if (n < 20) eng = `${ones[n]} Rupees`
+    else if (n < 100) eng = `${tens[Math.floor(n / 10)]}${n % 10 ? ' ' + ones[n % 10] : ''} Rupees`
+    else if (n < 1000) {
       const rem = n % 100
-      return `${ones[Math.floor(n / 100)]} Hundred${rem ? ' ' + (rem < 20 ? ones[rem] : tens[Math.floor(rem / 10)] + (rem % 10 ? ' ' + ones[rem % 10] : '')) : ''} Rupees`
-    }
-    if (n < 100000) {
+      eng = `${ones[Math.floor(n / 100)]} Hundred${rem ? ' ' + (rem < 20 ? ones[rem] : tens[Math.floor(rem / 10)] + (rem % 10 ? ' ' + ones[rem % 10] : '')) : ''} Rupees`
+    } else if (n < 100000) {
       const th = Math.floor(n / 1000)
       const rem = n % 1000
       const thStr = th < 20 ? ones[th] : tens[Math.floor(th / 10)] + (th % 10 ? ' ' + ones[th % 10] : '')
-      return `${thStr} Thousand${rem ? ' ' + PAYMENT_CONFIG.numberToRupeeWords(rem) : ' Rupees'}`
+      eng = `${thStr} Thousand${rem ? ' ' + PAYMENT_CONFIG.numberToRupeeWords(rem).replace(' Rupees', '') : ''} Rupees`
+    } else {
+      eng = `₹${num.toLocaleString('en-IN')} Rupees`
     }
-    return `₹${num.toLocaleString('en-IN')} Rupees`
+
+    // Convert digits to Devanagari script: 0123456789 -> ०१२३४५६७८९
+    const devanagariDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९']
+    const devanagariNum = n.toString().split('').map(d => devanagariDigits[parseInt(d, 10)] || d).join('')
+
+    // Auspicious Shagun check (+1)
+    const isShagun = n % 10 === 1 && n !== 11
+    const shagunTag = isShagun ? ' • शुभ सगुन' : ''
+
+    return `${eng} (₹${devanagariNum}${shagunTag})`
   },
 
   // Embed badges

@@ -4,12 +4,12 @@ import confetti from 'canvas-confetti'
 
 export default function PostPaymentNote({ amount, name, note }) {
   const shareText = encodeURIComponent(
-    `Hey Advaita, I just sent ₹${amount || 150} via support.advaitachandra.in to support your work!${
+    `Namaste Advaita, I just sent ₹${amount || 101} via support.advaitachandra.in to support your work!${
       note ? ` Note: "${note}"` : ''
     }${name ? ` - from ${name}` : ''}`
   )
 
-  const mailSubject = encodeURIComponent(`Supported your work via support.advaitachandra.in (₹${amount || 150})`)
+  const mailSubject = encodeURIComponent(`Supported your work via support.advaitachandra.in (₹${amount || 101})`)
   const mailBody = shareText
 
   const triggerCelebration = () => {
@@ -29,7 +29,7 @@ export default function PostPaymentNote({ amount, name, note }) {
         <div className="flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A]" />
           <span className="text-xs font-bold text-[#1D1D1F] dark:text-[#F8F6F0]">
-            Sent your contribution? Drop a quick note:
+            Dhanyawaad (धन्यवाद) • Sent your Sahyog? Drop a quick note:
           </span>
         </div>
 

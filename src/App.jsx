@@ -15,7 +15,7 @@ import { ShieldCheck, ArrowUpRight, Smartphone, QrCode } from 'lucide-react'
 
 export default function App() {
   const { theme, setTheme, resolvedTheme } = useTheme()
-  const [selectedAmount, setSelectedAmount] = useState(150)
+  const [selectedAmount, setSelectedAmount] = useState(101)
   const [isCustom, setIsCustom] = useState(false)
   const [name, setName] = useState('')
   const [note, setNote] = useState('')
