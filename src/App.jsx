@@ -5,16 +5,19 @@ import AmountSelector from './components/AmountSelector.jsx'
 import NoteField from './components/NoteField.jsx'
 import QrCard from './components/QrCard.jsx'
 import UpiActions from './components/UpiActions.jsx'
+import StickyMobileBar from './components/StickyMobileBar.jsx'
+import PostPaymentNote from './components/PostPaymentNote.jsx'
 import ProjectsShowcase from './components/ProjectsShowcase.jsx'
 import EmbedBadgesModal from './components/EmbedBadgesModal.jsx'
 import Toast from './components/Toast.jsx'
-import { Heart, ShieldCheck, ArrowUpRight } from 'lucide-react'
+import { ShieldCheck, ArrowUpRight, Smartphone, QrCode } from 'lucide-react'
 
 export default function App() {
   const [selectedAmount, setSelectedAmount] = useState(150)
   const [isCustom, setIsCustom] = useState(false)
   const [name, setName] = useState('')
   const [note, setNote] = useState('')
+  const [mobileTab, setMobileTab] = useState('pay') // 'pay' or 'qr'
   const [isBadgeModalOpen, setIsBadgeModalOpen] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
   const [toastVisible, setToastVisible] = useState(false)
@@ -26,11 +29,13 @@ export default function App() {
   }
 
   const handleCopyUpi = (textToCopy) => {
-    navigator.clipboard.writeText(textToCopy).then(() => {
-      showToast(`Copied ${textToCopy} to clipboard!`)
-    }).catch(() => {
-      showToast(`Copied to clipboard`)
-    })
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        showToast(`Copied ${textToCopy} to clipboard!`)
+      }).catch(() => {
+        showToast(`Copied to clipboard`)
+      })
+    }
   }
 
   // Live UPI pay URI based on state
@@ -48,7 +53,7 @@ export default function App() {
   }, [selectedAmount, name, note])
 
   return (
-    <div className="min-h-dvh flex flex-col justify-between bg-[#0F0E0D] text-[#F8F6F0]">
+    <div className="min-h-dvh flex flex-col justify-between bg-[#0F0E0D] text-[#F8F6F0] pb-24 lg:pb-0">
       {/* Toast Notification */}
       <Toast message={toastMessage} visible={toastVisible} />
 
@@ -65,10 +70,38 @@ export default function App() {
         <Header onOpenBadgeModal={() => setIsBadgeModalOpen(true)} />
 
         {/* Payment & Content Workspace */}
-        <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+        <main className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          {/* Mobile Tab Switcher (Pay directly vs Show QR code) */}
+          <div className="lg:hidden flex items-center p-1 rounded-xl bg-[#151412] border border-[#262421] mb-6">
+            <button
+              type="button"
+              onClick={() => setMobileTab('pay')}
+              className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                mobileTab === 'pay'
+                  ? 'bg-[#C2956A] text-[#0F0E0D] shadow-sm'
+                  : 'text-[#8E8A83] hover:text-[#F8F6F0]'
+              }`}
+            >
+              <Smartphone className="w-3.5 h-3.5" />
+              <span>1. Pay via App</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMobileTab('qr')}
+              className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                mobileTab === 'qr'
+                  ? 'bg-[#C2956A] text-[#0F0E0D] shadow-sm'
+                  : 'text-[#8E8A83] hover:text-[#F8F6F0]'
+              }`}
+            >
+              <QrCode className="w-3.5 h-3.5" />
+              <span>2. Scan QR Code</span>
+            </button>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left Column: Tiers, Custom Input & Note */}
-            <div className="lg:col-span-7 space-y-6">
+            {/* Left Column: Form & App Actions */}
+            <div className={`space-y-6 ${mobileTab === 'qr' ? 'hidden lg:block lg:col-span-7' : 'lg:col-span-7'}`}>
               <AmountSelector
                 selectedAmount={selectedAmount}
                 onSelectAmount={setSelectedAmount}
@@ -83,28 +116,36 @@ export default function App() {
                 setNote={setNote}
               />
 
-              {/* Mobile-friendly Actions (visible on mobile / below fields) */}
-              <div className="pt-2">
+              {/* Direct UPI Action Launchers */}
+              <div className="pt-1">
                 <UpiActions
                   upiUri={upiUri}
                   upiId={PAYMENT_CONFIG.upiId}
                   onCopyUpi={handleCopyUpi}
                   amount={selectedAmount}
+                  note={note ? `${note}${name ? ` (${name})` : ''}` : ''}
                 />
               </div>
+
+              {/* After payment acknowledgment */}
+              <PostPaymentNote
+                amount={selectedAmount}
+                name={name}
+                note={note}
+              />
 
               {/* Trust & Transparency Note */}
               <div className="p-3.5 rounded-xl bg-[#141311] border border-[#22201C] text-xs text-[#8E8A83] leading-relaxed flex items-start gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-[#C2956A] shrink-0 mt-0.5" />
                 <div>
                   <span className="font-semibold text-[#F8F6F0]">Direct Peer-to-Peer: </span>
-                  No intermediaries, no 5-10% gateway commissions. 100% of your contribution lands in Advaita's FamPay account to fund domains, server compute, books, and code.
+                  No payment processors taking 5–10% cuts. 100% of your contribution reaches Advaita's FamPay account to fund domains, server compute, books, and code.
                 </div>
               </div>
             </div>
 
             {/* Right Column: Live Dynamic QR Code Card */}
-            <div className="lg:col-span-5 lg:sticky lg:top-8">
+            <div className={`lg:col-span-5 lg:sticky lg:top-8 ${mobileTab === 'pay' ? 'hidden lg:block' : 'block'}`}>
               <QrCard
                 upiUri={upiUri}
                 amount={selectedAmount}
@@ -120,6 +161,14 @@ export default function App() {
           <ProjectsShowcase onOpenBadgeModal={() => setIsBadgeModalOpen(true)} />
         </main>
       </div>
+
+      {/* Sticky Mobile Checkout Bar (Visible on mobile viewports) */}
+      <StickyMobileBar
+        upiUri={upiUri}
+        amount={selectedAmount}
+        onCopyUpi={handleCopyUpi}
+        upiId={PAYMENT_CONFIG.upiId}
+      />
 
       {/* Footer */}
       <footer className="border-t border-[#262421]/60 py-8 mt-12 bg-[#0C0B0A]">
