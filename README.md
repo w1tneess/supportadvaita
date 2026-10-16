@@ -1,4 +1,4 @@
-# Support My Work — Advaita Chandra (`paytoadvaita`)
+# Support My Work — Advaita Chandra (`supportadvaita`)
 
 > *"To create is to live twice."* — Albert Camus
 
@@ -6,7 +6,7 @@ Hi, I'm **Advaita Chandra** (known online as **Wit**). I am a 16-year-old studen
 
 I spend most of my time outside school building software, experimenting with web technologies and AI, reading existential philosophy, and documenting the world through street and everyday photography.
 
-This repository powers **paytoadvaita** — my personal, zero-fee direct support portal.
+This repository powers **supportadvaita** — my personal, zero-fee direct support portal.
 
 ---
 
@@ -19,7 +19,7 @@ Since I am 16 and live in India, I don't use high-commission international payme
 | **UPI ID** | `advaita@fam` |
 | **Provider** | FamPay / FamApp |
 | **Beneficiary** | Advaita Chandra |
-| **Interactive Payment App** | [paytoadvaita](https://paytoadvaita.pages.dev) |
+| **Interactive Payment App** | [supportadvaita](https://support.advaitachandra.in) |
 | **Accepted Apps** | Google Pay, PhonePe, Paytm, BHIM, FamPay, Cred, any UPI app |
 
 ---

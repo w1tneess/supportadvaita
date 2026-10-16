@@ -25,7 +25,7 @@ export default function QrCard({ upiUri, amount, note, upiId, recipientName, onC
     if (pngUrl) {
       const link = document.createElement('a')
       link.href = pngUrl
-      link.download = `paytoadvaita-₹${amount || 'any'}.png`
+      link.download = `supportadvaita-₹${amount || 'any'}.png`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)

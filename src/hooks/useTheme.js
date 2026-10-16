@@ -3,14 +3,20 @@ import { useState, useEffect } from 'react'
 export function useTheme() {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('paytoadvaita_theme') || 'system'
+      return (
+        localStorage.getItem('supportadvaita_theme') ||
+        localStorage.getItem('paytoadvaita_theme') ||
+        'system'
+      )
     }
     return 'system'
   })
 
   const [resolvedTheme, setResolvedTheme] = useState(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('paytoadvaita_theme')
+      const saved =
+        localStorage.getItem('supportadvaita_theme') ||
+        localStorage.getItem('paytoadvaita_theme')
       if (saved === 'dark') return 'dark'
       if (saved === 'light') return 'light'
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
@@ -56,7 +62,7 @@ export function useTheme() {
 
   const changeTheme = (newTheme) => {
     setTheme(newTheme)
-    localStorage.setItem('paytoadvaita_theme', newTheme)
+    localStorage.setItem('supportadvaita_theme', newTheme)
   }
 
   return { theme, resolvedTheme, setTheme: changeTheme }

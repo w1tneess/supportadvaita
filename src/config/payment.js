@@ -1,5 +1,5 @@
 export const PAYMENT_CONFIG = {
-  appName: 'paytoadvaita',
+  appName: 'supportadvaita',
   upiId: 'advaita@fam',
   provider: 'FamPay',
   paymentRail: 'UPI (NPCI)',
@@ -194,7 +194,7 @@ export const PAYMENT_CONFIG = {
     }
 
     // Sanitize transaction note strictly to prevent UPI URI parameter pollution
-    let cleanNote = 'Support paytoadvaita'
+    let cleanNote = 'Support supportadvaita'
     if (typeof note === 'string' && note.trim().length > 0) {
       const sanitized = note
         .trim()

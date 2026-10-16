@@ -76,7 +76,7 @@ export default function EmbedBadgesModal({ isOpen, onClose, onCopy }) {
                 <span className="text-[11px] font-mono-code text-[#86868B] dark:text-[#736F68] block mb-1.5">Official Badge Preview:</span>
                 <img
                   src={PAYMENT_CONFIG.embedBadges.shieldUrl}
-                  alt="Support via paytoadvaita"
+                  alt="Support via supportadvaita"
                   className="h-7 rounded shadow-sm"
                 />
               </div>

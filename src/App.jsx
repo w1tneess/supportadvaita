@@ -49,7 +49,7 @@ export default function App() {
     } else if (name && name.trim()) {
       fullNote = `From ${name.trim()}`
     } else {
-      fullNote = `Support paytoadvaita`
+      fullNote = `Support supportadvaita`
     }
     return PAYMENT_CONFIG.buildUpiUri(selectedAmount, fullNote)
   }, [selectedAmount, name, note])

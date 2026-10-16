@@ -1,6 +1,6 @@
 {
-  "name": "Support Advaita Chandra — paytoadvaita",
-  "short_name": "paytoadvaita",
+  "name": "Support Advaita Chandra — supportadvaita",
+  "short_name": "supportadvaita",
   "description": "Direct, zero-commission patron support for Advaita Chandra's independent software, research, and writing via FamPay UPI.",
   "start_url": "/",
   "display": "standalone",
