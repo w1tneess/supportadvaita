@@ -208,6 +208,96 @@ export const PAYMENT_CONFIG = {
     return `upi://pay?${params.toString()}`
   },
 
+  // Generates dedicated app-specific deep links (Android Chrome Intent & native schemes)
+  buildAppPayLinks: (amount, note) => {
+    const numAmount = parseFloat(amount)
+    let cleanAmount = ''
+    if (!isNaN(numAmount) && numAmount >= 1 && numAmount <= 100000) {
+      cleanAmount = numAmount.toFixed(2)
+    }
+
+    let cleanNote = 'Support Advaita Chandra'
+    if (typeof note === 'string' && note.trim().length > 0) {
+      const sanitized = note
+        .trim()
+        .replace(/[^\w\s.,!?-]/gi, '')
+        .replace(/\s+/g, ' ')
+        .slice(0, 50)
+      if (sanitized.length > 0) cleanNote = sanitized
+    }
+
+    const params = new URLSearchParams()
+    params.set('pa', 'advaita@fam')
+    params.set('pn', 'Advaita Chandra')
+    params.set('cu', 'INR')
+    if (cleanAmount) params.set('am', cleanAmount)
+    params.set('tn', cleanNote)
+    const queryString = params.toString()
+
+    return [
+      {
+        id: 'gpay',
+        name: 'Google Pay',
+        shortName: 'GPay',
+        color: '#4285F4',
+        androidIntent: `intent://pay?${queryString}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end`,
+        scheme: `tez://upi/pay?${queryString}`,
+        dotClass: 'bg-[#4285F4]',
+        badge: 'Android & iOS',
+      },
+      {
+        id: 'phonepe',
+        name: 'PhonePe',
+        shortName: 'PhonePe',
+        color: '#5F259F',
+        androidIntent: `intent://pay?${queryString}#Intent;scheme=upi;package=com.phonepe.app;end`,
+        scheme: `phonepe://pay?${queryString}`,
+        dotClass: 'bg-[#5F259F]',
+        badge: 'Android & iOS',
+      },
+      {
+        id: 'paytm',
+        name: 'Paytm',
+        shortName: 'Paytm',
+        color: '#00BAF2',
+        androidIntent: `intent://pay?${queryString}#Intent;scheme=upi;package=net.one97.paytm;end`,
+        scheme: `paytmmp://pay?${queryString}`,
+        dotClass: 'bg-[#00BAF2]',
+        badge: 'Android & iOS',
+      },
+      {
+        id: 'bhim',
+        name: 'BHIM UPI',
+        shortName: 'BHIM',
+        color: '#005A9C',
+        androidIntent: `intent://pay?${queryString}#Intent;scheme=upi;package=in.org.npci.upiapp;end`,
+        scheme: `upi://pay?${queryString}`,
+        dotClass: 'bg-[#005A9C]',
+        badge: 'NPCI',
+      },
+      {
+        id: 'cred',
+        name: 'CRED UPI',
+        shortName: 'CRED',
+        color: '#111111',
+        androidIntent: `intent://pay?${queryString}#Intent;scheme=upi;package=com.dreamplug.androidapp;end`,
+        scheme: `cred://pay?${queryString}`,
+        dotClass: 'bg-neutral-900 dark:bg-white',
+        badge: 'Members',
+      },
+      {
+        id: 'fampay',
+        name: 'FamPay',
+        shortName: 'FamPay',
+        color: '#FF8A00',
+        androidIntent: `intent://pay?${queryString}#Intent;scheme=upi;package=com.fampay.in;end`,
+        scheme: `fampay://pay?${queryString}`,
+        dotClass: 'bg-[#FF8A00]',
+        badge: 'Issuer',
+      },
+    ]
+  },
+
   // Rupee words converter with Hindi/Devanagari cultural touch & global USD approximation
   numberToRupeeWords: (num) => {
     if (!num || isNaN(num) || num <= 0) return ''

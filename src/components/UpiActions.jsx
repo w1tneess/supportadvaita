@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { PAYMENT_CONFIG } from '../config/payment.js'
-import { Copy, Check, ArrowRight, Share2, Smartphone, ShieldCheck, Zap, Globe2 } from 'lucide-react'
+import { Copy, Check, ArrowRight, ArrowUpRight, Share2, Smartphone, ShieldCheck, Zap, Globe2 } from 'lucide-react'
 import confetti from 'canvas-confetti'
 
 export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
@@ -47,6 +47,26 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
       onCopyUpi('https://support.advaitachandra.in')
       setShared(true)
       setTimeout(() => setShared(false), 2400)
+    }
+  }
+
+  const appPayLinks = PAYMENT_CONFIG.buildAppPayLinks(amount, note)
+  const isAndroid = typeof navigator !== 'undefined' && /android/i.test(navigator.userAgent)
+  const isIos = typeof navigator !== 'undefined' && /iphone|ipad|ipod/i.test(navigator.userAgent)
+
+  const handleAppClick = (app, e) => {
+    triggerFeedback()
+    try {
+      confetti({
+        particleCount: 35,
+        spread: 55,
+        origin: { y: 0.8 },
+        colors: ['#B8860B', '#C2956A', '#1D1D1F'],
+      })
+    } catch {}
+
+    if (!isAndroid && !isIos) {
+      onCopyUpi(upiId)
     }
   }
 
@@ -97,10 +117,43 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
         </div>
       </a>
 
-      {/* App Compatibility Strip */}
-      <div className="flex items-center justify-between text-xs font-mono text-neutral-600 dark:text-neutral-400 px-1 flex-wrap gap-1">
-        <span className="font-semibold text-neutral-800 dark:text-neutral-200">Works with:</span>
-        <span className="text-neutral-600 dark:text-neutral-400">Google Pay • PhonePe • Paytm • BHIM • Cred • Any Bank UPI</span>
+      {/* Direct App Launchers Grid (Android & iOS Direct Links) */}
+      <div className="space-y-2 pt-1.5">
+        <div className="flex items-center justify-between text-xs font-mono text-neutral-600 dark:text-neutral-400">
+          <span className="font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
+            <Smartphone className="w-3.5 h-3.5 text-[#B8860B] dark:text-[#C2956A]" />
+            Direct Android / App Paylinks
+          </span>
+          <span className="text-[11px] text-neutral-500 font-medium">1-tap app launch</span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {appPayLinks.map((app) => {
+            const appHref = isAndroid ? app.androidIntent : app.scheme
+            return (
+              <a
+                key={app.id}
+                href={appHref}
+                onClick={(e) => handleAppClick(app, e)}
+                className="p-2.5 sm:py-3 rounded-xl border border-neutral-300/80 dark:border-neutral-800 bg-white/80 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 flex items-center justify-between transition-all active-press cursor-pointer shadow-2xs group"
+                title={`Open and pay in ${app.name}`}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className={`w-2.5 h-2.5 rounded-full ${app.dotClass} shrink-0 shadow-2xs`}></span>
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-mono text-xs font-bold text-neutral-900 dark:text-neutral-100 group-hover:text-black dark:group-hover:text-white truncate">
+                      {app.shortName}
+                    </span>
+                    <span className="text-[10px] font-mono text-neutral-500 dark:text-neutral-400 truncate">
+                      {app.badge}
+                    </span>
+                  </div>
+                </div>
+                <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </a>
+            )
+          })}
+        </div>
       </div>
 
       {/* Secondary Action Line: In-place Copy & Share */}
