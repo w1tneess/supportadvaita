@@ -7,15 +7,12 @@ export default function NoteField({ name, setName, note, setNote }) {
       {/* Monospace Step Header */}
       <div className="flex items-center justify-between pb-2.5 border-b border-black/[0.08] dark:border-neutral-800">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-xs font-bold text-[#B8860B] dark:text-[#C2956A]">02</span>
+          <span className="font-mono text-xs font-bold text-neutral-900 dark:text-white">02</span>
           <span className="text-xs font-mono uppercase tracking-wider text-neutral-900 dark:text-neutral-100 font-bold">
-            Remarks & Note
+            Message & Details
           </span>
           <span className="text-neutral-600 dark:text-neutral-400 font-mono text-xs font-medium">/ Optional</span>
         </div>
-        <span className="text-xs font-mono text-neutral-600 dark:text-neutral-400 font-medium">
-          Sandesh (संदेश)
-        </span>
       </div>
 
       {/* Pro-Dev Form Inputs Grid (Zero Nested Boxes) */}
@@ -23,7 +20,7 @@ export default function NoteField({ name, setName, note, setNote }) {
         {/* Name Field */}
         <div className="space-y-1.5">
           <label className="text-xs font-mono uppercase tracking-wider text-neutral-700 dark:text-neutral-300 font-semibold block">
-            your name
+            Your Name / Handle
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-500 dark:text-neutral-400">
@@ -31,7 +28,7 @@ export default function NoteField({ name, setName, note, setNote }) {
             </div>
             <input
               type="text"
-              placeholder="e.g. Rahul, Anonymous"
+              placeholder="e.g. Alex, Anonymous"
               value={name}
               onChange={(e) => setName(e.target.value)}
               maxLength={30}
@@ -43,7 +40,7 @@ export default function NoteField({ name, setName, note, setNote }) {
         {/* Note Field */}
         <div className="space-y-1.5">
           <label className="text-xs font-mono uppercase tracking-wider text-neutral-700 dark:text-neutral-300 font-semibold block">
-            transaction remarks
+            Transaction Note / Remarks
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-500 dark:text-neutral-400">
@@ -51,7 +48,7 @@ export default function NoteField({ name, setName, note, setNote }) {
             </div>
             <input
               type="text"
-              placeholder="e.g. Chai pe charcha, keep building!"
+              placeholder="e.g. Keep up the great work on open-source tools"
               value={note}
               onChange={(e) => setNote(e.target.value)}
               maxLength={45}
@@ -61,7 +58,7 @@ export default function NoteField({ name, setName, note, setNote }) {
         </div>
       </div>
       <p className="text-xs font-mono text-neutral-600 dark:text-neutral-400">
-        // remarks are injected into canonical NPCI UPI parameters (<code className="text-[#B8860B] dark:text-[#C2956A] font-semibold">tn=...</code>)
+        // Attached directly to transaction reference (<code className="text-neutral-900 dark:text-neutral-100 font-semibold">tn=...</code>)
       </p>
     </div>
   )

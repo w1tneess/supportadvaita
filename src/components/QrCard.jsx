@@ -104,7 +104,7 @@ export default function QrCard({ upiUri, amount, note, upiId, recipientName, onC
 
           <div className="flex items-center justify-between text-neutral-700 dark:text-neutral-300">
             <span className="font-medium">currency</span>
-            <span className="text-neutral-900 dark:text-neutral-100 font-semibold">INR (₹) • 1st Priority</span>
+            <span className="text-neutral-900 dark:text-neutral-100 font-semibold">INR (₹) • Primary Settlement</span>
           </div>
 
           <div className="flex items-center justify-between text-neutral-700 dark:text-neutral-300">

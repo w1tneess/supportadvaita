@@ -28,7 +28,7 @@ export default function StickyMobileBar({ upiUri, amount, onCopyUpi, upiId }) {
         {/* Amount in INR (1st Priority) + USD context */}
         <div className="flex flex-col">
           <span className="text-xs uppercase font-mono text-neutral-600 dark:text-neutral-400 font-semibold tracking-wider">
-            Total (INR)
+            Contribution
           </span>
           <div className="flex items-baseline gap-1.5 font-mono">
             <span className="text-base sm:text-lg font-bold text-neutral-950 dark:text-white">

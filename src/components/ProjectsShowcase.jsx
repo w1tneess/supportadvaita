@@ -26,7 +26,7 @@ export default function ProjectsShowcase() {
             <span className="text-neutral-600 dark:text-neutral-400 font-mono text-xs font-medium">/ Index</span>
           </div>
           <span className="text-xs font-mono text-neutral-700 dark:text-neutral-300 font-medium">
-            What your Sahyog directly fuels
+            Independent work funded directly by supporters
           </span>
         </div>
 

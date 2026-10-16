@@ -27,26 +27,26 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
 
   return (
     <div className="space-y-4">
-      {/* Header with Monospace Step Indicator & Currency Priority Badge */}
+      {/* Header with Monospace Step Indicator & Currency Reference */}
       <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-2.5 border-b border-black/[0.08] dark:border-neutral-800">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-mono text-xs font-bold text-[#B8860B] dark:text-[#C2956A]">01</span>
+          <span className="font-mono text-xs font-bold text-neutral-900 dark:text-white">01</span>
           <span className="text-xs font-mono uppercase tracking-wider text-neutral-900 dark:text-neutral-100 font-bold">
-            Select Contribution
+            Select Amount
           </span>
-          <span className="text-neutral-600 dark:text-neutral-400 font-mono text-xs font-medium">/ INR (₹) 1st Priority</span>
+          <span className="text-neutral-600 dark:text-neutral-400 font-mono text-xs font-medium">/ INR (₹) • Contextual USD</span>
         </div>
 
-        {words && (
-          <span className="font-mono text-xs text-neutral-700 dark:text-neutral-300 font-semibold">
-            {words}
+        {selectedAmount > 0 && (
+          <span className="font-mono text-xs text-neutral-700 dark:text-neutral-300 font-medium">
+            ₹{selectedAmount} INR <span className="text-neutral-500 dark:text-neutral-400">(~${usdVal} USD)</span>
           </span>
         )}
       </div>
 
-      {/* Pro-Dev Sleek Tier Matrix with Dual-Currency Precision */}
+      {/* Pro-Dev Sleek Tier Matrix */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
-        {PAYMENT_CONFIG.tiers.map((tier) => {
+        {PAYMENT_CONFIG.tiers.map((tier, idx) => {
           const IconComp = iconMap[tier.icon] || Coffee
           const isSelected = !isCustom && Number(selectedAmount) === tier.amount
 
@@ -64,32 +64,32 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
                   : 'bg-white/80 hover:bg-neutral-100/90 dark:bg-[#111111]/80 dark:hover:bg-neutral-900/90 border-neutral-300 dark:border-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-2xs'
               }`}
             >
-              {/* Shagun Badge on Popular Tier */}
+              {/* Subtle Recommended Badge on Popular Tier */}
               {tier.popular && (
                 <span className={`absolute -top-2 right-2 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold tracking-tight uppercase shadow-xs ${
                   isSelected
-                    ? 'bg-[#B8860B] text-white dark:bg-[#C2956A] dark:text-black'
-                    : 'bg-[#B8860B]/15 text-[#B8860B] dark:bg-[#C2956A]/20 dark:text-[#C2956A] border border-[#B8860B]/30 dark:border-[#C2956A]/30'
+                    ? 'bg-neutral-800 text-white dark:bg-neutral-200 dark:text-black'
+                    : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-300 dark:border-neutral-700'
                 }`}>
-                  Shagun
+                  Popular
                 </span>
               )}
 
-              {/* Top Row: Icon + Devanagari Glyph */}
+              {/* Top Row: Icon + Minimal Tier Index */}
               <div className="flex items-center justify-between w-full">
-                <IconComp className={`w-3.5 h-3.5 ${isSelected ? 'opacity-95 text-white dark:text-neutral-950' : 'text-[#B8860B] dark:text-[#C2956A]'}`} />
-                <span className={`font-mono text-xs font-semibold ${isSelected ? 'opacity-90 text-neutral-200 dark:text-neutral-800' : 'text-neutral-600 dark:text-neutral-400'}`}>
-                  ₹{tier.devanagari}
+                <IconComp className={`w-4 h-4 ${isSelected ? 'opacity-95 text-white dark:text-neutral-950' : 'text-neutral-700 dark:text-neutral-300'}`} />
+                <span className={`font-mono text-[10px] tracking-wider uppercase ${isSelected ? 'opacity-80 text-neutral-200 dark:text-neutral-800' : 'text-neutral-500 dark:text-neutral-400'}`}>
+                  0{idx + 1}
                 </span>
               </div>
 
-              {/* Bottom Row: Primary INR Amount + Global USD Approx + Title */}
+              {/* Bottom Row: Primary Amount + USD Equivalent + Title */}
               <div className="pt-2">
                 <div className="flex items-baseline gap-1.5 leading-tight">
                   <span className="font-mono text-base sm:text-lg font-bold tracking-tight">
                     ₹{tier.amount}
                   </span>
-                  <span className={`font-mono text-xs font-medium ${isSelected ? 'opacity-90 text-neutral-200 dark:text-neutral-800' : 'text-neutral-600 dark:text-neutral-400'}`}>
+                  <span className={`font-mono text-xs font-medium ${isSelected ? 'opacity-85 text-neutral-300 dark:text-neutral-700' : 'text-neutral-500 dark:text-neutral-400'}`}>
                     ~{tier.usdApprox}
                   </span>
                 </div>
@@ -102,7 +102,7 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
         })}
       </div>
 
-      {/* Pro-Dev Custom Amount Line with Dual-Currency Context */}
+      {/* Custom Amount Row */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
         <div className="relative flex-1 sm:max-w-xs">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-600 dark:text-neutral-400 font-mono text-xs font-bold">
@@ -112,7 +112,7 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
-            placeholder="custom amount in INR..."
+            placeholder="Custom amount (INR)..."
             value={isCustom ? selectedAmount : ''}
             onFocus={() => setIsCustom(true)}
             onChange={handleCustomChange}
@@ -135,13 +135,9 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
               key={inc.label}
               type="button"
               onClick={() => handleIncrement(inc.value)}
-              className={`px-3 py-1.5 rounded-md border font-mono text-xs font-medium transition-colors cursor-pointer active-press ${
-                inc.value === 1
-                  ? 'border-[#B8860B]/40 dark:border-[#C2956A]/40 text-[#B8860B] dark:text-[#C2956A] bg-[#B8860B]/5 hover:bg-[#B8860B]/15'
-                  : 'border-neutral-300 dark:border-neutral-700 bg-white/70 dark:bg-[#121212]/70 text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800'
-              }`}
+              className="px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-700 bg-white/70 dark:bg-[#121212]/70 text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 font-mono text-xs font-medium transition-colors cursor-pointer active-press"
             >
-              +{inc.value === 1 ? '₹1 Shagun' : `₹${inc.value}`}
+              {inc.label}
             </button>
           ))}
 
@@ -150,10 +146,10 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
               type="button"
               onClick={() => {
                 setIsCustom(false)
-                onSelectAmount(101)
+                onSelectAmount(150)
               }}
               className="p-1.5 rounded-md text-neutral-600 hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-neutral-100 border border-neutral-300 dark:border-neutral-700 transition-colors cursor-pointer"
-              title="Reset to ₹101"
+              title="Reset to default (₹150)"
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>

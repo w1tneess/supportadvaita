@@ -28,7 +28,7 @@ export default function Header({ theme, setTheme }) {
               <span>advaita@fam (FamPay)</span>
             </div>
             <span className="text-neutral-600 dark:text-neutral-400 font-mono text-xs hidden md:inline">
-              • UPI Rail • 1st Priority: INR (₹)
+              • Direct Sponsor Portal • Zero Intermediary Fees
             </span>
           </div>
 
@@ -58,7 +58,7 @@ export default function Header({ theme, setTheme }) {
                     </div>
                   )}
                 </div>
-                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-[#0A0A0A]" title="FamPay UPI Active"></span>
+                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-[#0A0A0A]" title="UPI Active"></span>
               </div>
 
               {/* Title & Metadata */}
@@ -68,14 +68,14 @@ export default function Header({ theme, setTheme }) {
                     {PAYMENT_CONFIG.recipientName}
                   </h1>
                   <span className="text-xs px-2.5 py-0.5 rounded-md bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 font-mono font-medium">
-                    wit.dev
+                    developer
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2.5 text-xs text-neutral-700 dark:text-neutral-300 font-mono flex-wrap">
                   <span className="flex items-center gap-1.5 font-medium">
-                    <GraduationCap className="w-3.5 h-3.5 text-[#B8860B] dark:text-[#C2956A]" />
-                    <span>{PAYMENT_CONFIG.grade} • {PAYMENT_CONFIG.age}yo</span>
+                    <GraduationCap className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400" />
+                    <span>Independent Student Builder • 16yo</span>
                   </span>
                   <span className="text-neutral-400 dark:text-neutral-600">•</span>
                   <span className="flex items-center gap-1.5 font-medium">
@@ -114,9 +114,9 @@ export default function Header({ theme, setTheme }) {
 
           {/* Right: Camus Quote & Metric Chips */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="border-l-2 border-[#B8860B] dark:border-[#C2956A] pl-4 py-1 space-y-2">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-[#B8860B] dark:text-[#C2956A] font-bold block">
-                // Epistemic Manifesto
+            <div className="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4 py-1 space-y-2">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-600 dark:text-neutral-400 font-bold block">
+                // Philosophy & Principle
               </span>
               <p className="font-editorial text-sm sm:text-base italic text-neutral-800 dark:text-neutral-200 leading-relaxed">
                 "{PAYMENT_CONFIG.quote.text}"

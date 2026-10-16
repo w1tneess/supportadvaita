@@ -15,7 +15,7 @@ import { ArrowUpRight, Smartphone, QrCode, ShieldCheck } from 'lucide-react'
 
 export default function App() {
   const { theme, setTheme, resolvedTheme } = useTheme()
-  const [selectedAmount, setSelectedAmount] = useState(101)
+  const [selectedAmount, setSelectedAmount] = useState(150)
   const [isCustom, setIsCustom] = useState(false)
   const [name, setName] = useState('')
   const [note, setNote] = useState('')
@@ -49,7 +49,7 @@ export default function App() {
     } else if (name && name.trim()) {
       fullNote = `From ${name.trim()}`
     } else {
-      fullNote = `Support supportadvaita`
+      fullNote = `Support Advaita Chandra`
     }
     return PAYMENT_CONFIG.buildUpiUri(selectedAmount, fullNote)
   }, [selectedAmount, name, note])
@@ -88,7 +88,7 @@ export default function App() {
               }`}
             >
               <Smartphone className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A]" />
-              <span>01. Pay via UPI</span>
+              <span>01. Pay via App</span>
             </button>
             <button
               type="button"
@@ -100,7 +100,7 @@ export default function App() {
               }`}
             >
               <QrCode className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A]" />
-              <span>02. Scan Terminal</span>
+              <span>02. Scan QR Code</span>
             </button>
           </div>
 

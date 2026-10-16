@@ -54,18 +54,18 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
 
   return (
     <div className="space-y-4">
-      {/* Monospace Step Header with Currency & Rail Context */}
+      {/* Monospace Step Header with Rail Context */}
       <div className="flex items-center justify-between pb-2.5 border-b border-black/[0.08] dark:border-neutral-800 flex-wrap gap-2">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-xs font-bold text-[#B8860B] dark:text-[#C2956A]">03</span>
+          <span className="font-mono text-xs font-bold text-neutral-900 dark:text-white">03</span>
           <span className="text-xs font-mono uppercase tracking-wider text-neutral-900 dark:text-neutral-100 font-bold">
-            Execute Transfer
+            Transfer via UPI
           </span>
-          <span className="text-neutral-600 dark:text-neutral-400 font-mono text-xs font-medium">/ UPI (FamPay)</span>
+          <span className="text-neutral-600 dark:text-neutral-400 font-mono text-xs font-medium">/ Direct Settlement</span>
         </div>
         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono text-emerald-700 dark:text-emerald-300 font-semibold bg-emerald-500/10 border border-emerald-500/25">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          <span>Zero Fee (0.0%) • Direct Settlement</span>
+          <span>Zero Platform Fee • Instant Settlement</span>
         </span>
       </div>
 
@@ -73,15 +73,15 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
       <a
         href={upiUri}
         onClick={handlePayClick}
-        className="group relative w-full py-4 sm:py-4.5 px-5 sm:px-6 rounded-2xl bg-[#0C0B0A] hover:bg-black text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-[#0C0B0A] border-2 border-[#B8860B] dark:border-[#C2956A] shadow-lg shadow-neutral-950/20 dark:shadow-[0_4px_24px_rgba(194,149,106,0.2)] font-mono font-bold text-base sm:text-lg flex items-center justify-between transition-all duration-200 active-press cursor-pointer ring-2 ring-black/5 dark:ring-white/10"
+        className="group relative w-full py-4 sm:py-4.5 px-5 sm:px-6 rounded-2xl bg-[#0C0B0A] hover:bg-black text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-[#0C0B0A] border-2 border-neutral-800 dark:border-neutral-200 shadow-lg shadow-neutral-950/20 dark:shadow-[0_4px_24px_rgba(255,255,255,0.12)] font-mono font-bold text-base sm:text-lg flex items-center justify-between transition-all duration-200 active-press cursor-pointer ring-1 ring-black/10 dark:ring-white/20"
       >
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-white/10 dark:bg-black/10 flex items-center justify-center text-[#C2956A] dark:text-[#B8860B] shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-white/10 dark:bg-black/10 flex items-center justify-center text-white dark:text-neutral-900 shrink-0">
             <Smartphone className="w-5 h-5" />
           </div>
           <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
             <span className="tracking-tight">
-              Pay {amount ? `₹${amount} INR` : 'Sahyog'} with UPI
+              Pay {amount ? `₹${amount} INR` : 'Custom Amount'} via UPI
             </span>
             {usdValue && (
               <span className="text-xs font-normal opacity-80">
@@ -92,12 +92,12 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
         </div>
 
         <div className="flex items-center gap-1.5 text-xs sm:text-sm font-semibold pl-2 shrink-0">
-          <span className="hidden xs:inline opacity-90 group-hover:opacity-100">open app</span>
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200 text-[#C2956A] dark:text-[#B8860B]" />
+          <span className="hidden xs:inline opacity-90 group-hover:opacity-100">launch app</span>
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200" />
         </div>
       </a>
 
-      {/* Pro-Dev Secondary Action Line: In-place Copy & Share */}
+      {/* Secondary Action Line: In-place Copy & Share */}
       <div className="flex items-center gap-2.5 pt-1">
         <button
           type="button"
@@ -144,12 +144,12 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
       {/* Protocol & Cross-Border Assurance Line */}
       <div className="space-y-1.5 pt-2 font-mono text-xs text-neutral-700 dark:text-neutral-300">
         <div className="flex items-center gap-2">
-          <Zap className="w-3.5 h-3.5 text-[#B8860B] dark:text-[#C2956A] shrink-0" />
-          <span>Active Rail: Direct UPI to <strong className="text-neutral-900 dark:text-neutral-100 font-semibold">advaita@fam</strong> via FamPay. 1st priority currency is INR.</span>
+          <Zap className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-400 shrink-0" />
+          <span>Active Rail: Direct UPI to <strong className="text-neutral-900 dark:text-neutral-100 font-semibold">advaita@fam</strong> via FamPay. Instant settlement.</span>
         </div>
         <div className="flex items-center gap-2 pl-5.5 text-neutral-600 dark:text-neutral-400">
           <Globe2 className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
-          <span>Cross-border cards/PayPal integration in development. Global supporters can reach out to sponsor directly.</span>
+          <span>Cross-border cards and international multi-currency checkouts currently in development.</span>
         </div>
       </div>
     </div>

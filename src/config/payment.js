@@ -21,8 +21,8 @@ export const PAYMENT_CONFIG = {
   instagram: 'https://instagram.com/adva1ta_',
 
   // Authentic narrative and ethos
-  bio: "I am a 16-year-old student, independent researcher, and developer based in West Bengal, India. Outside Class 10 coursework, I build open-source tools, investigate historical and philosophical questions, read existentialism, and pursue street and landscape photography.",
-  subBio: "I refuse intrusive advertisements, corporate tracking scripts, or artificial paywalls on my work. Every rupee contributed here directly funds server compute, domain renewals, book acquisitions, and research equipment.",
+  bio: "I am a 16-year-old student, independent researcher, and software developer. Outside Class 10 coursework, I build open-source developer tools, investigate historical and philosophical questions, and maintain public digital archives.",
+  subBio: "All my public tools and research are free of advertisements, tracking scripts, and paywalls. Contributions directly fund cloud infrastructure, domain renewals, technical research literature, and hardware upkeep.",
 
   // Philosophical foundation
   quote: {
@@ -34,87 +34,77 @@ export const PAYMENT_CONFIG = {
 
   // Key platform metrics
   metrics: [
-    { label: 'Settlement', value: '100% P2P' },
-    { label: 'Intermediary Cut', value: '0% (Zero Fee)' },
-    { label: 'Active Projects', value: '4 Maintained' },
-    { label: 'Student Patronage', value: 'Class 10 CBSE' },
+    { label: 'Settlement', value: 'Direct P2P' },
+    { label: 'Platform Fee', value: '0% (Zero Cut)' },
+    { label: 'Open Source', value: '4 Maintained' },
+    { label: 'Identity', value: 'Student Builder' },
   ],
 
   // Real financial breakdown: what running independent projects actually costs
   financialBreakdown: [
     { item: 'Cloud Compute & Server Workers', cost: '₹500 / mo', desc: 'Background workers, static hosting, and API micro-services' },
-    { item: 'Philosophy & CS Physical Books', cost: '₹400 / mo', desc: 'Physical editions of Camus, Krishnamurti, Dostoevsky, and CS textbooks' },
+    { item: 'Philosophy & CS Technical Books', cost: '₹400 / mo', desc: 'Physical editions of Camus, Krishnamurti, Dostoevsky, and CS textbooks' },
     { item: 'Photography Storage & Backups', cost: '₹300 / mo', desc: 'RAW photograph archives, camera upkeep, and hard disk storage' },
     { item: 'Canonical Domain Renewals', cost: '₹1,200 / yr', desc: 'Maintains advaitachandra.in and personal web namespace' }
   ],
 
-  // Grounded Indian Sahyog & Shagun tiers with Global USD contextual equivalents
+  // Professional developer contribution tiers
   tiers: [
     {
-      id: 'chai',
-      amount: 51,
-      devanagari: '५१',
+      id: 'supporter',
+      amount: 50,
       usdApprox: '$0.60',
-      label: 'Kulhad Chai',
-      hindiName: 'कुल्हड़ चाय',
-      desc: 'Late-night debugging & reading tea',
+      label: 'Supporter',
+      desc: 'Quick appreciation for open-source tools',
       icon: 'Coffee',
       popular: false,
     },
     {
-      id: 'book',
-      amount: 101,
-      devanagari: '१०१',
-      usdApprox: '$1.20',
-      label: 'Kitab Sahyog',
-      hindiName: 'किताब सहयोग',
-      desc: 'Contributes to a physical philosophy or CS book',
+      id: 'backer',
+      amount: 150,
+      usdApprox: '$1.80',
+      label: 'Research & Books',
+      desc: 'Contributes to technical research & literature',
       icon: 'BookOpen',
       popular: true,
-      tag: 'Shagun',
+      tag: 'Recommended',
     },
     {
-      id: 'server',
-      amount: 251,
-      devanagari: '२५१',
-      usdApprox: '$3.00',
-      label: 'Server Seva',
-      hindiName: 'सर्वर सेवा',
-      desc: 'Covers personal domain uptime & cloud droplets',
+      id: 'infrastructure',
+      amount: 500,
+      usdApprox: '$6.00',
+      label: 'Infrastructure',
+      desc: 'Covers domain uptime & cloud workers',
       icon: 'Server',
       popular: false,
     },
     {
-      id: 'vidya',
-      amount: 501,
-      devanagari: '५०१',
-      usdApprox: '$6.00',
-      label: 'Vidya Sahyog',
-      hindiName: 'विद्या सहयोग',
-      desc: 'Student backing for open-source tools & archives',
+      id: 'sponsor',
+      amount: 1000,
+      usdApprox: '$12.00',
+      label: 'Developer Sponsor',
+      desc: 'Funds dev tooling & hardware upkeep',
       icon: 'Sparkles',
       popular: false,
     },
     {
       id: 'patron',
-      amount: 1101,
-      devanagari: '११०१',
-      usdApprox: '$13.20',
-      label: 'Maha Sahyog',
-      hindiName: 'महा सहयोग',
-      desc: 'True patron of independent writing & software',
+      amount: 2500,
+      usdApprox: '$30.00',
+      label: 'Core Patron',
+      desc: 'Direct backing for long-term independent projects',
       icon: 'GraduationCap',
       popular: false,
     },
   ],
 
-  // Quick increment buttons with traditional Shagun amounts
+  // Quick increment buttons with clean, round amounts
   quickIncrements: [
-    { value: 1, label: '+₹1 Shagun' },
-    { value: 51, label: '+₹51' },
-    { value: 101, label: '+₹101' },
-    { value: 251, label: '+₹251' },
-    { value: 501, label: '+₹501' },
+    { value: 50, label: '+₹50' },
+    { value: 100, label: '+₹100' },
+    { value: 250, label: '+₹250' },
+    { value: 500, label: '+₹500' },
+    { value: 1000, label: '+₹1,000' },
   ],
 
   // Real projects built and maintained by Advaita
@@ -194,7 +184,7 @@ export const PAYMENT_CONFIG = {
     }
 
     // Sanitize transaction note strictly to prevent UPI URI parameter pollution
-    let cleanNote = 'Support supportadvaita'
+    let cleanNote = 'Support Advaita Chandra'
     if (typeof note === 'string' && note.trim().length > 0) {
       const sanitized = note
         .trim()

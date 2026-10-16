@@ -4,12 +4,12 @@ import confetti from 'canvas-confetti'
 
 export default function PostPaymentNote({ amount, name, note }) {
   const shareText = encodeURIComponent(
-    `Namaste Advaita, I just sent ₹${amount || 101} via support.advaitachandra.in to support your work!${
+    `Hi Advaita, I just sent ₹${amount || 150} via support.advaitachandra.in to support your open-source work!${
       note ? ` Note: "${note}"` : ''
     }${name ? ` - from ${name}` : ''}`
   )
 
-  const mailSubject = encodeURIComponent(`Supported your work via support.advaitachandra.in (₹${amount || 101})`)
+  const mailSubject = encodeURIComponent(`Supported your work via support.advaitachandra.in (₹${amount || 150})`)
   const mailBody = shareText
 
   const triggerCelebration = () => {
@@ -27,7 +27,7 @@ export default function PostPaymentNote({ amount, name, note }) {
     <div className="pt-6 border-t border-black/[0.08] dark:border-neutral-800 space-y-3">
       <div className="flex items-center justify-between">
         <span className="font-mono text-xs uppercase tracking-wider text-neutral-900 dark:text-neutral-100 font-bold">
-          // Acknowledgment (धन्यवाद)
+          // Payment Confirmation
         </span>
         <span className="text-xs font-mono text-neutral-600 dark:text-neutral-400 font-medium">
           sent transfer?
@@ -35,7 +35,7 @@ export default function PostPaymentNote({ amount, name, note }) {
       </div>
 
       <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-mono">
-        UPI does not automatically pass a backlink. Drop a quick note to confirm receipt & get acknowledged:
+        UPI transfers do not automatically pass back a link. Drop a quick message to confirm receipt:
       </p>
 
       <div className="flex items-center gap-2.5 pt-1 flex-wrap">
