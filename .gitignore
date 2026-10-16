@@ -25,3 +25,20 @@ bun.lockb
 *.sln
 *.sw?
 .agents/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Tooling / deploy caches
+.claude/
+.playwright-mcp/
+.vercel
+.wrangler/
+.dev.vars
+coverage
+*.tsbuildinfo
+
+# Local design/screenshot scratch
+.claude-shot-*.png

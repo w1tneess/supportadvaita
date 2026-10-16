@@ -65,6 +65,28 @@ Here is what your support fuels:
 
 ---
 
+## 🛠️ Tech Stack & Development
+
+**Stack:** React 19 · Vite · Tailwind CSS v4 · Lucide React · `qrcode` · `canvas-confetti`
+
+- Single-page, fully responsive layout (320px phones → desktop). QR card stacks under the payment widget on mobile.
+- Light / Dark / System theming (class-based `dark` variant, no flash on load, `theme-color` meta for mobile browser UI).
+- Dynamic UPI deep links and QR code that update with the selected amount and note.
+- UPI app icons are SVGs from the Figma community pack *UPI Apps • 60+ Logos • SVG (vector)*, stored in `public/icons/upi/`.
+
+```bash
+npm install
+npm run dev      # local dev server
+npm run build    # production build -> dist/
+npm run preview  # serve the production build
+```
+
+Key files: `src/components/SupportPage.jsx` (page), `src/components/AppIcons.jsx` (UPI app icons), `src/config/payment.js` (UPI ID, tiers, deep-link builders), `src/hooks/useTheme.js` (theme).
+
+Deploys to Vercel (`vercel.json`) or Cloudflare (`wrangler.jsonc`).
+
+---
+
 ## 📬 Leave a Note / Get in Touch
 
 If you send a contribution, please feel free to reach out with a book recommendation, feedback on my projects, or just to say hello:
