@@ -706,42 +706,134 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
           </div>
         </section>
 
-        {/* SECTION E: Editorial Footer */}
-        <footer className="border-t border-neutral-200 dark:border-[#22262B] pt-10 pb-16 space-y-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500 dark:text-neutral-400">
-            <div className="flex items-center gap-3">
-              <span>© {new Date().getFullYear()} Advaita Chandra</span>
-              <span>•</span>
-              <a
-                href="https://advaitachandra.in"
-                className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-              >
-                advaitachandra.in
-              </a>
-              <span>•</span>
-              <a
-                href="https://github.com/w1tneess"
-                className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-              >
-                GitHub
-              </a>
-              <span>•</span>
-              <a
-                href="https://x.com/w1tneess_"
-                className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-              >
-                Twitter / X
-              </a>
+        {/* SECTION E: Refined Editorial Footer */}
+        <footer className="border-t border-neutral-200 dark:border-[#22262B] pt-12 pb-16 space-y-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 items-start">
+            
+            {/* Col 1: Bio & Ethos (6 cols) */}
+            <div className="md:col-span-6 space-y-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-800 shrink-0">
+                  <img
+                    src={PAYMENT_CONFIG.avatar}
+                    alt="Advaita Chandra"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.src = 'https://avatars.githubusercontent.com/u/108343743?v=4'
+                    }}
+                  />
+                </div>
+                <span className="font-serif font-medium text-sm text-neutral-900 dark:text-neutral-100">
+                  Advaita Chandra
+                </span>
+                <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-medium border border-emerald-500/20">
+                  Student Builder • Age 16
+                </span>
+              </div>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-sm">
+                Independent research, open historical archives, and public software tools. 100% directly funded with zero platform intermediary cuts.
+              </p>
+              <div className="text-[11px] text-neutral-400 dark:text-neutral-500 flex items-center gap-1.5 pt-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span>Direct P2P Settlement via FamPay UPI (<span className="font-mono text-neutral-600 dark:text-neutral-300">advaita@fam</span>)</span>
+              </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <button
-                type="button"
-                onClick={onOpenBadges}
-                className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors cursor-pointer underline underline-offset-2"
-              >
-                Get Sponsor Badges
-              </button>
+            {/* Col 2: Navigation Links (3 cols) */}
+            <div className="md:col-span-3 space-y-2.5">
+              <span className="text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-200 block">
+                Ecosystem
+              </span>
+              <ul className="space-y-2 text-xs text-neutral-500 dark:text-neutral-400">
+                <li>
+                  <a
+                    href="https://advaitachandra.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-flex items-center gap-1 group"
+                  >
+                    <span>advaitachandra.in</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/w1tneess"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-flex items-center gap-1 group"
+                  >
+                    <span>GitHub Repositories</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://x.com/w1tneess_"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-flex items-center gap-1 group"
+                  >
+                    <span>Twitter / X (@w1tneess_)</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="mailto:advaita974@gmail.com"
+                    className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-flex items-center gap-1 group"
+                  >
+                    <span>Direct Email</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 3: Community & Badges (3 cols) */}
+            <div className="md:col-span-3 space-y-2.5">
+              <span className="text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-200 block">
+                Patron Resources
+              </span>
+              <div className="space-y-2 text-xs">
+                <button
+                  type="button"
+                  onClick={onOpenBadges}
+                  className="w-full text-left py-2 px-2.5 rounded-lg border border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:bg-neutral-50 dark:hover:bg-[#1C2024] text-neutral-700 dark:text-neutral-300 transition-all flex items-center justify-between group cursor-pointer"
+                >
+                  <span className="font-medium text-[11px]">Get README Badges</span>
+                  <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleCopy(PAYMENT_CONFIG.upiId)}
+                  className="w-full text-left py-2 px-2.5 rounded-lg border border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:bg-neutral-50 dark:hover:bg-[#1C2024] text-neutral-700 dark:text-neutral-300 transition-all flex items-center justify-between group cursor-pointer"
+                >
+                  <span className="font-mono text-[11px]">Copy advaita@fam</span>
+                  {copied ? (
+                    <Check className="w-3 h-3 text-emerald-500" />
+                  ) : (
+                    <Copy className="w-3 h-3 opacity-70 group-hover:opacity-100" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Sub-footer Bar with Copyright & Privacy Standards */}
+          <div className="pt-6 border-t border-neutral-200/80 dark:border-[#22262B]/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-neutral-400 dark:text-neutral-500">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span>© {new Date().getFullYear()} Advaita Chandra</span>
+              <span>•</span>
+              <span>Class 10 CBSE Student Builder</span>
+              <span>•</span>
+              <span>West Bengal, India</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span>Zero tracking cookies</span>
+              <span>•</span>
+              <span>Open-source client</span>
             </div>
           </div>
         </footer>
