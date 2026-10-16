@@ -67,7 +67,7 @@ Here is what your support fuels:
 
 ## 🛠️ Tech Stack & Development
 
-**Stack:** React 19 · Vite · Tailwind CSS v4 · Lucide React · `qrcode` · `canvas-confetti`
+**Stack:** React 19 · Vite · Tailwind CSS v4 · Lucide React · `qrcode`
 
 - Single-page, fully responsive layout (320px phones → desktop). QR card stacks under the payment widget on mobile.
 - Light / Dark / System theming (class-based `dark` variant, no flash on load, `theme-color` meta for mobile browser UI).
