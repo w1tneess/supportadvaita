@@ -48,7 +48,7 @@ export default function StickyMobileBar({ upiUri, amount, onCopyUpi, upiId }) {
             type="button"
             onClick={handleCopy}
             className="h-11 w-11 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white flex items-center justify-center transition-colors shadow-2xs"
-            title="Copy UPI ID (FamPay)"
+            title="Copy UPI ID (advaita@fam)"
             aria-label="Copy UPI ID"
           >
             {copied ? (
@@ -64,7 +64,7 @@ export default function StickyMobileBar({ upiUri, amount, onCopyUpi, upiId }) {
             className="h-11 px-5 rounded-xl bg-[#0C0B0A] text-white hover:bg-black dark:bg-white dark:text-[#0C0B0A] dark:hover:bg-neutral-100 border border-[#B8860B] dark:border-[#C2956A] font-mono text-xs sm:text-sm font-bold flex items-center gap-2 transition-all active-press shadow-md cursor-pointer"
           >
             <Smartphone className="w-4 h-4 text-[#C2956A] dark:text-[#B8860B]" />
-            <span>Pay with UPI</span>
+            <span>Pay with Any UPI App</span>
             <ArrowRight className="w-4 h-4" />
           </a>
         </div>

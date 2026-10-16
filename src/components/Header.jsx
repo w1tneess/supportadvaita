@@ -25,10 +25,10 @@ export default function Header({ theme, setTheme }) {
             <span className="text-neutral-400 dark:text-neutral-600 hidden sm:inline">/</span>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-700 dark:text-emerald-300 font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>advaita@fam (FamPay)</span>
+              <span>UPI: advaita@fam • Any UPI App</span>
             </div>
             <span className="text-neutral-600 dark:text-neutral-400 font-mono text-xs hidden md:inline">
-              • Direct Sponsor Portal • Zero Intermediary Fees
+              • Direct P2P Settlement • Zero Platform Cut
             </span>
           </div>
 

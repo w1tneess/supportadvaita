@@ -81,7 +81,7 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
           </div>
           <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
             <span className="tracking-tight">
-              Pay {amount ? `₹${amount} INR` : 'Custom Amount'} via UPI
+              Pay {amount ? `₹${amount} INR` : 'Custom Amount'} via Any UPI App
             </span>
             {usdValue && (
               <span className="text-xs font-normal opacity-80">
@@ -97,6 +97,12 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
         </div>
       </a>
 
+      {/* App Compatibility Strip */}
+      <div className="flex items-center justify-between text-xs font-mono text-neutral-600 dark:text-neutral-400 px-1 flex-wrap gap-1">
+        <span className="font-semibold text-neutral-800 dark:text-neutral-200">Works with:</span>
+        <span className="text-neutral-600 dark:text-neutral-400">Google Pay • PhonePe • Paytm • BHIM • Cred • Any Bank UPI</span>
+      </div>
+
       {/* Secondary Action Line: In-place Copy & Share */}
       <div className="flex items-center gap-2.5 pt-1">
         <button
@@ -111,13 +117,13 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
           {copied ? (
             <div className="flex items-center gap-2 w-full justify-center">
               <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-              <span>Copied {upiId} (FamPay) to clipboard</span>
+              <span>Copied {upiId} to clipboard</span>
             </div>
           ) : (
             <>
               <div className="flex items-center gap-2">
                 <Copy className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
-                <span>vpa: <strong className="text-neutral-950 dark:text-white font-bold">{upiId}</strong> <span className="text-neutral-600 dark:text-neutral-400 font-normal">(FamPay)</span></span>
+                <span>vpa: <strong className="text-neutral-950 dark:text-white font-bold">{upiId}</strong></span>
               </div>
               <span className="text-xs text-neutral-600 dark:text-neutral-400 uppercase tracking-wider font-semibold">
                 click to copy
@@ -141,13 +147,19 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
         </button>
       </div>
 
-      {/* Protocol & Cross-Border Assurance Line */}
-      <div className="space-y-1.5 pt-2 font-mono text-xs text-neutral-700 dark:text-neutral-300">
-        <div className="flex items-center gap-2">
-          <Zap className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-400 shrink-0" />
-          <span>Active Rail: Direct UPI to <strong className="text-neutral-900 dark:text-neutral-100 font-semibold">advaita@fam</strong> via FamPay. Instant settlement.</span>
+      {/* Protocol & Minor/Student Account Context */}
+      <div className="space-y-2 pt-1 font-mono text-xs text-neutral-700 dark:text-neutral-300">
+        <div className="p-3.5 rounded-xl border border-neutral-300/80 dark:border-neutral-800 bg-neutral-100/60 dark:bg-neutral-900/60 space-y-1.5">
+          <div className="flex items-center gap-2 text-neutral-900 dark:text-neutral-100 font-semibold">
+            <Zap className="w-3.5 h-3.5 text-[#B8860B] dark:text-[#C2956A] shrink-0" />
+            <span>Universal UPI Interoperability</span>
+          </div>
+          <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed text-xs">
+            As a 16-year-old student builder, my UPI ID (<strong className="text-neutral-900 dark:text-neutral-100 font-bold">{upiId}</strong>) is registered via FamPay. Because NPCI UPI is open and interoperable, you can send payments from <strong>any</strong> UPI app (Google Pay, PhonePe, Paytm, BHIM, Cred, or any mobile bank) without needing FamPay yourself.
+          </p>
         </div>
-        <div className="flex items-center gap-2 pl-5.5 text-neutral-600 dark:text-neutral-400">
+
+        <div className="flex items-center gap-2 pl-2 text-neutral-600 dark:text-neutral-400">
           <Globe2 className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
           <span>Cross-border cards and international multi-currency checkouts currently in development.</span>
         </div>

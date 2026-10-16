@@ -1,8 +1,9 @@
 export const PAYMENT_CONFIG = {
   appName: 'supportadvaita',
   upiId: 'advaita@fam',
-  provider: 'FamPay',
-  paymentRail: 'UPI (NPCI)',
+  provider: 'FamPay (Student / Minor Account • Age 16)',
+  paymentRail: 'NPCI UPI (Open Interoperability — Works with Any UPI App)',
+  supportedApps: ['Google Pay', 'PhonePe', 'Paytm', 'BHIM', 'Cred', 'Navi', 'Any Bank App'],
   recipientName: 'Advaita Chandra',
   nickname: 'Wit',
   age: 16,

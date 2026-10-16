@@ -55,7 +55,7 @@ export default function QrCard({ upiUri, amount, note, upiId, recipientName, onC
         </div>
         <div className="flex items-center gap-1.5 text-neutral-700 dark:text-neutral-300 text-xs font-medium">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>UPI / FamPay Live</span>
+          <span>Any UPI App Supported</span>
         </div>
       </div>
 
@@ -108,8 +108,8 @@ export default function QrCard({ upiUri, amount, note, upiId, recipientName, onC
           </div>
 
           <div className="flex items-center justify-between text-neutral-700 dark:text-neutral-300">
-            <span className="font-medium">rail / gateway</span>
-            <span className="text-neutral-900 dark:text-neutral-100 font-semibold">UPI (FamPay)</span>
+            <span className="font-medium">payment_rail</span>
+            <span className="text-neutral-900 dark:text-neutral-100 font-semibold">NPCI UPI (Any App)</span>
           </div>
 
           <div className="flex items-center justify-between text-neutral-700 dark:text-neutral-300">
@@ -129,6 +129,11 @@ export default function QrCard({ upiUri, amount, note, upiId, recipientName, onC
             </button>
           </div>
 
+          <div className="flex items-center justify-between text-neutral-700 dark:text-neutral-300">
+            <span className="font-medium">account_issuer</span>
+            <span className="text-neutral-900 dark:text-neutral-100 font-semibold">FamPay (Student • 16yo)</span>
+          </div>
+
           {note && (
             <div className="flex items-center justify-between text-neutral-700 dark:text-neutral-300 pt-1.5 border-t border-neutral-300/70 dark:border-neutral-800">
               <span className="font-medium">remarks</span>
@@ -137,12 +142,17 @@ export default function QrCard({ upiUri, amount, note, upiId, recipientName, onC
           )}
         </div>
 
-        {/* Global Supporter Information Box */}
-        <div className="w-full p-3 rounded-xl border border-neutral-300/80 dark:border-neutral-800 bg-neutral-100/60 dark:bg-neutral-900/60 text-xs font-mono text-neutral-700 dark:text-neutral-300 flex items-start gap-2.5 mb-3.5">
+        {/* Global Supporter & Universal UPI Interoperability Box */}
+        <div className="w-full p-3.5 rounded-xl border border-neutral-300/80 dark:border-neutral-800 bg-neutral-100/60 dark:bg-neutral-900/60 text-xs font-mono text-neutral-700 dark:text-neutral-300 flex items-start gap-2.5 mb-3.5">
           <Globe2 className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A] shrink-0 mt-0.5" />
-          <div className="leading-relaxed">
-            <span className="font-bold text-neutral-950 dark:text-white">Global Backers: </span>
-            Canonical settlement is strictly in INR via India's UPI protocol (<code className="text-[#B8860B] dark:text-[#C2956A] font-semibold">{upiId}</code> on FamPay). International card rails in development.
+          <div className="leading-relaxed space-y-1">
+            <p>
+              <span className="font-bold text-neutral-950 dark:text-white">Compatible with ANY UPI App: </span>
+              Scan or transfer with Google Pay, PhonePe, Paytm, BHIM, Cred, or any mobile bank app.
+            </p>
+            <p className="text-neutral-600 dark:text-neutral-400">
+              As a 16-year-old minor student builder, my account is hosted on FamPay (<code className="text-[#B8860B] dark:text-[#C2956A] font-semibold">{upiId}</code>). The open UPI network enables direct transfers from any app.
+            </p>
           </div>
         </div>
 
