@@ -69,13 +69,14 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
   // Re-render QR code dynamically whenever URI or theme changes
   useEffect(() => {
     let isMounted = true
-    generateQrSvg(upiUri, theme === 'dark' ? 'dark' : 'light').then((svg) => {
+    // Always generate high-contrast black QR on white background for camera readability
+    generateQrSvg(upiUri, 'light').then((svg) => {
       if (isMounted) setQrSvg(svg)
     })
     return () => {
       isMounted = false
     }
-  }, [upiUri, theme])
+  }, [upiUri])
 
   const showToast = (msg) => {
     setToastMessage(msg)
@@ -294,24 +295,24 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
         <section className="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
           
           {/* Left Column: Contribution Configurator (7 cols on md+) */}
-          <div className="md:col-span-7 flex flex-col justify-between bg-white dark:bg-[#14171A] border border-neutral-300 dark:border-[#22262B] rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
+          <div className="md:col-span-7 flex flex-col justify-between bg-white dark:bg-[#121214] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl sm:text-3xl font-serif text-neutral-950 dark:text-neutral-50 tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-serif text-zinc-900 dark:text-zinc-50 tracking-tight">
                   Support the Research
                 </h2>
-                <p className="text-[15px] text-neutral-700 dark:text-neutral-300 mt-1 leading-relaxed">
+                <p className="text-[15px] text-zinc-600 dark:text-zinc-400 mt-1 leading-relaxed">
                   Choose a contribution tier or specify a custom amount. 100% directly funds infrastructure, books, and archive uptime with zero intermediary platform cuts.
                 </p>
               </div>
 
-              {/* Tiered Amount Selection (Responsive 2x2 grid on mobile) */}
+              {/* Tiered Amount Selection (Responsive 2x2 grid on mobile, 4-col on desktop) */}
               <div className="space-y-3">
-                <label className="text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                   Select Amount (INR)
                 </label>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1.5">
                   {presetTiers.map((tier) => {
                     const isSelected = !isCustom && amount === tier.value
                     return (
@@ -322,18 +323,18 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                           setAmount(tier.value)
                           setIsCustom(false)
                         }}
-                        className={`relative p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[74px] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
+                        className={`relative p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[76px] focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 ${
                           isSelected
-                            ? 'border-neutral-950 dark:border-neutral-100 bg-neutral-950 dark:bg-neutral-100 text-white dark:text-neutral-950 shadow-sm'
-                            : 'border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:border-neutral-400 dark:hover:border-neutral-600 text-neutral-900 dark:text-neutral-100'
+                            ? 'border-zinc-900 bg-zinc-900 text-white dark:border-white dark:bg-white dark:text-zinc-950 shadow-sm'
+                            : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#121214] hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 text-zinc-900 dark:text-zinc-100'
                         }`}
                       >
                         {tier.badge && (
                           <span
-                            className={`absolute top-2 right-2 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase pointer-events-none ${
+                            className={`absolute -top-2.5 inset-x-0 mx-auto w-fit text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full pointer-events-none tracking-wide shadow-xs ${
                               isSelected
-                                ? 'bg-amber-400 text-neutral-950'
-                                : 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800/60'
+                                ? 'bg-amber-400 text-zinc-950'
+                                : 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-700/60'
                             }`}
                           >
                             {tier.badge}
@@ -342,7 +343,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                         <div className="text-lg font-semibold tracking-tight">{tier.label}</div>
                         <div
                           className={`text-xs mt-0.5 font-mono ${
-                            isSelected ? 'text-neutral-300 dark:text-neutral-700' : 'text-neutral-600 dark:text-neutral-400'
+                            isSelected ? 'text-zinc-300 dark:text-zinc-700' : 'text-zinc-500 dark:text-zinc-400'
                           }`}
                         >
                           ~{tier.usd} USD
@@ -361,14 +362,14 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                         setIsCustom(true)
                         setCustomAmount('')
                       }}
-                      className="text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white underline underline-offset-4 cursor-pointer"
+                      className="text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline underline-offset-4 cursor-pointer"
                     >
                       + Or enter a custom amount
                     </button>
                   ) : (
                     <div className="flex items-center gap-2 mt-2">
                       <div className="relative flex-1">
-                        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-600 dark:text-neutral-400 font-medium">
+                        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 dark:text-zinc-400 font-medium">
                           ₹
                         </span>
                         <input
@@ -378,7 +379,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                           placeholder="Enter custom amount (e.g. 250)"
                           value={customAmount}
                           onChange={(e) => setCustomAmount(e.target.value)}
-                          className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                          className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
                           autoFocus
                         />
                       </div>
@@ -388,7 +389,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                           setIsCustom(false)
                           setAmount(150)
                         }}
-                        className="px-3 py-2.5 rounded-xl text-xs font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-neutral-100 cursor-pointer"
+                        className="px-3 py-2.5 rounded-xl text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer"
                       >
                         Reset
                       </button>
@@ -397,39 +398,45 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                 </div>
               </div>
 
-              {/* Optional Donor Details (Understated Inputs) */}
-              <div className="space-y-3 pt-1">
-                <label className="text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+              {/* Optional Donor Details (Inputs with distinct labels & focus rings) */}
+              <div className="space-y-2 pt-1">
+                <label className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                   Optional Note & Handle
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <input
-                    type="text"
-                    placeholder="Your Name or @handle"
-                    value={donorName}
-                    onChange={(e) => setDonorName(e.target.value)}
-                    maxLength={30}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Short note (optional)"
-                    value={donorNote}
-                    onChange={(e) => setDonorNote(e.target.value)}
-                    maxLength={50}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
+                  <div>
+                    <label className="sr-only">Your Name or Handle</label>
+                    <input
+                      type="text"
+                      placeholder="Your Name or @handle"
+                      value={donorName}
+                      onChange={(e) => setDonorName(e.target.value)}
+                      maxLength={30}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600 transition-shadow"
+                    />
+                  </div>
+                  <div>
+                    <label className="sr-only">Short Note</label>
+                    <input
+                      type="text"
+                      placeholder="Short note (optional)"
+                      value={donorNote}
+                      onChange={(e) => setDonorNote(e.target.value)}
+                      maxLength={50}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600 transition-shadow"
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* Dynamic Primary Execution Call-to-Action with Rich Interactive States */}
+              {/* Dynamic Primary Execution Call-to-Action */}
               <div className="pt-2">
                 <a
                   href={upiUri}
-                  className="w-full py-4 px-6 rounded-xl bg-neutral-950 hover:bg-neutral-800 active:bg-black text-white dark:bg-white dark:hover:bg-neutral-100 dark:active:bg-neutral-200 dark:text-neutral-950 font-semibold text-base flex items-center justify-between transition-all duration-150 shadow-md hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#14171A] active:scale-[0.99] cursor-pointer"
+                  className="w-full py-4 px-6 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:bg-zinc-950 text-white dark:bg-zinc-50 dark:hover:bg-zinc-200 dark:active:bg-zinc-300 dark:text-zinc-950 font-semibold text-base flex items-center justify-between transition-all duration-150 shadow-md hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#121214] active:scale-[0.99] cursor-pointer"
                 >
                   <div className="flex items-center gap-2.5">
-                    <Smartphone className="w-5 h-5 text-neutral-300 dark:text-neutral-700" />
+                    <Smartphone className="w-5 h-5 text-zinc-300 dark:text-zinc-700" />
                     <span>
                       Pay {activeAmount ? `₹${activeAmount} INR` : 'Custom Amount'} via Any UPI App
                     </span>
@@ -441,9 +448,9 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                 </a>
               </div>
 
-              {/* Direct 1-Tap App Launcher Row */}
+              {/* Direct 1-Tap App Launcher Row (Neutral rounded chips) */}
               <div className="space-y-2 pt-1">
-                <div className="flex items-center justify-between text-xs text-neutral-600 dark:text-neutral-400">
+                <div className="flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400">
                   <span>Or open directly in your preferred app:</span>
                   <span className="text-[11px] font-mono">1-tap launch</span>
                 </div>
@@ -454,13 +461,13 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                       <a
                         key={app.id}
                         href={href}
-                        className="p-2 rounded-xl border border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:bg-neutral-50 dark:hover:bg-[#1C2024] hover:border-neutral-400 dark:hover:border-neutral-600 flex flex-col items-center justify-center gap-1.5 transition-all text-center group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                        className="p-2 rounded-xl border border-zinc-200 dark:border-zinc-700/60 bg-zinc-100 dark:bg-zinc-800/80 hover:bg-zinc-200/80 dark:hover:bg-zinc-700/80 hover:border-zinc-300 dark:hover:border-zinc-600 flex flex-col items-center justify-center gap-1.5 transition-all text-center group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 hover:scale-105"
                         title={`Launch and pay in ${app.name}`}
                       >
-                        <div className="w-6 h-6 rounded-md overflow-hidden shrink-0 group-hover:scale-105 transition-transform">
+                        <div className="w-6 h-6 rounded-md overflow-hidden shrink-0 transition-transform">
                           <AppIconRenderer appId={app.id} className="w-full h-full" />
                         </div>
-                        <span className="text-[11px] font-medium text-neutral-700 dark:text-neutral-300 truncate w-full">
+                        <span className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 truncate w-full">
                           {app.shortName}
                         </span>
                       </a>
@@ -471,19 +478,19 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
             </div>
 
             {/* Micro Trust Banner */}
-            <div className="pt-2 border-t border-neutral-100 dark:border-[#22262B] text-xs text-neutral-600 dark:text-neutral-400 flex items-center justify-between">
+            <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800/80 text-xs text-zinc-500 dark:text-zinc-400 flex items-center justify-between">
               <span>Direct P2P transfer</span>
               <span>100% directly funds infrastructure • 0% fees</span>
             </div>
           </div>
 
           {/* Right Column: Direct Scan & VPA Container (5 cols, hidden on small screens) */}
-          <div className="hidden md:flex md:col-span-5 flex-col justify-between bg-white dark:bg-[#14171A] border border-neutral-300 dark:border-[#22262B] rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
+          <div className="hidden md:flex md:col-span-5 flex-col justify-between bg-white dark:bg-[#121214] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
             
             {/* Header & Copyable VPA */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                   Scan to Pay (Desktop / QR)
                 </span>
                 <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
@@ -492,21 +499,21 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                 </span>
               </div>
 
-              {/* Copyable UPI Bar */}
+              {/* Copyable UPI Bar with feedback */}
               <div
                 onClick={() => handleCopy(PAYMENT_CONFIG.upiId)}
-                className="flex items-center justify-between p-3 rounded-xl bg-neutral-50 dark:bg-[#0B0D0E] border border-neutral-300 dark:border-[#22262B] cursor-pointer hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors group"
+                className="flex items-center justify-between p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 cursor-pointer hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors group"
                 title="Click to copy UPI address"
               >
                 <div className="flex flex-col min-w-0">
-                  <span className="text-[10px] text-neutral-500 uppercase tracking-wider font-mono">
+                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">
                     Virtual Payment Address (VPA)
                   </span>
-                  <span className="font-mono text-sm font-semibold text-neutral-900 dark:text-neutral-100 truncate">
+                  <span className="font-mono text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">
                     {PAYMENT_CONFIG.upiId}
                   </span>
                 </div>
-                <div className="p-2 rounded-lg bg-white dark:bg-[#14171A] border border-neutral-300 dark:border-[#22262B] text-neutral-700 dark:text-neutral-300 group-hover:text-neutral-950 dark:group-hover:text-white transition-colors shrink-0 ml-2">
+                <div className="p-2 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors shrink-0 ml-2">
                   {copied ? (
                     <Check className="w-4 h-4 text-emerald-500" />
                   ) : (
@@ -516,23 +523,25 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
               </div>
             </div>
 
-            {/* Sharp, High-Contrast Dynamic QR Container */}
-            <div className="flex flex-col items-center justify-center p-5 rounded-xl bg-white border border-neutral-200 shadow-inner">
-              {qrSvg ? (
-                <div
-                  className="w-48 h-48 sm:w-52 sm:h-52 flex items-center justify-center select-none"
-                  dangerouslySetInnerHTML={{ __html: qrSvg }}
-                />
-              ) : (
-                <div className="w-48 h-48 flex items-center justify-center text-neutral-400 text-xs">
-                  Generating dynamic QR...
-                </div>
-              )}
-              <div className="mt-3 text-center">
-                <span className="text-xs font-semibold text-neutral-900">
+            {/* Sharp, High-Contrast Dynamic QR Container: isolated white container */}
+            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-white border border-zinc-200 dark:border-zinc-700 shadow-sm">
+              <div className="p-3 bg-white rounded-lg flex items-center justify-center">
+                {qrSvg ? (
+                  <div
+                    className="w-48 h-48 sm:w-52 sm:h-52 flex items-center justify-center select-none"
+                    dangerouslySetInnerHTML={{ __html: qrSvg }}
+                  />
+                ) : (
+                  <div className="w-48 h-48 flex items-center justify-center text-zinc-400 text-xs">
+                    Generating dynamic QR...
+                  </div>
+                )}
+              </div>
+              <div className="mt-2 text-center pb-1">
+                <span className="text-xs font-semibold text-zinc-900">
                   Dynamic UPI QR for {activeAmount ? `₹${activeAmount}` : 'Custom'}
                 </span>
-                <p className="text-[11px] text-neutral-600 mt-0.5">
+                <p className="text-[11px] text-zinc-500 mt-0.5">
                   Scan with GPay, PhonePe, Paytm, BHIM, or any banking app
                 </p>
               </div>
@@ -544,7 +553,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                 <button
                   type="button"
                   onClick={handleDownloadQr}
-                  className="flex-1 py-2.5 px-3 rounded-xl border border-neutral-300 dark:border-[#22262B] text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#1C2024] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  className="flex-1 py-2.5 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <QrCode className="w-3.5 h-3.5" />
                   <span>Download QR</span>
@@ -552,20 +561,21 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                 <button
                   type="button"
                   onClick={handleShare}
-                  className="flex-1 py-2.5 px-3 rounded-xl border border-neutral-300 dark:border-[#22262B] text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#1C2024] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  className="flex-1 py-2.5 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <Share2 className="w-3.5 h-3.5" />
                   <span>Share Page</span>
                 </button>
               </div>
 
-              <div className="text-[12px] text-neutral-600 dark:text-neutral-400 leading-relaxed space-y-1.5 border-t border-neutral-100 dark:border-[#22262B] pt-3">
+              {/* Footnote legal notice as clean, muted text without marker highlights */}
+              <div className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-1.5 border-t border-zinc-100 dark:border-zinc-800/80 pt-3">
                 <p className="flex items-start gap-1.5">
                   <span className="text-emerald-500 mt-0.5">•</span>
                   <span>Direct P2P transfer • 100% directly funds infrastructure • 0% platform fees.</span>
                 </p>
-                <p className="flex items-start gap-1.5 text-neutral-500 dark:text-neutral-400 text-[11px]">
-                  <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                <p className="flex items-start gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+                  <Info className="w-3.5 h-3.5 shrink-0 mt-0.5 text-zinc-400 dark:text-zinc-500" />
                   <span>
                     International cards unavailable as Advaita is 16 and a legal minor. UPI serves as the primary direct interoperable rail.
                   </span>
