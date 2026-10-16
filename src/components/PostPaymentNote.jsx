@@ -1,5 +1,5 @@
 import React from 'react'
-import { MessageCircle, Mail, Send, CheckCircle2 } from 'lucide-react'
+import { MessageCircle, Mail, Send } from 'lucide-react'
 import confetti from 'canvas-confetti'
 
 export default function PostPaymentNote({ amount, name, note }) {
@@ -24,51 +24,51 @@ export default function PostPaymentNote({ amount, name, note }) {
   }
 
   return (
-    <div className="p-1.5 sm:p-2 rounded-[28px] bg-black/[0.03] dark:bg-white/[0.03] ring-1 ring-black/[0.06] dark:ring-white/[0.08] shadow-sm">
-      <div className="p-5 sm:p-6 rounded-[calc(28px-0.375rem)] bg-white dark:bg-[#141311] shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)] space-y-3.5 transition-colors">
-        <div className="flex items-center gap-2.5 pb-2 border-b border-black/[0.05] dark:border-white/[0.06]">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-          <span className="text-xs sm:text-[13px] font-bold text-[#1D1D1F] dark:text-[#F8F6F0]">
-            Dhanyawaad (धन्यवाद) • Sent your Sahyog? Drop a quick note:
-          </span>
-        </div>
+    <div className="pt-4 border-t border-black/[0.08] dark:border-neutral-800 space-y-2.5">
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-xs uppercase tracking-wider text-neutral-800 dark:text-neutral-200 font-semibold">
+          // Acknowledgment (धन्यवाद)
+        </span>
+        <span className="text-[11px] font-mono text-neutral-400 dark:text-neutral-500">
+          sent transfer?
+        </span>
+      </div>
 
-        <p className="text-xs text-[#6E6E73] dark:text-[#8E8A83] leading-relaxed">
-          Direct peer-to-peer transfers do not automatically establish communication channels. Let Advaita know so he can personally acknowledge your patron support:
-        </p>
+      <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed font-mono">
+        UPI does not automatically open a chat link. Drop a quick note to confirm receipt:
+      </p>
 
-        <div className="flex items-center gap-2 pt-1 flex-wrap">
-          <a
-            href={`https://wa.me/?text=${shareText}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={triggerCelebration}
-            className="px-4 py-2 rounded-xl bg-[#F8F8FA] dark:bg-[#181714] hover:bg-black/[0.04] dark:hover:bg-[#22201C] border border-black/[0.06] dark:border-white/[0.08] text-xs font-mono-code font-semibold text-[#424245] dark:text-[#A5A096] hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0] flex items-center gap-2 transition-all shadow-xs active-press"
-          >
-            <MessageCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span>WhatsApp Note</span>
-          </a>
+      <div className="flex items-center gap-2 pt-1 flex-wrap">
+        <a
+          href={`https://wa.me/?text=${shareText}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={triggerCelebration}
+          className="px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-xs font-mono text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 flex items-center gap-1.5 transition-colors"
+        >
+          <MessageCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+          <span>whatsapp</span>
+        </a>
 
-          <a
-            href={`mailto:advaita974@gmail.com?subject=${mailSubject}&body=${mailBody}`}
-            onClick={triggerCelebration}
-            className="px-4 py-2 rounded-xl bg-[#F8F8FA] dark:bg-[#181714] hover:bg-black/[0.04] dark:hover:bg-[#22201C] border border-black/[0.06] dark:border-white/[0.08] text-xs font-mono-code font-semibold text-[#424245] dark:text-[#A5A096] hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0] flex items-center gap-2 transition-all shadow-xs active-press"
-          >
-            <Mail className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A]" />
-            <span>Email Advaita</span>
-          </a>
+        <a
+          href={`mailto:advaita974@gmail.com?subject=${mailSubject}&body=${mailBody}`}
+          onClick={triggerCelebration}
+          className="px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-xs font-mono text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 flex items-center gap-1.5 transition-colors"
+        >
+          <Mail className="w-3.5 h-3.5 text-[#B8860B] dark:text-[#C2956A]" />
+          <span>email</span>
+        </a>
 
-          <a
-            href="https://x.com/w1tneess_"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={triggerCelebration}
-            className="px-4 py-2 rounded-xl bg-[#F8F8FA] dark:bg-[#181714] hover:bg-black/[0.04] dark:hover:bg-[#22201C] border border-black/[0.06] dark:border-white/[0.08] text-xs font-mono-code font-semibold text-[#424245] dark:text-[#A5A096] hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0] flex items-center gap-2 transition-all shadow-xs active-press"
-          >
-            <Send className="w-4 h-4 text-sky-600 dark:text-sky-400" />
-            <span>DM on X</span>
-          </a>
-        </div>
+        <a
+          href="https://x.com/w1tneess_"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={triggerCelebration}
+          className="px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-xs font-mono text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 flex items-center gap-1.5 transition-colors"
+        >
+          <Send className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
+          <span>dm on x</span>
+        </a>
       </div>
     </div>
   )
