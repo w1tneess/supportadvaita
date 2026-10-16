@@ -1,5 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="8" fill="#0F0E0D" />
-  <circle cx="16" cy="16" r="10" stroke="#C2956A" stroke-width="2" />
-  <path d="M12 12h8M16 12v8M13 20h6" stroke="#F8F6F0" stroke-width="1.8" stroke-linecap="round" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <!-- Light Mode Gradient -->
+    <linearGradient id="lightBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F2EFE9" />
+    </linearGradient>
+    <linearGradient id="lightAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#B8860B" />
+      <stop offset="100%" stop-color="#8C6207" />
+    </linearGradient>
+
+    <!-- Dark Mode Gradient -->
+    <linearGradient id="darkBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#181715" />
+      <stop offset="100%" stop-color="#0C0B0A" />
+    </linearGradient>
+    <linearGradient id="darkAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#DFC3A5" />
+      <stop offset="50%" stop-color="#C2956A" />
+      <stop offset="100%" stop-color="#9E7247" />
+    </linearGradient>
+
+    <style>
+      .bg-rect { fill: url(#darkBg); stroke: rgba(255, 255, 255, 0.12); }
+      .accent-stroke { stroke: url(#darkAccent); }
+      .accent-fill { fill: url(#darkAccent); }
+      .glyph-white { fill: #F8F6F0; }
+
+      @media (prefers-color-scheme: light) {
+        .bg-rect { fill: url(#lightBg); stroke: rgba(0, 0, 0, 0.1); }
+        .accent-stroke { stroke: url(#lightAccent); }
+        .accent-fill { fill: url(#lightAccent); }
+        .glyph-white { fill: #1D1D1F; }
+      }
+    </style>
+  </defs>
+
+  <!-- Outer Squircle Plate with Dual Bezel -->
+  <rect x="2" y="2" width="60" height="60" rx="18" class="bg-rect" stroke-width="2" />
+  
+  <!-- Concentric Inner Highlight Ring -->
+  <circle cx="32" cy="32" r="22" stroke-width="1.5" class="accent-stroke" stroke-dasharray="2 3" opacity="0.6" />
+
+  <!-- Center Stylized Indian Rupee Symbol with Geometric Elegance -->
+  <!-- Top Bar 1 -->
+  <path d="M22 20h20" class="accent-stroke" stroke-width="3" stroke-linecap="round" />
+  <!-- Top Bar 2 -->
+  <path d="M22 26h15" class="accent-stroke" stroke-width="3" stroke-linecap="round" />
+  <!-- Loop & Diagonal Stem -->
+  <path d="M28 20v14c0 3.5 2.5 5 7 5l6 9" class="accent-stroke" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M28 20c7 0 11 2 11 6.5s-4 6.5-11 6.5" class="accent-stroke" stroke-width="3" stroke-linecap="round" />
+  
+  <!-- Subtle Auspicious Bindu (Dot) -->
+  <circle cx="43" cy="21" r="2" class="accent-fill" />
 </svg>

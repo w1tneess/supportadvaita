@@ -1,0 +1,49 @@
+name: Build and Verify Deployment
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build & Verify Production Bundle
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Vite static assets
+        run: npm run build
+
+      - name: Verify build artifacts
+        run: |
+          test -f dist/index.html || exit 1
+          test -f dist/favicon.svg || exit 1
+          echo "Production build verified successfully!"
+
+      - name: Deploy to Cloudflare Pages (if secrets configured)
+        if: env.CLOUDFLARE_API_TOKEN != '' && github.ref == 'refs/heads/master'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx wrangler pages deploy dist --project-name=paytoadvaita --branch=master

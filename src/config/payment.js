@@ -14,26 +14,35 @@ export const PAYMENT_CONFIG = {
   twitter: 'https://x.com/w1tneess_',
   instagram: 'https://instagram.com/adva1ta_',
 
-  // Real voice and bio from Advaita's personal notebook
-  bio: "I'm a 16-year-old student based in West Bengal, India. Outside school, I build independent software, investigate historical and epistemological questions, read existential philosophy, and shoot street and landscape photography.",
-  subBio: "I refuse to put intrusive advertisements, tracking pop-ups, or artificial paywalls on any of my projects. Every rupee sent here directly supports independent research, server compute, book acquisitions, and hardware upkeep.",
+  // Authentic narrative and ethos
+  bio: "I am a 16-year-old student, independent researcher, and developer based in West Bengal, India. Outside Class 10 coursework, I build open-source tools, investigate historical and philosophical questions, read existentialism, and pursue street and landscape photography.",
+  subBio: "I refuse intrusive advertisements, corporate tracking scripts, or artificial paywalls on my work. Every rupee contributed here directly funds server compute, domain renewals, book acquisitions, and research equipment.",
 
-  // Philosophical quote from Advaita's writing on Camus
+  // Philosophical foundation
   quote: {
     text: "The absurd is the friction produced when the human longing for clarity collides with an unanswering world. Rather than leaping into certainty, one must maintain the tension without illusion.",
-    author: "Albert Camus (The Myth of Sisyphus)",
-    note: "The epistemic foundation for my research, coding, and writing."
+    author: "Albert Camus",
+    source: "The Myth of Sisyphus",
+    note: "The epistemic principle guiding my research, software, and writing."
   },
+
+  // Key platform metrics
+  metrics: [
+    { label: 'Settlement', value: '100% P2P' },
+    { label: 'Intermediary Cut', value: '0% (Zero Fee)' },
+    { label: 'Active Projects', value: '4 Maintained' },
+    { label: 'Student Patronage', value: 'Class 10 CBSE' },
+  ],
 
   // Real financial breakdown: what running independent projects actually costs
   financialBreakdown: [
-    { item: 'Domain Renewals (advaitachandra.in, etc.)', cost: '₹1,200 / year', desc: 'Maintains personal canonical identity on the web' },
-    { item: 'Cloud Compute & Server Instances', cost: '₹500 / month', desc: 'Runs background workers, APIs, and micro-services' },
-    { item: 'Books & Philosophical Texts', cost: '₹400 / month', desc: 'Physical editions of Camus, Krishnamurti, Dostoevsky, and CS textbooks' },
-    { item: 'Photography Storage & Gear Upkeep', cost: '₹300 / month', desc: 'RAW photograph backups, camera maintenance, and storage disks' }
+    { item: 'Cloud Compute & Server Workers', cost: '₹500 / mo', desc: 'Background workers, static hosting, and API micro-services' },
+    { item: 'Philosophy & CS Physical Books', cost: '₹400 / mo', desc: 'Physical editions of Camus, Krishnamurti, Dostoevsky, and CS textbooks' },
+    { item: 'Photography Storage & Backups', cost: '₹300 / mo', desc: 'RAW photograph archives, camera upkeep, and hard disk storage' },
+    { item: 'Canonical Domain Renewals', cost: '₹1,200 / yr', desc: 'Maintains advaitachandra.in and personal web namespace' }
   ],
 
-  // Grounded, meaningful Indian Sahyog & Shagun tiers
+  // Grounded Indian Sahyog & Shagun tiers
   tiers: [
     {
       id: 'chai',
@@ -41,8 +50,7 @@ export const PAYMENT_CONFIG = {
       devanagari: '५१',
       label: 'Kulhad Chai',
       hindiName: 'कुल्हड़ चाय',
-      desc: 'Late-night debugging & reading fuel after Class 10 school hours',
-      tag: '₹51',
+      desc: 'Late-night debugging & reading fuel after school hours',
       icon: 'Coffee',
       popular: false,
     },
@@ -53,9 +61,9 @@ export const PAYMENT_CONFIG = {
       label: 'Kitab Sahyog',
       hindiName: 'किताब सहयोग',
       desc: 'Contributes to a physical philosophy or computer science book',
-      tag: '₹101',
       icon: 'BookOpen',
       popular: true,
+      tag: 'शुभ शगुन',
     },
     {
       id: 'server',
@@ -63,8 +71,7 @@ export const PAYMENT_CONFIG = {
       devanagari: '२५१',
       label: 'Server Seva',
       hindiName: 'सर्वर सेवा',
-      desc: 'Covers personal domain uptime & cloud worker droplets for a month',
-      tag: '₹251',
+      desc: 'Covers personal domain uptime & cloud droplets for a month',
       icon: 'Server',
       popular: false,
     },
@@ -75,7 +82,6 @@ export const PAYMENT_CONFIG = {
       label: 'Vidya Sahyog',
       hindiName: 'विद्या सहयोग',
       desc: 'Substantial student backing for open-source research and tools',
-      tag: '₹501',
       icon: 'Sparkles',
       popular: false,
     },
@@ -85,8 +91,7 @@ export const PAYMENT_CONFIG = {
       devanagari: '११०१',
       label: 'Maha Sahyog',
       hindiName: 'महा सहयोग',
-      desc: 'True patron of independent writing, evidence archives & code',
-      tag: '₹1,101',
+      desc: 'True patron of independent writing, archives & software',
       icon: 'GraduationCap',
       popular: false,
     },
@@ -101,13 +106,13 @@ export const PAYMENT_CONFIG = {
     { value: 501, label: '+₹501' },
   ],
 
-  // Real projects built by Advaita
+  // Real projects built and maintained by Advaita
   projects: [
     {
       id: 'advaitachandra-in',
       name: 'advaitachandra.in',
       category: 'Personal Space & Digital Garden',
-      summary: 'Public notebook, philosophical essays, data architecture notes, and street photography.',
+      summary: 'Public digital notebook, philosophical essays, data architecture notes, and street photography.',
       details: 'Built with React 19, Tailwind CSS, Lucide, Framer Motion, and pre-rendered SSG for fast offline-first reading.',
       url: 'https://advaitachandra.in',
       repoUrl: 'https://github.com/w1tneess',
@@ -161,30 +166,37 @@ export const PAYMENT_CONFIG = {
     { name: 'Instagram', handle: '@adva1ta_', url: 'https://instagram.com/adva1ta_', icon: 'Instagram' },
   ],
 
-  // UPI link generator
+  // UPI link generator with strict parameter injection prevention and NPCI bounds
   buildUpiUri: (amount, note) => {
-    const cleanAmount = Number(amount) > 0 ? Number(amount).toFixed(2) : ''
-    const cleanNote = note && note.trim().length > 0 
-      ? note.trim().replace(/[^a-zA-Z0-9 -]/g, '')
-      : 'Support paytoadvaita'
-    
-    let uri = `upi://pay?pa=advaita@fam&pn=Advaita%20Chandra&cu=INR`
-    if (cleanAmount) uri += `&am=${cleanAmount}`
-    if (cleanNote) uri += `&tn=${encodeURIComponent(cleanNote)}`
-    return uri
-  },
-
-  // App-specific URI deep links
-  buildAppUpiUri: (appId, amount, note) => {
-    const baseUri = PAYMENT_CONFIG.buildUpiUri(amount, note)
-    const queryString = baseUri.replace('upi://pay?', '')
-    switch (appId) {
-      case 'gpay': return `tez://upi/pay?${queryString}`
-      case 'phonepe': return `phonepe://pay?${queryString}`
-      case 'paytm': return `paytmmp://pay?${queryString}`
-      case 'bhim': return `bhim://upi/pay?${queryString}`
-      default: return baseUri
+    const numAmount = parseFloat(amount)
+    let cleanAmount = ''
+    // Enforce NPCI UPI limits: positive number up to ₹1,00,000
+    if (!isNaN(numAmount) && numAmount >= 1 && numAmount <= 100000) {
+      cleanAmount = numAmount.toFixed(2)
     }
+
+    // Sanitize transaction note strictly to prevent UPI URI parameter pollution
+    let cleanNote = 'Support paytoadvaita'
+    if (typeof note === 'string' && note.trim().length > 0) {
+      const sanitized = note
+        .trim()
+        .replace(/[^\w\s.,!?-]/gi, '') // Strip any &, =, ?, #, %, ;, etc.
+        .replace(/\s+/g, ' ')
+        .slice(0, 50) // NPCI tn character limit
+      if (sanitized.length > 0) {
+        cleanNote = sanitized
+      }
+    }
+
+    // Build canonical params safely
+    const params = new URLSearchParams()
+    params.set('pa', 'advaita@fam')
+    params.set('pn', 'Advaita Chandra')
+    params.set('cu', 'INR')
+    if (cleanAmount) params.set('am', cleanAmount)
+    params.set('tn', cleanNote)
+
+    return `upi://pay?${params.toString()}`
   },
 
   // Rupee words converter with Hindi/Devanagari cultural touch
@@ -215,16 +227,16 @@ export const PAYMENT_CONFIG = {
 
     // Auspicious Shagun check (+1)
     const isShagun = n % 10 === 1 && n !== 11
-    const shagunTag = isShagun ? ' • शुभ सगुन' : ''
+    const shagunTag = isShagun ? ' • शुभ शगुन' : ''
 
     return `${eng} (₹${devanagariNum}${shagunTag})`
   },
 
-  // Embed badges
+  // Ready-to-use embed badges for GitHub READMEs & Websites (Neutral, zero-company branding)
   embedBadges: {
-    markdown: `[![Support via paytoadvaita](https://img.shields.io/badge/Support-advaita-C2956A?style=for-the-badge&logo=googlepay&logoColor=white)](https://support.advaitachandra.in)`,
-    html: `<a href="https://support.advaitachandra.in" target="_blank"><img src="https://img.shields.io/badge/Support-advaita-C2956A?style=for-the-badge&logo=googlepay&logoColor=white" alt="Support via paytoadvaita" /></a>`,
-    shieldUrl: `https://img.shields.io/badge/Support-advaita-C2956A?style=for-the-badge&logo=googlepay&logoColor=white`,
-    textLink: `[Support my projects on support.advaitachandra.in](https://support.advaitachandra.in)`
+    markdown: `[![Support Advaita Chandra](https://img.shields.io/badge/Patron-Advaita_Chandra-C2956A?style=for-the-badge&logoColor=white)](https://support.advaitachandra.in)`,
+    html: `<a href="https://support.advaitachandra.in" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Patron-Advaita_Chandra-C2956A?style=for-the-badge&logoColor=white" alt="Support Advaita Chandra" /></a>`,
+    shieldUrl: `https://img.shields.io/badge/Patron-Advaita_Chandra-C2956A?style=for-the-badge&logoColor=white`,
+    textLink: `[Support my independent work on support.advaitachandra.in](https://support.advaitachandra.in)`
   }
 }

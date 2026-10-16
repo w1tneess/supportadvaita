@@ -1,0 +1,22 @@
+{
+  "name": "Support Advaita Chandra — paytoadvaita",
+  "short_name": "paytoadvaita",
+  "description": "Direct, zero-commission patron support for Advaita Chandra's independent software, research, and writing via FamPay UPI.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0C0B0A",
+  "theme_color": "#0C0B0A",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ]
+}

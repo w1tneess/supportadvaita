@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="30%" r="70%" fx="50%" fy="30%">
+      <stop offset="0%" stop-color="#241E18" />
+      <stop offset="40%" stop-color="#141210" />
+      <stop offset="100%" stop-color="#080706" />
+    </radialGradient>
+    <radialGradient id="accentOrb" cx="80%" cy="20%" r="40%">
+      <stop offset="0%" stop-color="#C2956A" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#C2956A" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F2D7B6" />
+      <stop offset="50%" stop-color="#C2956A" />
+      <stop offset="100%" stop-color="#9E7247" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="20" stdDeviation="30" flood-color="#000000" flood-opacity="0.6" />
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="630" fill="url(#bgGlow)" />
+  <circle cx="950" cy="180" r="450" fill="url(#accentOrb)" />
+  <circle cx="150" cy="500" r="350" fill="url(#accentOrb)" opacity="0.6" />
+
+  <!-- Outer Double-Bezel Card Container -->
+  <g filter="url(#cardShadow)">
+    <rect x="120" y="85" width="960" height="460" rx="40" fill="#141311" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" />
+    <rect x="132" y="97" width="936" height="436" rx="32" fill="#181714" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1.5" />
+  </g>
+
+  <!-- Content Layer -->
+  <g transform="translate(180, 150)">
+    <!-- Status Eyebrow Pill -->
+    <rect x="0" y="0" width="360" height="36" rx="18" fill="rgba(194, 149, 106, 0.12)" stroke="rgba(194, 149, 106, 0.25)" stroke-width="1.5" />
+    <circle cx="20" cy="18" r="4" fill="#10B981" />
+    <text x="34" y="23" fill="#DFC3A5" font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="600" letter-spacing="1">
+      advaita@fam • FamPay Direct UPI
+    </text>
+
+    <!-- Main Title -->
+    <text x="0" y="90" fill="#F8F6F0" font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', sans-serif" font-size="48" font-weight="800" letter-spacing="-1">
+      Support Advaita Chandra
+    </text>
+
+    <!-- Subtitle / Mission -->
+    <text x="0" y="135" fill="#A5A096" font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', sans-serif" font-size="20" font-weight="400">
+      Direct peer-to-peer patron support for independent research, coding, and writing.
+    </text>
+    <text x="0" y="165" fill="#736F68" font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', sans-serif" font-size="17" font-weight="400">
+      Zero third-party payment gateway cuts. 100% fuels open-source code, servers, and books.
+    </text>
+
+    <!-- Features / Highlights Row -->
+    <g transform="translate(0, 220)">
+      <!-- Feature 1 -->
+      <rect x="0" y="0" width="220" height="60" rx="16" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.06)" />
+      <text x="20" y="26" fill="#DFC3A5" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600">UPI VPA</text>
+      <text x="20" y="46" fill="#F8F6F0" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700">advaita@fam</text>
+
+      <!-- Feature 2 -->
+      <rect x="235" y="0" width="220" height="60" rx="16" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.06)" />
+      <text x="255" y="26" fill="#DFC3A5" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600">RECIPIENT</text>
+      <text x="255" y="46" fill="#F8F6F0" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="700">Advaita (Wit)</text>
+
+      <!-- Feature 3 -->
+      <rect x="470" y="0" width="240" height="60" rx="16" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.06)" />
+      <text x="490" y="26" fill="#DFC3A5" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600">HOSTED AT</text>
+      <text x="490" y="46" fill="#F8F6F0" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">support.advaitachandra.in</text>
+    </g>
+  </g>
+
+  <!-- Large Stylized Monogram Graphic on Right -->
+  <g transform="translate(930, 260)" opacity="0.9">
+    <circle cx="0" cy="0" r="85" fill="rgba(194, 149, 106, 0.06)" stroke="url(#goldGradient)" stroke-width="2" stroke-dasharray="4 6" />
+    <path d="M-30 -35h60" stroke="url(#goldGradient)" stroke-width="7" stroke-linecap="round" />
+    <path d="M-30 -16h45" stroke="url(#goldGradient)" stroke-width="7" stroke-linecap="round" />
+    <path d="M-12 -35v45c0 10 7 15 20 15l20 28" stroke="url(#goldGradient)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M-12 -35c20 0 32 6 32 19s-12 19-32 19" stroke="url(#goldGradient)" stroke-width="7" stroke-linecap="round" />
+    <circle cx="34" cy="-33" r="4" fill="url(#goldGradient)" />
+  </g>
+</svg>
