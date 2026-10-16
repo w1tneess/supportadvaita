@@ -23,17 +23,19 @@ export default function StickyMobileBar({ upiUri, amount, onCopyUpi, upiId }) {
   const usdValue = PAYMENT_CONFIG.inrToUsd(amount)
 
   return (
-    <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-neutral-200 dark:border-neutral-800 bg-white/95 dark:bg-[#0A0A0A]/95 backdrop-blur-md p-3 transition-colors">
+    <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-neutral-300 dark:border-neutral-800 bg-white/95 dark:bg-[#0A0A0A]/95 backdrop-blur-md px-4 py-3 transition-colors shadow-lg">
       <div className="max-w-md mx-auto flex items-center justify-between gap-3">
         {/* Amount in INR (1st Priority) + USD context */}
         <div className="flex flex-col">
-          <span className="text-[10px] uppercase font-mono text-neutral-400">Total (INR 1st Priority)</span>
-          <div className="flex items-baseline gap-1 font-mono">
-            <span className="text-base font-bold text-neutral-900 dark:text-neutral-100">
+          <span className="text-xs uppercase font-mono text-neutral-600 dark:text-neutral-400 font-semibold tracking-wider">
+            Total (INR)
+          </span>
+          <div className="flex items-baseline gap-1.5 font-mono">
+            <span className="text-base sm:text-lg font-bold text-neutral-950 dark:text-white">
               {amount ? `₹${amount}.00` : 'Any'}
             </span>
             {usdValue && (
-              <span className="text-[10px] text-neutral-400">
+              <span className="text-xs text-neutral-600 dark:text-neutral-400 font-medium">
                 (~${usdValue})
               </span>
             )}
@@ -41,29 +43,29 @@ export default function StickyMobileBar({ upiUri, amount, onCopyUpi, upiId }) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-2 flex-1 justify-end">
+        <div className="flex items-center gap-2.5 flex-1 justify-end">
           <button
             type="button"
             onClick={handleCopy}
-            className="p-2.5 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+            className="h-11 w-11 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white flex items-center justify-center transition-colors shadow-2xs"
             title="Copy UPI ID (FamPay)"
             aria-label="Copy UPI ID"
           >
             {copied ? (
-              <Check className="w-4 h-4 text-emerald-500" />
+              <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             ) : (
-              <Copy className="w-4 h-4 text-neutral-400" />
+              <Copy className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
             )}
           </button>
 
           <a
             href={upiUri}
             onClick={handlePay}
-            className="py-2.5 px-4 rounded-lg bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 font-mono text-xs font-bold flex items-center gap-2 transition-colors active-press cursor-pointer"
+            className="h-11 px-5 rounded-xl bg-[#0C0B0A] text-white hover:bg-black dark:bg-white dark:text-[#0C0B0A] dark:hover:bg-neutral-100 border border-[#B8860B] dark:border-[#C2956A] font-mono text-xs sm:text-sm font-bold flex items-center gap-2 transition-all active-press shadow-md cursor-pointer"
           >
-            <Smartphone className="w-3.5 h-3.5" />
+            <Smartphone className="w-4 h-4 text-[#C2956A] dark:text-[#B8860B]" />
             <span>Pay with UPI</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-4 h-4" />
           </a>
         </div>
       </div>

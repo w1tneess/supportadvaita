@@ -53,63 +53,73 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
   const usdValue = PAYMENT_CONFIG.inrToUsd(amount)
 
   return (
-    <div className="space-y-3.5">
+    <div className="space-y-4">
       {/* Monospace Step Header with Currency & Rail Context */}
-      <div className="flex items-center justify-between pb-2 border-b border-black/[0.08] dark:border-neutral-800 flex-wrap gap-2">
+      <div className="flex items-center justify-between pb-2.5 border-b border-black/[0.08] dark:border-neutral-800 flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <span className="font-mono text-xs font-bold text-[#B8860B] dark:text-[#C2956A]">03</span>
-          <span className="text-xs font-mono uppercase tracking-wider text-neutral-800 dark:text-neutral-200 font-semibold">
+          <span className="text-xs font-mono uppercase tracking-wider text-neutral-900 dark:text-neutral-100 font-bold">
             Execute Transfer
           </span>
-          <span className="text-neutral-400 dark:text-neutral-600 font-mono text-xs">/ UPI (FamPay)</span>
+          <span className="text-neutral-600 dark:text-neutral-400 font-mono text-xs font-medium">/ UPI (FamPay)</span>
         </div>
-        <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-medium">
-          Zero Fee (0.0%) • Direct Settlement
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono text-emerald-700 dark:text-emerald-300 font-semibold bg-emerald-500/10 border border-emerald-500/25">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span>Zero Fee (0.0%) • Direct Settlement</span>
         </span>
       </div>
 
-      {/* Pro-Dev High-Contrast Master Action Button */}
+      {/* Prominent Primary Call-to-Action: Commanding UPI Payment Execution Button */}
       <a
         href={upiUri}
         onClick={handlePayClick}
-        className="group relative w-full py-3.5 px-5 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-neutral-900 font-mono font-bold text-sm sm:text-base flex items-center justify-between transition-all active-press shadow-xs cursor-pointer"
+        className="group relative w-full py-4 sm:py-4.5 px-5 sm:px-6 rounded-2xl bg-[#0C0B0A] hover:bg-black text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-[#0C0B0A] border-2 border-[#B8860B] dark:border-[#C2956A] shadow-lg shadow-neutral-950/20 dark:shadow-[0_4px_24px_rgba(194,149,106,0.2)] font-mono font-bold text-base sm:text-lg flex items-center justify-between transition-all duration-200 active-press cursor-pointer ring-2 ring-black/5 dark:ring-white/10"
       >
-        <div className="flex items-center gap-2.5">
-          <Smartphone className="w-4 h-4" />
-          <div className="flex items-baseline gap-1.5">
-            <span>Pay {amount ? `₹${amount} INR` : 'Sahyog'} with UPI</span>
-            {usdValue && <span className="text-xs opacity-70 font-normal">(~${usdValue} USD)</span>}
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-white/10 dark:bg-black/10 flex items-center justify-center text-[#C2956A] dark:text-[#B8860B] shrink-0">
+            <Smartphone className="w-5 h-5" />
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+            <span className="tracking-tight">
+              Pay {amount ? `₹${amount} INR` : 'Sahyog'} with UPI
+            </span>
+            {usdValue && (
+              <span className="text-xs font-normal opacity-80">
+                (~${usdValue} USD)
+              </span>
+            )}
           </div>
         </div>
-        <span className="flex items-center gap-1 text-xs opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
-          <span>↵ open app</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </span>
+
+        <div className="flex items-center gap-1.5 text-xs sm:text-sm font-semibold pl-2 shrink-0">
+          <span className="hidden xs:inline opacity-90 group-hover:opacity-100">open app</span>
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200 text-[#C2956A] dark:text-[#B8860B]" />
+        </div>
       </a>
 
       {/* Pro-Dev Secondary Action Line: In-place Copy & Share */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2.5 pt-1">
         <button
           type="button"
           onClick={handleCopy}
-          className={`flex-1 py-2.5 px-3.5 rounded-lg border text-xs font-mono flex items-center justify-between transition-colors cursor-pointer active-press ${
+          className={`flex-1 h-12 px-4 rounded-xl border text-xs sm:text-sm font-mono flex items-center justify-between transition-colors cursor-pointer active-press ${
             copied
-              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
-              : 'border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-neutral-700 dark:text-neutral-300'
+              ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-700 dark:text-emerald-300 font-semibold'
+              : 'border-neutral-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-200 shadow-2xs'
           }`}
         >
           {copied ? (
             <div className="flex items-center gap-2 w-full justify-center">
-              <Check className="w-3.5 h-3.5 text-emerald-500" />
+              <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>Copied {upiId} (FamPay) to clipboard</span>
             </div>
           ) : (
             <>
               <div className="flex items-center gap-2">
-                <Copy className="w-3.5 h-3.5 text-neutral-400" />
-                <span>vpa: <strong className="text-neutral-900 dark:text-neutral-100">{upiId}</strong> <span className="text-neutral-400 font-normal">(FamPay)</span></span>
+                <Copy className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+                <span>vpa: <strong className="text-neutral-950 dark:text-white font-bold">{upiId}</strong> <span className="text-neutral-600 dark:text-neutral-400 font-normal">(FamPay)</span></span>
               </div>
-              <span className="text-[10px] text-neutral-400 uppercase tracking-wider">
+              <span className="text-xs text-neutral-600 dark:text-neutral-400 uppercase tracking-wider font-semibold">
                 click to copy
               </span>
             </>
@@ -119,26 +129,26 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
         <button
           type="button"
           onClick={handleShare}
-          className="p-2.5 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors cursor-pointer"
+          className="h-12 w-12 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer shadow-2xs"
           title="Share page"
           aria-label="Share page"
         >
           {shared ? (
-            <Check className="w-3.5 h-3.5 text-emerald-500" />
+            <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           ) : (
-            <Share2 className="w-3.5 h-3.5" />
+            <Share2 className="w-4 h-4" />
           )}
         </button>
       </div>
 
       {/* Protocol & Cross-Border Assurance Line */}
-      <div className="space-y-1 pt-1 font-mono text-[11px] text-neutral-400 dark:text-neutral-500">
+      <div className="space-y-1.5 pt-2 font-mono text-xs text-neutral-700 dark:text-neutral-300">
         <div className="flex items-center gap-2">
-          <Zap className="w-3 h-3 text-[#B8860B] dark:text-[#C2956A] shrink-0" />
-          <span>Active Rail: Direct UPI to <strong className="text-neutral-700 dark:text-neutral-300">advaita@fam</strong> via FamPay. 1st priority currency is INR.</span>
+          <Zap className="w-3.5 h-3.5 text-[#B8860B] dark:text-[#C2956A] shrink-0" />
+          <span>Active Rail: Direct UPI to <strong className="text-neutral-900 dark:text-neutral-100 font-semibold">advaita@fam</strong> via FamPay. 1st priority currency is INR.</span>
         </div>
-        <div className="flex items-center gap-2 pl-5">
-          <Globe2 className="w-3 h-3 text-neutral-400 shrink-0" />
+        <div className="flex items-center gap-2 pl-5.5 text-neutral-600 dark:text-neutral-400">
+          <Globe2 className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
           <span>Cross-border cards/PayPal integration in development. Global supporters can reach out to sponsor directly.</span>
         </div>
       </div>

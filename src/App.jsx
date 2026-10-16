@@ -74,40 +74,40 @@ export default function App() {
         {/* Unboxed Minimalist Header */}
         <Header theme={theme} setTheme={setTheme} />
 
-        {/* Main Content Layout */}
-        <main className="max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-12">
+        {/* Main Content Layout with Generous Section Whitespace */}
+        <main className="max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 md:py-20 space-y-16 md:space-y-24">
           {/* Mobile Tab Switcher (< lg screens) */}
-          <div className="lg:hidden flex items-center p-1 rounded-lg bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 mb-6">
+          <div className="lg:hidden flex items-center p-1.5 rounded-xl bg-neutral-200/70 dark:bg-neutral-900/80 border border-neutral-300 dark:border-neutral-800 mb-8 shadow-2xs">
             <button
               type="button"
               onClick={() => setMobileTab('pay')}
-              className={`flex-1 py-1.5 px-3 rounded-md text-xs font-mono font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+              className={`flex-1 py-2 px-3.5 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                 mobileTab === 'pay'
-                  ? 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xs'
-                  : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100'
+                  ? 'bg-white dark:bg-[#1A1A1A] text-neutral-950 dark:text-white shadow-xs border border-black/5 dark:border-white/10'
+                  : 'text-neutral-600 hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white'
               }`}
             >
-              <Smartphone className="w-3.5 h-3.5" />
+              <Smartphone className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A]" />
               <span>01. Pay via UPI</span>
             </button>
             <button
               type="button"
               onClick={() => setMobileTab('qr')}
-              className={`flex-1 py-1.5 px-3 rounded-md text-xs font-mono font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+              className={`flex-1 py-2 px-3.5 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                 mobileTab === 'qr'
-                  ? 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xs'
-                  : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100'
+                  ? 'bg-white dark:bg-[#1A1A1A] text-neutral-950 dark:text-white shadow-xs border border-black/5 dark:border-white/10'
+                  : 'text-neutral-600 hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white'
               }`}
             >
-              <QrCode className="w-3.5 h-3.5" />
+              <QrCode className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A]" />
               <span>02. Scan Terminal</span>
             </button>
           </div>
 
           {/* Master 12-Column Layout (Clean, Unboxed, Open Lines) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
             {/* Left Column: Form Steps (7 cols) */}
-            <div className={`space-y-8 ${mobileTab === 'qr' ? 'hidden lg:block lg:col-span-7 xl:col-span-7' : 'lg:col-span-7 xl:col-span-7'}`}>
+            <div className={`space-y-10 sm:space-y-12 min-w-0 ${mobileTab === 'qr' ? 'hidden lg:block lg:col-span-7 xl:col-span-7' : 'lg:col-span-7 xl:col-span-7'}`}>
               <AmountSelector
                 selectedAmount={selectedAmount}
                 onSelectAmount={setSelectedAmount}
@@ -138,7 +138,7 @@ export default function App() {
             </div>
 
             {/* Right Column: Precision Terminal (5 cols) */}
-            <div className={`space-y-4 lg:col-span-5 xl:col-span-5 lg:sticky lg:top-8 ${mobileTab === 'pay' ? 'hidden lg:block' : 'block'}`}>
+            <div className={`space-y-4 lg:col-span-5 xl:col-span-5 min-w-0 lg:sticky lg:top-8 ${mobileTab === 'pay' ? 'hidden lg:block' : 'block'}`}>
               <QrCard
                 upiUri={upiUri}
                 amount={selectedAmount}
@@ -150,12 +150,12 @@ export default function App() {
               />
 
               {/* Protocol Integrity Badge */}
-              <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-[#111111]/50 backdrop-blur-xs flex items-center justify-between text-xs font-mono text-neutral-500 dark:text-neutral-400">
-                <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>NPCI UPI Protocol Live</span>
+              <div className="p-3.5 rounded-xl border border-neutral-300 dark:border-neutral-800 bg-white/80 dark:bg-[#111111]/80 backdrop-blur-xs flex items-center justify-between text-xs font-mono text-neutral-700 dark:text-neutral-300 shadow-2xs">
+                <span className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span className="font-semibold">NPCI UPI Protocol Live</span>
                 </span>
-                <span className="text-neutral-400 dark:text-neutral-600">p2p direct</span>
+                <span className="text-neutral-600 dark:text-neutral-400 font-medium">p2p direct</span>
               </div>
             </div>
           </div>
@@ -173,39 +173,39 @@ export default function App() {
         upiId={PAYMENT_CONFIG.upiId}
       />
 
-      {/* Pro-Dev Minimal Footer */}
-      <footer className="border-t border-black/[0.08] dark:border-neutral-800 py-6 mt-16 bg-white/40 dark:bg-[#0A0A0A]/40 backdrop-blur-md transition-colors font-mono text-xs text-neutral-400 dark:text-neutral-500">
+      {/* Pro-Dev Minimal Footer with High Contrast */}
+      <footer className="border-t border-black/[0.08] dark:border-neutral-800 py-8 mt-20 bg-white/50 dark:bg-[#0A0A0A]/50 backdrop-blur-md transition-colors font-mono text-xs text-neutral-600 dark:text-neutral-400">
         <div className="max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span>© {new Date().getFullYear()} Advaita Chandra</span>
-            <span>•</span>
-            <span className="text-[#B8860B] dark:text-[#C2956A]">support.advaitachandra.in</span>
+            <span className="text-neutral-400 dark:text-neutral-600">•</span>
+            <span className="text-[#B8860B] dark:text-[#C2956A] font-semibold">support.advaitachandra.in</span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5 flex-wrap">
             <a
               href="https://advaitachandra.in"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-neutral-900 dark:hover:text-neutral-100 flex items-center gap-1 transition-colors"
+              className="hover:text-neutral-950 dark:hover:text-white flex items-center gap-1 transition-colors font-medium"
             >
               <span>site</span>
-              <ArrowUpRight className="w-3 h-3" />
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
             <a
               href="https://github.com/w1tneess"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-neutral-900 dark:hover:text-neutral-100 flex items-center gap-1 transition-colors"
+              className="hover:text-neutral-950 dark:hover:text-white flex items-center gap-1 transition-colors font-medium"
             >
               <span>github</span>
-              <ArrowUpRight className="w-3 h-3" />
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
             {/* Discreet footer modal trigger */}
             <button
               type="button"
               onClick={() => setIsBadgeModalOpen(true)}
-              className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors cursor-pointer"
+              className="hover:text-neutral-950 dark:hover:text-white transition-colors cursor-pointer font-medium hover:underline underline-offset-4"
             >
               embed badge
             </button>

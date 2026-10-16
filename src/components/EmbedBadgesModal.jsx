@@ -54,7 +54,7 @@ export default function EmbedBadgesModal({ isOpen, onClose, onCopy }) {
                 <h3 className="text-base font-bold text-[#1D1D1F] dark:text-[#F8F6F0]">
                   Connect to Repositories & Websites
                 </h3>
-                <p className="text-xs text-[#86868B] dark:text-[#8E8A83]">
+                <p className="text-xs text-neutral-600 dark:text-neutral-300 font-medium">
                   Copy ready-made badges linking to <strong className="font-mono-code text-[#B8860B] dark:text-[#C2956A]">support.advaitachandra.in</strong>
                 </p>
               </div>
@@ -62,7 +62,7 @@ export default function EmbedBadgesModal({ isOpen, onClose, onCopy }) {
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-full text-[#86868B] dark:text-[#8E8A83] hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0] bg-black/[0.04] dark:bg-[#1E1D19] hover:bg-black/[0.08] dark:hover:bg-[#282621] transition-colors cursor-pointer active-press"
+              className="p-1.5 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0] bg-black/[0.04] dark:bg-[#1E1D19] hover:bg-black/[0.08] dark:hover:bg-[#282621] transition-colors cursor-pointer active-press"
             >
               <X className="w-4 h-4" />
             </button>
@@ -71,13 +71,13 @@ export default function EmbedBadgesModal({ isOpen, onClose, onCopy }) {
           {/* Modal Body */}
           <div className="p-5 overflow-y-auto space-y-4">
             {/* Live Badge Preview */}
-            <div className="p-4 rounded-2xl bg-[#F7F7F9] dark:bg-[#0F0E0D] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between shadow-inner">
+            <div className="p-4 rounded-2xl bg-[#F7F7F9] dark:bg-[#0F0E0D] border border-black/[0.08] dark:border-white/[0.1] flex items-center justify-between shadow-inner">
               <div>
-                <span className="text-[11px] font-mono-code text-[#86868B] dark:text-[#736F68] block mb-1.5">Official Badge Preview:</span>
+                <span className="text-xs font-mono-code text-neutral-600 dark:text-neutral-400 font-semibold block mb-1.5">Official Badge Preview:</span>
                 <img
                   src={PAYMENT_CONFIG.embedBadges.shieldUrl}
                   alt="Support via supportadvaita"
-                  className="h-7 rounded shadow-sm"
+                  className="h-7 rounded shadow-xs"
                 />
               </div>
               <span className="text-xs text-[#B8860B] dark:text-[#C2956A] font-mono-code font-bold">Vector SVG</span>
@@ -87,11 +87,11 @@ export default function EmbedBadgesModal({ isOpen, onClose, onCopy }) {
             {snippets.map((snip) => (
               <div key={snip.key} className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-[#1D1D1F] dark:text-[#F8F6F0]">{snip.title}</span>
+                  <span className="text-xs sm:text-sm font-semibold text-[#1D1D1F] dark:text-[#F8F6F0]">{snip.title}</span>
                   <button
                     type="button"
                     onClick={() => copySnippet(snip.key, snip.code)}
-                    className="inline-flex items-center gap-1.5 text-xs text-[#B8860B] dark:text-[#C2956A] hover:opacity-80 font-mono-code cursor-pointer font-medium active-press"
+                    className="inline-flex items-center gap-1.5 text-xs text-[#B8860B] dark:text-[#C2956A] hover:opacity-80 font-mono-code cursor-pointer font-bold active-press"
                   >
                     {copiedKey === snip.key ? (
                       <>
@@ -106,8 +106,8 @@ export default function EmbedBadgesModal({ isOpen, onClose, onCopy }) {
                     )}
                   </button>
                 </div>
-                <p className="text-[11px] text-[#86868B] dark:text-[#736F68]">{snip.desc}</p>
-                <pre className="p-3 rounded-xl bg-[#F2F2F7] dark:bg-[#0F0E0D] border border-black/[0.06] dark:border-white/[0.08] text-xs font-mono-code text-[#424245] dark:text-[#A5A096] overflow-x-auto whitespace-pre-wrap break-all shadow-inner">
+                <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-normal">{snip.desc}</p>
+                <pre className="p-3.5 rounded-xl bg-[#F2F2F7] dark:bg-[#0F0E0D] border border-black/[0.08] dark:border-white/[0.1] text-xs font-mono-code text-neutral-800 dark:text-neutral-200 overflow-x-auto whitespace-pre-wrap break-all shadow-inner font-medium">
                   {snip.code}
                 </pre>
               </div>

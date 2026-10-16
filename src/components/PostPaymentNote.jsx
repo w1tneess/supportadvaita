@@ -24,38 +24,38 @@ export default function PostPaymentNote({ amount, name, note }) {
   }
 
   return (
-    <div className="pt-4 border-t border-black/[0.08] dark:border-neutral-800 space-y-2.5">
+    <div className="pt-6 border-t border-black/[0.08] dark:border-neutral-800 space-y-3">
       <div className="flex items-center justify-between">
-        <span className="font-mono text-xs uppercase tracking-wider text-neutral-800 dark:text-neutral-200 font-semibold">
+        <span className="font-mono text-xs uppercase tracking-wider text-neutral-900 dark:text-neutral-100 font-bold">
           // Acknowledgment (धन्यवाद)
         </span>
-        <span className="text-[11px] font-mono text-neutral-400 dark:text-neutral-500">
+        <span className="text-xs font-mono text-neutral-600 dark:text-neutral-400 font-medium">
           sent transfer?
         </span>
       </div>
 
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed font-mono">
-        UPI does not automatically open a chat link. Drop a quick note to confirm receipt:
+      <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-mono">
+        UPI does not automatically pass a backlink. Drop a quick note to confirm receipt & get acknowledged:
       </p>
 
-      <div className="flex items-center gap-2 pt-1 flex-wrap">
+      <div className="flex items-center gap-2.5 pt-1 flex-wrap">
         <a
           href={`https://wa.me/?text=${shareText}`}
           target="_blank"
           rel="noopener noreferrer"
           onClick={triggerCelebration}
-          className="px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-xs font-mono text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 flex items-center gap-1.5 transition-colors"
+          className="px-3.5 py-2 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-xs sm:text-sm font-mono font-medium text-neutral-800 dark:text-neutral-200 hover:text-neutral-950 dark:hover:text-white flex items-center gap-2 transition-colors shadow-2xs"
         >
-          <MessageCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+          <MessageCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           <span>whatsapp</span>
         </a>
 
         <a
           href={`mailto:advaita974@gmail.com?subject=${mailSubject}&body=${mailBody}`}
           onClick={triggerCelebration}
-          className="px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-xs font-mono text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 flex items-center gap-1.5 transition-colors"
+          className="px-3.5 py-2 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-xs sm:text-sm font-mono font-medium text-neutral-800 dark:text-neutral-200 hover:text-neutral-950 dark:hover:text-white flex items-center gap-2 transition-colors shadow-2xs"
         >
-          <Mail className="w-3.5 h-3.5 text-[#B8860B] dark:text-[#C2956A]" />
+          <Mail className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A]" />
           <span>email</span>
         </a>
 
@@ -64,9 +64,9 @@ export default function PostPaymentNote({ amount, name, note }) {
           target="_blank"
           rel="noopener noreferrer"
           onClick={triggerCelebration}
-          className="px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-xs font-mono text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 flex items-center gap-1.5 transition-colors"
+          className="px-3.5 py-2 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-xs sm:text-sm font-mono font-medium text-neutral-800 dark:text-neutral-200 hover:text-neutral-950 dark:hover:text-white flex items-center gap-2 transition-colors shadow-2xs"
         >
-          <Send className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
+          <Send className="w-4 h-4 text-sky-600 dark:text-sky-400" />
           <span>dm on x</span>
         </a>
       </div>
