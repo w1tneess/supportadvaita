@@ -682,34 +682,6 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
             </div>
           </div>
 
-          {/* Monthly Funding Progress Indicator */}
-          <div className="p-5 rounded-2xl border border-neutral-300 dark:border-[#22262B] bg-white dark:bg-[#14171A] space-y-3 shadow-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-neutral-950 dark:text-neutral-50">Monthly Operational Coverage</span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold border border-emerald-500/20">
-                  Target: ₹2,079
-                </span>
-              </div>
-              <span className="font-mono text-neutral-600 dark:text-neutral-400 text-xs">
-                Community Funded Rail • Transparent Ledger
-              </span>
-            </div>
-
-            {/* Progress Bar Track */}
-            <div className="w-full h-2.5 rounded-full bg-neutral-100 dark:bg-neutral-800 overflow-hidden relative border border-neutral-200 dark:border-neutral-700/60">
-              <div 
-                className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-500"
-                style={{ width: `${Math.min(100, Math.round((activeAmount / 2079) * 100))}%` }}
-              />
-            </div>
-
-            <div className="flex items-center justify-between text-[11px] font-mono text-neutral-500 dark:text-neutral-400">
-              <span>Selected Contribution: ₹{activeAmount} ({Math.min(100, Math.round((activeAmount / 2079) * 100))}% of monthly baseline)</span>
-              <span>Baseline Deficit Managed via Personal Savings</span>
-            </div>
-          </div>
-
           {/* Itemized Table Container */}
           <div className="border border-neutral-300 dark:border-[#22262B] rounded-2xl overflow-hidden bg-white dark:bg-[#14171A] shadow-xs">
             <div className="overflow-x-auto">
