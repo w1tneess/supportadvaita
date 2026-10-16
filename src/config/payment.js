@@ -2,24 +2,44 @@ export const PAYMENT_CONFIG = {
   appName: 'paytoadvaita',
   upiId: 'advaita@fam',
   recipientName: 'Advaita Chandra',
+  nickname: 'Wit',
+  age: 16,
+  grade: 'Class 10 (CBSE)',
+  location: 'West Bengal, India',
   currency: 'INR',
-  tagline: 'Direct, zero-fee patron support for independent code, research, and reflections.',
-  bio: 'Advaita Chandra (Wit) is a 16-year-old student, builder, and photographer from West Bengal, India. Fuelling open-source tools, digital experiments, and philosophical writing.',
-  
-  // Philosophical quote matching Advaita's intellectual interests (Camus / Krishnamurti)
+  avatar: '/pfp.png',
+  website: 'https://advaitachandra.in',
+  email: 'advaita974@gmail.com',
+  github: 'https://github.com/w1tneess',
+  twitter: 'https://x.com/w1tneess_',
+  instagram: 'https://instagram.com/adva1ta_',
+
+  // Real voice and bio from Advaita's personal notebook
+  bio: "I'm a 16-year-old student based in West Bengal, India. Outside school, I build independent software, investigate historical and epistemological questions, read existential philosophy, and shoot street and landscape photography.",
+  subBio: "I refuse to put intrusive advertisements, tracking pop-ups, or artificial paywalls on any of my projects. Every rupee sent here directly supports independent research, server compute, book acquisitions, and hardware upkeep.",
+
+  // Philosophical quote from Advaita's writing on Camus
   quote: {
-    text: "To create is to live twice.",
-    author: "Albert Camus",
-    subtext: "Supporting independent craftsmanship in an age of automated noise."
+    text: "The absurd is the friction produced when the human longing for clarity collides with an unanswering world. Rather than leaping into certainty, one must maintain the tension without illusion.",
+    author: "Albert Camus (The Myth of Sisyphus)",
+    note: "The epistemic foundation for my research, coding, and writing."
   },
 
-  // Expanded Presets with common increments
+  // Real financial breakdown: what running independent projects actually costs
+  financialBreakdown: [
+    { item: 'Domain Renewals (advaitachandra.in, etc.)', cost: '₹1,200 / year', desc: 'Maintains personal canonical identity on the web' },
+    { item: 'Cloud Compute & Server Instances', cost: '₹500 / month', desc: 'Runs background workers, APIs, and micro-services' },
+    { item: 'Books & Philosophical Texts', cost: '₹400 / month', desc: 'Physical editions of Camus, Krishnamurti, Dostoevsky, and CS textbooks' },
+    { item: 'Photography Storage & Gear Upkeep', cost: '₹300 / month', desc: 'RAW photograph backups, camera maintenance, and storage disks' }
+  ],
+
+  // Grounded, meaningful tiers
   tiers: [
     {
       id: 'chai',
       amount: 50,
-      label: 'Cup of Chai',
-      desc: 'Late-night debugging fuel',
+      label: 'A Cup of Chai',
+      desc: 'Late-night debugging and reading fuel after school hours',
       tag: '₹50',
       icon: 'Coffee',
       popular: false,
@@ -27,8 +47,8 @@ export const PAYMENT_CONFIG = {
     {
       id: 'book',
       amount: 150,
-      label: 'Cold Brew / Book',
-      desc: 'Nourishment for literature & essays',
+      label: 'Book & Paper Fund',
+      desc: 'Contributes to a physical philosophy or tech text',
       tag: '₹150',
       icon: 'BookOpen',
       popular: true,
@@ -36,8 +56,8 @@ export const PAYMENT_CONFIG = {
     {
       id: 'server',
       amount: 500,
-      label: 'Server & Domain',
-      desc: 'Keeps cloud instances & projects live',
+      label: 'Server & Domain Month',
+      desc: 'Covers one full month of cloud droplets, database, and domain uptime',
       tag: '₹500',
       icon: 'Server',
       popular: false,
@@ -45,75 +65,78 @@ export const PAYMENT_CONFIG = {
     {
       id: 'patron',
       amount: 1000,
-      label: 'Patron of Craft',
-      desc: 'Substantial backing for open source',
+      label: 'Patron of Independent Work',
+      desc: 'Substantial backing toward hardware upkeep and open-source tooling',
       tag: '₹1,000',
       icon: 'Sparkles',
       popular: false,
     },
   ],
 
-  // Quick increment buttons for easy mobile adjustment
+  // Quick increment buttons
   quickIncrements: [50, 100, 200, 500],
 
-  // Specific UPI app deep-link definitions
-  supportedApps: [
-    { id: 'all', name: 'Any UPI App', protocol: 'upi://pay' },
-    { id: 'gpay', name: 'Google Pay', protocol: 'tez://upi/pay' },
-    { id: 'phonepe', name: 'PhonePe', protocol: 'phonepe://pay' },
-    { id: 'paytm', name: 'Paytm', protocol: 'paytmmp://pay' },
-    { id: 'bhim', name: 'BHIM', protocol: 'bhim://upi/pay' },
-  ],
-
-  // Connected Repositories & Websites
+  // Real projects built by Advaita
   projects: [
     {
       id: 'advaitachandra-in',
       name: 'advaitachandra.in',
       category: 'Personal Space & Digital Garden',
-      description: 'Personal site, public notebook, philosophical inquiries, photography, and interactive art.',
+      summary: 'Public notebook, philosophical essays, data architecture notes, and street photography.',
+      details: 'Built with React 19, Tailwind CSS, Lucide, Framer Motion, and pre-rendered SSG for fast offline-first reading.',
       url: 'https://advaitachandra.in',
       repoUrl: 'https://github.com/w1tneess',
       type: 'Website',
-      status: 'Live',
-      stars: 'Digital Space',
-      tags: ['React', 'Tailwind', 'Philosophy', 'Photography'],
+      status: 'Active',
+      tech: ['React 19', 'Tailwind', 'Philosophy', 'Photography'],
     },
     {
       id: 'osho-documentary',
-      name: 'osho-documentary',
-      category: 'Interactive Archival Site',
-      description: 'Interactive documentary platform exploring Osho and Rajneeshpuram with archival timelines and map navigation.',
+      name: 'Osho Archival Documentary',
+      category: 'Investigative Web Archive',
+      summary: 'An impartial, evidence-graded archival platform deconstructing Osho and Rajneeshpuram.',
+      details: 'Built from 5,000+ audio discourses, FBI vault files, and Wasco County court records with interactive map & timeline.',
       url: 'https://github.com/w1tneess/osho-documentary',
       repoUrl: 'https://github.com/w1tneess/osho-documentary',
       type: 'Repository',
       status: 'Public',
-      stars: 'TypeScript',
-      tags: ['Next.js', 'TypeScript', 'History', 'Archive'],
+      tech: ['Next.js', 'TypeScript', 'Primary Sources', 'Archive'],
     },
     {
       id: 'declutter',
       name: 'declutter',
-      category: 'Windows Desktop Utility',
-      description: 'Windows application that safely declutters messy folders: sorts by type, finds duplicates and old files with instant preview.',
+      category: 'System Utility (Python)',
+      summary: 'Windows application that safely declutters messy directories without permanent data loss.',
+      details: 'Categorizes by filetype, detects duplicate hashes, flags stale/large files, and previews every operation first.',
       url: 'https://github.com/w1tneess/declutter',
       repoUrl: 'https://github.com/w1tneess/declutter',
       type: 'Repository',
       status: 'Public',
-      stars: 'Python',
-      tags: ['Python', 'Automation', 'Utility', 'CLI'],
+      tech: ['Python', 'Automation', 'CLI', 'Windows'],
+    },
+    {
+      id: 'terrorism-dataviz',
+      name: 'Terrorism in India (1947–2026)',
+      category: 'Data Reconciliation & Analysis',
+      summary: 'Python data visualization project examining incident reports across seven decades.',
+      details: 'Reconciles conflicting sources and marks reporting gaps explicitly instead of smoothing over historical absences.',
+      url: 'https://advaitachandra.in/projects',
+      repoUrl: null,
+      type: 'Research',
+      status: 'Completed',
+      tech: ['Python', 'Matplotlib', 'Data Ethics', 'History'],
     },
   ],
 
-  // Social Channels
+  // Social Links
   socials: [
-    { name: 'GitHub', handle: 'w1tneess', url: 'https://github.com/w1tneess', icon: 'Github' },
-    { name: 'X / Twitter', handle: '@w1tneess_', url: 'https://x.com/w1tneess_', icon: 'Twitter' },
-    { name: 'Instagram', handle: '@adva1ta_', url: 'https://instagram.com/adva1ta_', icon: 'Instagram' },
     { name: 'Website', handle: 'advaitachandra.in', url: 'https://advaitachandra.in', icon: 'Globe' },
+    { name: 'GitHub', handle: 'w1tneess', url: 'https://github.com/w1tneess', icon: 'Github' },
+    { name: 'Twitter / X', handle: '@w1tneess_', url: 'https://x.com/w1tneess_', icon: 'Twitter' },
+    { name: 'Instagram', handle: '@adva1ta_', url: 'https://instagram.com/adva1ta_', icon: 'Instagram' },
   ],
 
-  // Helper to generate compliant UPI link
+  // UPI link generator
   buildUpiUri: (amount, note) => {
     const cleanAmount = Number(amount) > 0 ? Number(amount).toFixed(2) : ''
     const cleanNote = note && note.trim().length > 0 
@@ -126,7 +149,7 @@ export const PAYMENT_CONFIG = {
     return uri
   },
 
-  // Helper for specific app deep links
+  // App-specific URI deep links
   buildAppUpiUri: (appId, amount, note) => {
     const baseUri = PAYMENT_CONFIG.buildUpiUri(amount, note)
     const queryString = baseUri.replace('upi://pay?', '')
@@ -139,7 +162,7 @@ export const PAYMENT_CONFIG = {
     }
   },
 
-  // Helper to format Indian Rupee into words
+  // Rupee words converter
   numberToRupeeWords: (num) => {
     if (!num || isNaN(num) || num <= 0) return ''
     const n = Math.floor(num)
@@ -161,7 +184,7 @@ export const PAYMENT_CONFIG = {
     return `₹${num.toLocaleString('en-IN')} Rupees`
   },
 
-  // Ready-to-use badges
+  // Embed badges
   embedBadges: {
     markdown: `[![Support via paytoadvaita](https://img.shields.io/badge/Support-paytoadvaita-C2956A?style=for-the-badge&logo=googlepay&logoColor=white)](https://paytoadvaita.pages.dev)`,
     html: `<a href="https://paytoadvaita.pages.dev" target="_blank"><img src="https://img.shields.io/badge/Support-paytoadvaita-C2956A?style=for-the-badge&logo=googlepay&logoColor=white" alt="Support via paytoadvaita" /></a>`,

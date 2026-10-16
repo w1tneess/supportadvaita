@@ -68,8 +68,19 @@ export default function QrCard({ upiUri, amount, note, upiId, recipientName, onC
 
           {/* Center Brand Badge over QR */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-10 h-10 rounded-xl bg-[#0F0E0D] border border-[#C2956A] shadow-md flex items-center justify-center text-xs font-editorial text-[#C2956A] font-bold">
-              AC
+            <div className="w-10 h-10 rounded-xl bg-[#0F0E0D] border border-[#C2956A] shadow-md flex items-center justify-center overflow-hidden">
+              <img
+                src="/pfp.png"
+                alt="Advaita Chandra"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.style.display = 'none'
+                  e.target.nextElementSibling.style.display = 'block'
+                }}
+              />
+              <span style={{ display: 'none' }} className="text-xs font-editorial text-[#C2956A] font-bold">
+                AC
+              </span>
             </div>
           </div>
         </div>
