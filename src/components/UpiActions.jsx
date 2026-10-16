@@ -161,7 +161,7 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
 
         <div className="flex items-center gap-2 pl-2 text-neutral-600 dark:text-neutral-400">
           <Globe2 className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
-          <span>Cross-border cards and international multi-currency checkouts currently in development.</span>
+          <span>Cross-border cards and international multi-currency checkouts are currently unavailable because I am 16 and legally a minor. Direct UPI is the sole active settlement rail.</span>
         </div>
       </div>
     </div>

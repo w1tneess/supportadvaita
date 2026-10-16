@@ -145,13 +145,17 @@ export default function QrCard({ upiUri, amount, note, upiId, recipientName, onC
         {/* Global Supporter & Universal UPI Interoperability Box */}
         <div className="w-full p-3.5 rounded-xl border border-neutral-300/80 dark:border-neutral-800 bg-neutral-100/60 dark:bg-neutral-900/60 text-xs font-mono text-neutral-700 dark:text-neutral-300 flex items-start gap-2.5 mb-3.5">
           <Globe2 className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A] shrink-0 mt-0.5" />
-          <div className="leading-relaxed space-y-1">
+          <div className="leading-relaxed space-y-1.5">
             <p>
               <span className="font-bold text-neutral-950 dark:text-white">Compatible with ANY UPI App: </span>
               Scan or transfer with Google Pay, PhonePe, Paytm, BHIM, Cred, or any mobile bank app.
             </p>
             <p className="text-neutral-600 dark:text-neutral-400">
               As a 16-year-old minor student builder, my account is hosted on FamPay (<code className="text-[#B8860B] dark:text-[#C2956A] font-semibold">{upiId}</code>). The open UPI network enables direct transfers from any app.
+            </p>
+            <p className="text-neutral-600 dark:text-neutral-400 pt-1.5 border-t border-neutral-200/80 dark:border-neutral-800/80">
+              <span className="font-semibold text-neutral-800 dark:text-neutral-200">International Checkouts: </span>
+              Cross-border cards and multi-currency gateways are currently unavailable because Advaita is 16 and legally a minor under banking regulations. Direct UPI is the active settlement rail.
             </p>
           </div>
         </div>
