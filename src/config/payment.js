@@ -41,12 +41,11 @@ export const PAYMENT_CONFIG = {
     { label: 'Identity', value: 'Student Builder' },
   ],
 
-  // Real financial breakdown: what running independent projects actually costs
   financialBreakdown: [
-    { item: 'Cloud Compute & Server Workers', cost: '₹500 / mo', desc: 'Background workers, static hosting, and API micro-services' },
-    { item: 'Philosophy & CS Technical Books', cost: '₹400 / mo', desc: 'Physical editions of Camus, Krishnamurti, Dostoevsky, and CS textbooks' },
-    { item: 'Photography Storage & Backups', cost: '₹300 / mo', desc: 'RAW photograph archives, camera upkeep, and hard disk storage' },
-    { item: 'Canonical Domain Renewals', cost: '₹1,200 / yr', desc: 'Maintains advaitachandra.in and personal web namespace' }
+    { item: 'Cloud Compute & Server Workers', cost: '₹800 / mo', desc: 'Edge runtimes, lightweight backend workers, and static asset hosting' },
+    { item: 'Archival Storage & Redundancy', cost: '₹450 / mo', desc: 'Public dataset backups, historical scan preservation, and media storage' },
+    { item: 'Research Books & Academic Texts', cost: '₹650 / mo', desc: 'Primary editions, philosophy monographs, and technical literature' },
+    { item: 'Domain & Canonical Web Namespace', cost: '₹179 / mo', desc: 'Annual renewal for advaitachandra.in and personal digital infrastructure (₹2,148/yr)' }
   ],
 
   // Professional developer contribution tiers

@@ -174,27 +174,27 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
     {
       category: 'Cloud Compute & Server Workers',
       purpose: 'Edge runtimes, lightweight backend workers, and static asset hosting',
-      cost: '₹500 / mo',
-      usd: '~$6.00',
+      cost: '₹800 / mo',
+      usd: '~$9.60',
     },
     {
       category: 'Archival Storage & Redundancy',
       purpose: 'Public dataset backups, historical scan preservation, and media storage',
-      cost: '₹250 / mo',
-      usd: '~$3.00',
+      cost: '₹450 / mo',
+      usd: '~$5.40',
     },
     {
       category: 'Research Books & Academic Texts',
       purpose: 'Primary editions, philosophy monographs, and technical literature',
-      cost: '₹400 / mo',
-      usd: '~$4.80',
+      cost: '₹650 / mo',
+      usd: '~$7.80',
     },
     {
       category: 'Domain & Canonical Web Namespace',
       purpose: 'Annual renewal for advaitachandra.in and personal digital infrastructure',
-      cost: '₹100 / mo',
-      usd: '~$1.20',
-      note: '₹1,200/yr',
+      cost: '₹179 / mo',
+      usd: '~$2.15',
+      note: '₹2,148/yr',
     },
   ]
 
@@ -700,7 +700,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                 Baseline student operating infrastructure target
               </span>
               <span className="font-mono text-sm font-bold text-neutral-950 dark:text-neutral-50">
-                ~₹1,250 / month (~$15.00 USD)
+                ~₹2,079 / month (~$24.90 USD)
               </span>
             </div>
           </div>
