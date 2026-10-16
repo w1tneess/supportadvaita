@@ -1,6 +1,6 @@
 import React from 'react'
 import { PAYMENT_CONFIG } from '../config/payment.js'
-import { Coffee, BookOpen, Server, Sparkles, GraduationCap, IndianRupee, Plus, RotateCcw, Check } from 'lucide-react'
+import { Coffee, BookOpen, Server, Sparkles, GraduationCap, IndianRupee, Plus, RotateCcw, Check, Heart } from 'lucide-react'
 
 export default function AmountSelector({ selectedAmount, onSelectAmount, isCustom, setIsCustom }) {
   const iconMap = {
@@ -25,12 +25,12 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
   const words = PAYMENT_CONFIG.numberToRupeeWords(selectedAmount)
 
   return (
-    <div className="p-1.5 sm:p-2 rounded-[28px] bg-black/[0.03] dark:bg-white/[0.03] ring-1 ring-black/[0.06] dark:ring-white/[0.08] shadow-sm">
+    <div className="p-1.5 sm:p-2 rounded-[28px] bg-gradient-to-b from-[#B8860B]/5 to-black/[0.03] dark:from-[#C2956A]/5 dark:to-white/[0.02] ring-1 ring-[#B8860B]/20 dark:ring-[#C2956A]/20 shadow-sm">
       <div className="p-5 sm:p-6 rounded-[calc(28px-0.375rem)] bg-white dark:bg-[#141311] shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)] space-y-5 transition-colors">
-        {/* Step Header & Live Words */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1 border-b border-black/[0.05] dark:border-white/[0.06]">
-          <div className="inline-flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#B8860B] dark:bg-[#C2956A]"></span>
+        {/* Step Header & Live Currency Words */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-black/[0.06] dark:border-white/[0.06]">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#B8860B] dark:bg-[#C2956A] shadow-xs"></span>
             <span className="text-xs font-mono-code font-bold uppercase tracking-[0.15em] text-[#B8860B] dark:text-[#C2956A]">
               Step 01 • Select Sahyog (सहयोग) / Shagun
             </span>
@@ -43,7 +43,7 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
           )}
         </div>
 
-        {/* Generous 5-Card Grid for Sahyog & Shagun Tiers */}
+        {/* 5-Card Auspicious Sahyog Tier Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {PAYMENT_CONFIG.tiers.map((tier) => {
             const IconComp = iconMap[tier.icon] || Coffee
@@ -57,53 +57,56 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
                   setIsCustom(false)
                   onSelectAmount(tier.amount)
                 }}
-                className={`group relative p-3.5 sm:p-4 rounded-2xl text-left transition-all cursor-pointer min-h-[140px] flex flex-col justify-between active-press ${
+                className={`group relative p-3.5 sm:p-4 rounded-2xl text-left transition-all cursor-pointer min-h-[148px] flex flex-col justify-between active-press ${
                   isSelected
-                    ? 'bg-[#FAF6F0] dark:bg-[#1E1B16] border-2 border-[#C2956A] shadow-md shadow-[#C2956A]/15 ring-2 ring-[#C2956A]/20'
-                    : 'bg-[#F9F9FB] dark:bg-[#181714] hover:bg-[#F2F2F5] dark:hover:bg-[#201E1A] border border-black/[0.06] dark:border-white/[0.08] shadow-xs'
+                    ? 'bg-[#FAF6F0] dark:bg-[#1E1B16] border-2 border-[#C2956A] shadow-md shadow-[#C2956A]/20 ring-2 ring-[#C2956A]/30'
+                    : 'bg-[#FBFBFC] dark:bg-[#181613] hover:bg-[#F5F2EB] dark:hover:bg-[#221F1A] border border-[#E8DEC8]/60 dark:border-[#383126] shadow-xs hover:border-[#C2956A]/40'
                 }`}
               >
-                {/* Popular / Shagun Badge */}
+                {/* Auspicious Shagun Ribbon on ₹101 */}
                 {tier.popular && (
-                  <span className="absolute -top-2 right-2 px-2 py-0.5 rounded-full text-[9px] font-mono-code font-bold bg-[#B8860B] dark:bg-[#C2956A] text-white dark:text-[#0F0E0D] shadow-sm tracking-wider uppercase">
-                    {tier.tag || 'शुभ शगुन'}
+                  <span className="absolute -top-2.5 right-2 px-2.5 py-0.5 rounded-full text-[9px] font-mono-code font-extrabold bg-gradient-to-r from-[#B8860B] to-[#D97706] dark:from-[#C2956A] dark:to-[#E59866] text-white dark:text-[#0F0E0D] shadow-sm tracking-wider uppercase">
+                    {tier.tag || '★ शुभ शगुन'}
                   </span>
                 )}
 
-                {/* Top Row: Icon + Devanagari Glyph */}
+                {/* Top Row: Icon + Devanagari Auspicious Glyph */}
                 <div className="flex items-center justify-between w-full">
                   <span
                     className={`w-8 h-8 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 ${
                       isSelected
                         ? 'bg-[#B8860B] dark:bg-[#C2956A] text-white dark:text-[#0F0E0D] shadow-xs'
-                        : 'bg-black/[0.04] dark:bg-[#24221E] text-[#B8860B] dark:text-[#C2956A]'
+                        : 'bg-[#FAF3E0] dark:bg-[#252018] text-[#B8860B] dark:text-[#C2956A]'
                     }`}
                   >
                     <IconComp className="w-4 h-4" />
                   </span>
 
-                  <span className="text-xs font-mono-code font-bold text-[#86868B] dark:text-[#736F68]">
+                  <span className="text-[11px] font-mono-code font-bold text-[#86868B] dark:text-[#8E8A83] px-1.5 py-0.5 rounded-md bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.04] dark:border-white/[0.04]">
                     ₹{tier.devanagari}
                   </span>
                 </div>
 
-                {/* Bottom Row: Amount & Descriptions */}
+                {/* Middle & Bottom: Amount, Hindi cultural tag, English title, Description */}
                 <div className="space-y-0.5 pt-2">
                   <div className="text-lg sm:text-xl font-bold font-mono-code text-[#1D1D1F] dark:text-[#F8F6F0] leading-tight">
                     ₹{tier.amount}
                   </div>
+
                   <div className="text-[11px] font-bold text-[#B8860B] dark:text-[#C2956A] leading-tight">
                     {tier.hindiName}
                   </div>
+
                   <div className="text-xs font-semibold text-[#1D1D1F] dark:text-[#F8F6F0] truncate">
                     {tier.label}
                   </div>
+
                   <div className="text-[10px] text-[#6E6E73] dark:text-[#8E8A83] leading-snug line-clamp-2 pt-0.5">
                     {tier.desc}
                   </div>
                 </div>
 
-                {/* Selected Indicator Checkmark */}
+                {/* Selected Checkmark Indicator */}
                 {isSelected && (
                   <div className="absolute top-2 left-2 w-4 h-4 rounded-full bg-[#B8860B] dark:bg-[#C2956A] text-white dark:text-[#0F0E0D] flex items-center justify-center shadow-xs">
                     <Check className="w-2.5 h-2.5" />
@@ -114,15 +117,28 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
           })}
         </div>
 
-        {/* Custom Amount & Quick Increment Bar */}
-        <div className="p-4 rounded-2xl bg-[#F8F8FA] dark:bg-[#100F0D] border border-black/[0.06] dark:border-white/[0.08] space-y-3.5 shadow-inner">
+        {/* The Indian Shagun Tradition Context Banner (Tasteful, Warm, Culturally Rich) */}
+        <div className="p-3.5 rounded-2xl bg-[#FAF5EB] dark:bg-[#191713] border border-[#B8860B]/20 dark:border-[#C2956A]/20 flex items-start gap-3 text-xs text-[#52525B] dark:text-[#A39E93] shadow-inner transition-colors">
+          <div className="p-1 rounded-lg bg-[#B8860B]/15 dark:bg-[#C2956A]/20 text-[#B8860B] dark:text-[#C2956A] shrink-0 mt-0.5">
+            <Sparkles className="w-3.5 h-3.5" />
+          </div>
+          <div className="leading-relaxed">
+            <strong className="text-[#1D1D1F] dark:text-[#F8F6F0] font-semibold">
+              The Indian Shagun Tradition (शुभ शगुन):{' '}
+            </strong>
+            In Indian culture, adding ₹1 (such as ₹51, ₹101, ₹251) turns a transaction into an auspicious blessing — symbolizing that the connection is open, continuous, and growing, rather than a closed zero-ending trade.
+          </div>
+        </div>
+
+        {/* Custom Amount & Quick Adders Row */}
+        <div className="p-4 rounded-2xl bg-[#F9F9FB] dark:bg-[#11100E] border border-black/[0.06] dark:border-white/[0.08] space-y-3.5 shadow-inner">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div>
               <span className="text-xs sm:text-[13px] font-bold text-[#1D1D1F] dark:text-[#F8F6F0] block">
-                Custom Amount / Shagun:
+                Custom Sahyog / Shagun Amount:
               </span>
               <span className="text-[11px] text-[#86868B] dark:text-[#736F68]">
-                Contribute any specific amount or add auspicious ₹1 Shagun
+                Enter any amount or tap "+₹1 Shagun" to make it auspicious
               </span>
             </div>
 
@@ -143,28 +159,32 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
             </div>
           </div>
 
-          {/* Quick Increment Steppers */}
+          {/* Quick Increment Steppers with Standout +₹1 Shagun Pill */}
           <div className="flex items-center justify-between pt-2.5 border-t border-black/[0.06] dark:border-white/[0.06] flex-wrap gap-2">
             <span className="text-xs font-mono-code text-[#86868B] dark:text-[#736F68]">
-              Quick Adders:
+              Quick Sahyog:
             </span>
             <div className="flex items-center gap-1.5 flex-wrap">
-              {PAYMENT_CONFIG.quickIncrements.map((inc) => (
-                <button
-                  key={inc.label}
-                  type="button"
-                  onClick={() => handleIncrement(inc.value)}
-                  className={`px-3 py-1.5 rounded-xl border text-xs font-mono-code flex items-center gap-1 transition-all cursor-pointer active-press ${
-                    inc.value === 1
-                      ? 'bg-[#B8860B]/10 dark:bg-[#C2956A]/15 text-[#B8860B] dark:text-[#C2956A] border-[#B8860B]/30 dark:border-[#C2956A]/30 font-bold shadow-xs'
-                      : 'bg-white dark:bg-[#1B1A17] hover:bg-black/[0.03] dark:hover:bg-[#25231F] border-black/[0.08] dark:border-white/[0.08] text-[#424245] dark:text-[#A5A096] hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0]'
-                  }`}
-                  title={inc.value === 1 ? 'Add ₹1 traditional Shagun' : `Add ₹${inc.value}`}
-                >
-                  <Plus className="w-3 h-3 text-[#B8860B] dark:text-[#C2956A]" />
-                  <span>{inc.label}</span>
-                </button>
-              ))}
+              {PAYMENT_CONFIG.quickIncrements.map((inc) => {
+                const isShagun = inc.value === 1
+
+                return (
+                  <button
+                    key={inc.label}
+                    type="button"
+                    onClick={() => handleIncrement(inc.value)}
+                    className={`px-3 py-1.5 rounded-xl border text-xs font-mono-code flex items-center gap-1 transition-all cursor-pointer active-press ${
+                      isShagun
+                        ? 'bg-gradient-to-r from-[#B8860B]/15 to-[#D97706]/15 dark:from-[#C2956A]/20 dark:to-[#E59866]/20 text-[#B8860B] dark:text-[#C2956A] border-[#B8860B]/40 dark:border-[#C2956A]/40 font-bold shadow-xs hover:border-[#B8860B]'
+                        : 'bg-white dark:bg-[#1B1A17] hover:bg-black/[0.03] dark:hover:bg-[#25231F] border-black/[0.08] dark:border-white/[0.08] text-[#424245] dark:text-[#A5A096] hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0]'
+                    }`}
+                    title={isShagun ? 'Add ₹1 auspicious Shagun (+१ रुपया शगुन)' : `Add ₹${inc.value}`}
+                  >
+                    <Plus className="w-3 h-3 text-[#B8860B] dark:text-[#C2956A]" />
+                    <span>{inc.label}</span>
+                  </button>
+                )
+              })}
 
               {isCustom && (
                 <button
@@ -174,7 +194,7 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
                     onSelectAmount(101)
                   }}
                   className="p-1.5 rounded-xl text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0] bg-white dark:bg-[#1B1A17] border border-black/[0.08] dark:border-white/[0.08] transition-colors cursor-pointer active-press"
-                  title="Reset to default ₹101 (Kitab Sahyog)"
+                  title="Reset to default ₹101 (Kitab Shagun)"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                 </button>
