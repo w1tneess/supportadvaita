@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { PAYMENT_CONFIG } from '../config/payment.js'
 import { Copy, Check, ArrowRight, ArrowUpRight, Share2, Smartphone, ShieldCheck, Zap, Globe2 } from 'lucide-react'
+import { AppIconRenderer } from './AppIcons.jsx'
 import confetti from 'canvas-confetti'
 
 export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
@@ -138,8 +139,10 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
                 className="p-2.5 sm:py-3 rounded-xl border border-neutral-300/80 dark:border-neutral-800 bg-white/80 dark:bg-neutral-900/60 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 flex items-center justify-between transition-all active-press cursor-pointer shadow-2xs group"
                 title={`Open and pay in ${app.name}`}
               >
-                <div className="flex items-center gap-2 min-w-0">
-                  <span className={`w-2.5 h-2.5 rounded-full ${app.dotClass} shrink-0 shadow-2xs`}></span>
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-7 h-7 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700/80 flex items-center justify-center shrink-0 shadow-2xs overflow-hidden p-0.5 group-hover:scale-105 transition-transform">
+                    <AppIconRenderer appId={app.id} className="w-5 h-5 object-contain" />
+                  </div>
                   <div className="flex flex-col min-w-0">
                     <span className="font-mono text-xs font-bold text-neutral-900 dark:text-neutral-100 group-hover:text-black dark:group-hover:text-white truncate">
                       {app.shortName}
