@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { PAYMENT_CONFIG } from '../config/payment.js'
 import { Copy, Check, ArrowRight, ArrowUpRight, Share2, Smartphone, ShieldCheck, Zap, Globe2 } from 'lucide-react'
-import { AppIconRenderer } from './AppIcons.jsx'
+import { AppIconRenderer, appTileClass } from './AppIcons.jsx'
 import confetti from 'canvas-confetti'
 
 export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
@@ -140,8 +140,8 @@ export default function UpiActions({ upiUri, upiId, onCopyUpi, amount, note }) {
                 title={`Open and pay in ${app.name}`}
               >
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shrink-0 shadow-2xs overflow-hidden group-hover:scale-105 transition-transform">
-                    <AppIconRenderer appId={app.id} className="w-full h-full" />
+                  <div className={`w-8 h-8 rounded-xl ${appTileClass(app.id)} border border-neutral-200/90 dark:border-neutral-600 flex items-center justify-center shrink-0 shadow-xs overflow-hidden p-1 group-hover:scale-105 transition-transform`}>
+                    <AppIconRenderer appId={app.id} className="w-6 h-6 object-contain" />
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="font-mono text-xs font-bold text-neutral-900 dark:text-neutral-100 group-hover:text-black dark:group-hover:text-white truncate">
