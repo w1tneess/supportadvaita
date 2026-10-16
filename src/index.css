@@ -1,23 +1,14 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
-    --canvas: #0F0E0D;
-    --card: #151412;
-    --card-hover: #1C1A17;
-    --card-border: #262421;
-    --card-border-hover: #3A3630;
-    --accent: #C2956A;
-    --accent-glow: rgba(194, 149, 106, 0.25);
-    --ink: #F8F6F0;
-    --muted: #8E8A83;
-    --muted-dark: #58554F;
+    color-scheme: light dark;
   }
 
   body {
-    background-color: var(--canvas);
-    color: var(--ink);
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 }
 
@@ -35,12 +26,12 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0F0E0D;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #262421;
+  background: rgba(120, 115, 110, 0.25);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3A3630;
+  background: rgba(120, 115, 110, 0.45);
 }

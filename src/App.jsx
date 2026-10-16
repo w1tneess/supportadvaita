@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { PAYMENT_CONFIG } from './config/payment.js'
+import { useTheme } from './hooks/useTheme.js'
 import Header from './components/Header.jsx'
 import AmountSelector from './components/AmountSelector.jsx'
 import NoteField from './components/NoteField.jsx'
@@ -13,6 +14,7 @@ import Toast from './components/Toast.jsx'
 import { ShieldCheck, ArrowUpRight, Smartphone, QrCode } from 'lucide-react'
 
 export default function App() {
+  const { theme, setTheme, resolvedTheme } = useTheme()
   const [selectedAmount, setSelectedAmount] = useState(150)
   const [isCustom, setIsCustom] = useState(false)
   const [name, setName] = useState('')
@@ -53,7 +55,7 @@ export default function App() {
   }, [selectedAmount, name, note])
 
   return (
-    <div className="min-h-dvh flex flex-col justify-between bg-[#0F0E0D] text-[#F8F6F0] pb-24 lg:pb-0">
+    <div className="min-h-dvh flex flex-col justify-between bg-[#FBFBFD] dark:bg-[#0C0B0A] text-[#1D1D1F] dark:text-[#F8F6F0] pb-24 lg:pb-0 transition-colors">
       {/* Toast Notification */}
       <Toast message={toastMessage} visible={toastVisible} />
 
@@ -67,19 +69,23 @@ export default function App() {
       {/* Main Page Container */}
       <div className="flex-1">
         {/* Header Section */}
-        <Header onOpenBadgeModal={() => setIsBadgeModalOpen(true)} />
+        <Header
+          onOpenBadgeModal={() => setIsBadgeModalOpen(true)}
+          theme={theme}
+          setTheme={setTheme}
+        />
 
         {/* Payment & Content Workspace */}
         <main className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {/* Mobile Tab Switcher (Pay directly vs Show QR code) */}
-          <div className="lg:hidden flex items-center p-1 rounded-xl bg-[#151412] border border-[#262421] mb-6">
+          <div className="lg:hidden flex items-center p-1 rounded-xl bg-black/[0.04] dark:bg-[#151412] border border-black/[0.06] dark:border-[#262421] mb-6 transition-colors">
             <button
               type="button"
               onClick={() => setMobileTab('pay')}
               className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                 mobileTab === 'pay'
-                  ? 'bg-[#C2956A] text-[#0F0E0D] shadow-sm'
-                  : 'text-[#8E8A83] hover:text-[#F8F6F0]'
+                  ? 'bg-[#C2956A] text-white dark:text-[#0F0E0D] shadow-sm'
+                  : 'text-[#6E6E73] dark:text-[#8E8A83] hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0]'
               }`}
             >
               <Smartphone className="w-3.5 h-3.5" />
@@ -90,8 +96,8 @@ export default function App() {
               onClick={() => setMobileTab('qr')}
               className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                 mobileTab === 'qr'
-                  ? 'bg-[#C2956A] text-[#0F0E0D] shadow-sm'
-                  : 'text-[#8E8A83] hover:text-[#F8F6F0]'
+                  ? 'bg-[#C2956A] text-white dark:text-[#0F0E0D] shadow-sm'
+                  : 'text-[#6E6E73] dark:text-[#8E8A83] hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0]'
               }`}
             >
               <QrCode className="w-3.5 h-3.5" />
@@ -135,10 +141,10 @@ export default function App() {
               />
 
               {/* Trust & Transparency Note */}
-              <div className="p-3.5 rounded-xl bg-[#141311] border border-[#22201C] text-xs text-[#8E8A83] leading-relaxed flex items-start gap-2.5">
-                <ShieldCheck className="w-4 h-4 text-[#C2956A] shrink-0 mt-0.5" />
+              <div className="p-3.5 rounded-xl bg-white dark:bg-[#141311] border border-black/[0.06] dark:border-[#22201C] text-xs text-[#6E6E73] dark:text-[#8E8A83] leading-relaxed flex items-start gap-2.5 transition-colors shadow-sm">
+                <ShieldCheck className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A] shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold text-[#F8F6F0]">Direct Peer-to-Peer: </span>
+                  <span className="font-semibold text-[#1D1D1F] dark:text-[#F8F6F0]">Direct Peer-to-Peer: </span>
                   No payment processors taking 5–10% cuts. 100% of your contribution reaches Advaita's FamPay account to fund domains, server compute, books, and code.
                 </div>
               </div>
@@ -153,6 +159,7 @@ export default function App() {
                 upiId={PAYMENT_CONFIG.upiId}
                 recipientName={PAYMENT_CONFIG.recipientName}
                 onCopyUpi={handleCopyUpi}
+                resolvedTheme={resolvedTheme}
               />
             </div>
           </div>
@@ -171,12 +178,12 @@ export default function App() {
       />
 
       {/* Footer */}
-      <footer className="border-t border-[#262421]/60 py-8 mt-12 bg-[#0C0B0A]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#736F68]">
+      <footer className="border-t border-black/[0.06] dark:border-white/[0.08] py-8 mt-12 bg-white/50 dark:bg-[#0C0B0A] backdrop-blur-sm transition-colors">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#86868B] dark:text-[#736F68]">
           <div className="flex items-center gap-2">
             <span>© {new Date().getFullYear()} Advaita Chandra</span>
             <span>•</span>
-            <span className="font-mono-code text-[#C2956A]">paytoadvaita</span>
+            <span className="font-mono-code text-[#B8860B] dark:text-[#C2956A] font-semibold">paytoadvaita</span>
           </div>
 
           <div className="flex items-center gap-4">
@@ -184,7 +191,7 @@ export default function App() {
               href="https://advaitachandra.in"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#F8F6F0] flex items-center gap-1 transition-colors"
+              className="hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0] flex items-center gap-1 transition-colors"
             >
               <span>advaitachandra.in</span>
               <ArrowUpRight className="w-3 h-3" />
@@ -193,14 +200,14 @@ export default function App() {
               href="https://github.com/w1tneess"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#F8F6F0] flex items-center gap-1 transition-colors"
+              className="hover:text-[#1D1D1F] dark:hover:text-[#F8F6F0] flex items-center gap-1 transition-colors"
             >
               <span>GitHub</span>
               <ArrowUpRight className="w-3 h-3" />
             </a>
             <button
               onClick={() => setIsBadgeModalOpen(true)}
-              className="text-[#C2956A] hover:underline cursor-pointer"
+              className="text-[#B8860B] dark:text-[#C2956A] hover:underline cursor-pointer font-medium"
             >
               Get Badges
             </button>

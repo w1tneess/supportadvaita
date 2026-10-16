@@ -20,12 +20,12 @@ export default function StickyMobileBar({ upiUri, amount, onCopyUpi, upiId }) {
   }
 
   return (
-    <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-[#151412]/95 backdrop-blur-md border-t border-[#2D2A24] px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-2xl">
+    <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/90 dark:bg-[#151412]/95 backdrop-blur-md border-t border-black/[0.08] dark:border-[#2D2A24] px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-2xl transition-colors">
       <div className="max-w-md mx-auto flex items-center justify-between gap-3">
         {/* Current Amount Display */}
         <div className="flex flex-col">
-          <span className="text-[10px] uppercase tracking-wider text-[#8E8A83] font-semibold">Total</span>
-          <span className="text-lg font-bold font-mono-code text-[#F8F6F0]">
+          <span className="text-[10px] uppercase tracking-wider text-[#86868B] dark:text-[#8E8A83] font-semibold">Total</span>
+          <span className="text-lg font-bold font-mono-code text-[#1D1D1F] dark:text-[#F8F6F0]">
             ₹{amount || '0'}
           </span>
         </div>
@@ -35,21 +35,21 @@ export default function StickyMobileBar({ upiUri, amount, onCopyUpi, upiId }) {
           <button
             type="button"
             onClick={handleCopy}
-            className="p-3 rounded-xl bg-[#22201C] hover:bg-[#2A2722] border border-[#2D2A24] text-[#F8F6F0] flex items-center justify-center transition-colors cursor-pointer"
+            className="p-3 rounded-2xl bg-[#F2F2F7] dark:bg-[#22201C] hover:bg-black/[0.06] dark:hover:bg-[#2A2722] border border-black/[0.08] dark:border-[#2D2A24] text-[#1D1D1F] dark:text-[#F8F6F0] flex items-center justify-center transition-colors cursor-pointer shadow-sm"
             title="Copy UPI ID"
             aria-label="Copy UPI ID"
           >
             {copied ? (
-              <Check className="w-4 h-4 text-emerald-400" />
+              <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             ) : (
-              <Copy className="w-4 h-4 text-[#C2956A]" />
+              <Copy className="w-4 h-4 text-[#B8860B] dark:text-[#C2956A]" />
             )}
           </button>
 
           <a
             href={upiUri}
             onClick={handlePay}
-            className="flex-1 max-w-[220px] py-3 px-4 rounded-xl bg-gradient-to-r from-[#C2956A] to-[#B38355] text-[#0F0E0D] font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#C2956A]/20 transition-transform active:scale-[0.98]"
+            className="flex-1 max-w-[220px] py-3 px-4 rounded-2xl bg-gradient-to-r from-[#B8860B] to-[#996515] dark:from-[#C2956A] dark:to-[#B38355] text-white dark:text-[#0F0E0D] font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#C2956A]/20 transition-transform active:scale-[0.98]"
           >
             <Smartphone className="w-4 h-4" />
             <span>Pay with UPI</span>

@@ -186,9 +186,9 @@ export const PAYMENT_CONFIG = {
 
   // Embed badges
   embedBadges: {
-    markdown: `[![Support via paytoadvaita](https://img.shields.io/badge/Support-paytoadvaita-C2956A?style=for-the-badge&logo=googlepay&logoColor=white)](https://paytoadvaita.pages.dev)`,
-    html: `<a href="https://paytoadvaita.pages.dev" target="_blank"><img src="https://img.shields.io/badge/Support-paytoadvaita-C2956A?style=for-the-badge&logo=googlepay&logoColor=white" alt="Support via paytoadvaita" /></a>`,
-    shieldUrl: `https://img.shields.io/badge/Support-paytoadvaita-C2956A?style=for-the-badge&logo=googlepay&logoColor=white`,
-    textLink: `[Support my projects on paytoadvaita](https://paytoadvaita.pages.dev)`
+    markdown: `[![Support via paytoadvaita](https://img.shields.io/badge/Support-advaita-C2956A?style=for-the-badge&logo=googlepay&logoColor=white)](https://support.advaitachandra.in)`,
+    html: `<a href="https://support.advaitachandra.in" target="_blank"><img src="https://img.shields.io/badge/Support-advaita-C2956A?style=for-the-badge&logo=googlepay&logoColor=white" alt="Support via paytoadvaita" /></a>`,
+    shieldUrl: `https://img.shields.io/badge/Support-advaita-C2956A?style=for-the-badge&logo=googlepay&logoColor=white`,
+    textLink: `[Support my projects on support.advaitachandra.in](https://support.advaitachandra.in)`
   }
 }
