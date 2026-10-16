@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { PAYMENT_CONFIG } from '../config/payment.js'
 import { generateQrSvg, generateQrPng } from '../lib/qrcode.js'
-import { Download, QrCode, ShieldCheck, Check, Copy } from 'lucide-react'
+import { Download, QrCode, Check, Copy, Globe2 } from 'lucide-react'
 
 export default function QrCard({ upiUri, amount, note, upiId, recipientName, onCopyUpi, resolvedTheme = 'dark' }) {
   const [svgHtml, setSvgHtml] = useState('')
@@ -40,9 +41,11 @@ export default function QrCard({ upiUri, amount, note, upiId, recipientName, onC
     setTimeout(() => setCopiedId(false), 2200)
   }
 
+  const usdValue = PAYMENT_CONFIG.inrToUsd(amount)
+
   return (
     <div className="border border-neutral-200 dark:border-neutral-800 rounded-xl bg-white/70 dark:bg-[#111111]/70 backdrop-blur-sm p-5 space-y-4 transition-colors shadow-xs">
-      {/* Terminal Header */}
+      {/* Terminal Header with Global Rail Status */}
       <div className="flex items-center justify-between pb-3 border-b border-black/[0.06] dark:border-neutral-800 font-mono text-xs">
         <div className="flex items-center gap-2">
           <QrCode className="w-3.5 h-3.5 text-[#B8860B] dark:text-[#C2956A]" />
@@ -52,7 +55,7 @@ export default function QrCard({ upiUri, amount, note, upiId, recipientName, onC
         </div>
         <div className="flex items-center gap-1.5 text-neutral-500 text-[11px]">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>p2p live</span>
+          <span>UPI / FamPay Live</span>
         </div>
       </div>
 
@@ -90,22 +93,27 @@ export default function QrCard({ upiUri, amount, note, upiId, recipientName, onC
           </div>
         </div>
 
-        {/* Monospace Key-Value Terminal Receipt */}
+        {/* Global Pro-Dev Monospace Terminal Receipt */}
         <div className="w-full bg-neutral-50 dark:bg-[#0D0D0D] border border-neutral-200 dark:border-neutral-800 rounded-lg p-3 space-y-1.5 text-xs font-mono mb-3">
           <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
-            <span>amount</span>
+            <span>amount (inr)</span>
             <span className="font-bold text-neutral-900 dark:text-neutral-100">
-              {amount ? `₹${amount}.00` : 'any'}
+              {amount ? `₹${amount}.00` : 'any'} {usdValue && <span className="font-normal text-neutral-400">(~${usdValue} USD)</span>}
             </span>
           </div>
 
           <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
-            <span>payee</span>
-            <span className="text-neutral-800 dark:text-neutral-200 truncate">{recipientName}</span>
+            <span>currency</span>
+            <span className="text-neutral-800 dark:text-neutral-200">INR (₹) • 1st Priority</span>
           </div>
 
           <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
-            <span>upi_vpa</span>
+            <span>rail / gateway</span>
+            <span className="text-neutral-800 dark:text-neutral-200">UPI (FamPay)</span>
+          </div>
+
+          <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
+            <span>vpa_handle</span>
             <button
               type="button"
               onClick={handleCopyUpiId}
@@ -127,6 +135,15 @@ export default function QrCard({ upiUri, amount, note, upiId, recipientName, onC
               <span className="text-neutral-700 dark:text-neutral-300 truncate max-w-[170px]">{note}</span>
             </div>
           )}
+        </div>
+
+        {/* Global Supporter Information Box */}
+        <div className="w-full p-2.5 rounded-lg border border-neutral-200/80 dark:border-neutral-800/80 bg-neutral-100/50 dark:bg-neutral-900/50 text-[11px] font-mono text-neutral-500 dark:text-neutral-400 flex items-start gap-2 mb-3">
+          <Globe2 className="w-3.5 h-3.5 text-neutral-400 shrink-0 mt-0.5" />
+          <div className="leading-snug">
+            <span className="font-bold text-neutral-800 dark:text-neutral-200">Global Backers: </span>
+            Canonical settlement is strictly in INR via India's UPI protocol (<code className="text-[#B8860B] dark:text-[#C2956A]">{upiId}</code> on FamPay). International card rails in development.
+          </div>
         </div>
 
         {/* Pro-Dev Download Button */}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { PAYMENT_CONFIG } from '../config/payment.js'
 import ThemeToggle from './ThemeToggle.jsx'
-import { Globe, Github, Twitter, Instagram, MapPin, GraduationCap, ArrowUpRight, CheckCircle2 } from 'lucide-react'
+import { Globe, Github, Twitter, Instagram, MapPin, GraduationCap, ArrowUpRight } from 'lucide-react'
 
 export default function Header({ theme, setTheme }) {
   const [imgError, setImgError] = useState(false)
@@ -16,17 +16,20 @@ export default function Header({ theme, setTheme }) {
   return (
     <header className="border-b border-black/[0.08] dark:border-neutral-800/80 bg-white/50 dark:bg-[#0A0A0A]/50 backdrop-blur-md transition-colors">
       <div className="max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-        {/* Top Minimal Navigation Strip */}
-        <div className="flex items-center justify-between gap-4 pb-6 mb-6 border-b border-black/[0.06] dark:border-neutral-800/60">
-          <div className="flex items-center gap-3">
+        {/* Top Minimal Navigation Strip with Global Rail Context */}
+        <div className="flex items-center justify-between gap-4 pb-6 mb-6 border-b border-black/[0.06] dark:border-neutral-800/60 flex-wrap">
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
             <span className="font-mono text-xs font-bold tracking-tight text-[#1D1D1F] dark:text-[#F8F6F0]">
               support.advaitachandra.in
             </span>
-            <span className="text-neutral-300 dark:text-neutral-700">/</span>
+            <span className="text-neutral-300 dark:text-neutral-700 hidden sm:inline">/</span>
             <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-mono text-emerald-600 dark:text-emerald-400">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>advaita@fam</span>
+              <span>advaita@fam (FamPay)</span>
             </div>
+            <span className="text-neutral-400 dark:text-neutral-600 font-mono text-[11px] hidden md:inline">
+              • UPI Rail • 1st Priority: INR (₹)
+            </span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -55,7 +58,7 @@ export default function Header({ theme, setTheme }) {
                     </div>
                   )}
                 </div>
-                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-[#0A0A0A]" title="Direct P2P Verified"></span>
+                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-[#0A0A0A]" title="FamPay UPI Active"></span>
               </div>
 
               {/* Title & Metadata */}

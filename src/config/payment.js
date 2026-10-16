@@ -1,12 +1,18 @@
 export const PAYMENT_CONFIG = {
   appName: 'paytoadvaita',
   upiId: 'advaita@fam',
+  provider: 'FamPay',
+  paymentRail: 'UPI (NPCI)',
   recipientName: 'Advaita Chandra',
   nickname: 'Wit',
   age: 16,
   grade: 'Class 10 (CBSE)',
   location: 'West Bengal, India',
   currency: 'INR',
+  currencySymbol: '₹',
+  secondaryCurrency: 'USD',
+  fxRateUsdToInr: 83.5, // 1 USD ≈ 83.5 INR for global mental approximation
+
   avatar: '/pfp.png',
   website: 'https://advaitachandra.in',
   email: 'advaita974@gmail.com',
@@ -42,15 +48,16 @@ export const PAYMENT_CONFIG = {
     { item: 'Canonical Domain Renewals', cost: '₹1,200 / yr', desc: 'Maintains advaitachandra.in and personal web namespace' }
   ],
 
-  // Grounded Indian Sahyog & Shagun tiers
+  // Grounded Indian Sahyog & Shagun tiers with Global USD contextual equivalents
   tiers: [
     {
       id: 'chai',
       amount: 51,
       devanagari: '५१',
+      usdApprox: '$0.60',
       label: 'Kulhad Chai',
       hindiName: 'कुल्हड़ चाय',
-      desc: 'Late-night debugging & reading fuel after school hours',
+      desc: 'Late-night debugging & reading tea',
       icon: 'Coffee',
       popular: false,
     },
@@ -58,20 +65,22 @@ export const PAYMENT_CONFIG = {
       id: 'book',
       amount: 101,
       devanagari: '१०१',
+      usdApprox: '$1.20',
       label: 'Kitab Sahyog',
       hindiName: 'किताब सहयोग',
-      desc: 'Contributes to a physical philosophy or computer science book',
+      desc: 'Contributes to a physical philosophy or CS book',
       icon: 'BookOpen',
       popular: true,
-      tag: 'शुभ शगुन',
+      tag: 'Shagun',
     },
     {
       id: 'server',
       amount: 251,
       devanagari: '२५१',
+      usdApprox: '$3.00',
       label: 'Server Seva',
       hindiName: 'सर्वर सेवा',
-      desc: 'Covers personal domain uptime & cloud droplets for a month',
+      desc: 'Covers personal domain uptime & cloud droplets',
       icon: 'Server',
       popular: false,
     },
@@ -79,9 +88,10 @@ export const PAYMENT_CONFIG = {
       id: 'vidya',
       amount: 501,
       devanagari: '५०१',
+      usdApprox: '$6.00',
       label: 'Vidya Sahyog',
       hindiName: 'विद्या सहयोग',
-      desc: 'Substantial student backing for open-source research and tools',
+      desc: 'Student backing for open-source tools & archives',
       icon: 'Sparkles',
       popular: false,
     },
@@ -89,9 +99,10 @@ export const PAYMENT_CONFIG = {
       id: 'patron',
       amount: 1101,
       devanagari: '११०१',
+      usdApprox: '$13.20',
       label: 'Maha Sahyog',
       hindiName: 'महा सहयोग',
-      desc: 'True patron of independent writing, archives & software',
+      desc: 'True patron of independent writing & software',
       icon: 'GraduationCap',
       popular: false,
     },
@@ -166,6 +177,13 @@ export const PAYMENT_CONFIG = {
     { name: 'Instagram', handle: '@adva1ta_', url: 'https://instagram.com/adva1ta_', icon: 'Instagram' },
   ],
 
+  // Global USD approximation calculator
+  inrToUsd: (amount) => {
+    const num = parseFloat(amount)
+    if (isNaN(num) || num <= 0) return ''
+    return (num / 83.5).toFixed(2)
+  },
+
   // UPI link generator with strict parameter injection prevention and NPCI bounds
   buildUpiUri: (amount, note) => {
     const numAmount = parseFloat(amount)
@@ -199,7 +217,7 @@ export const PAYMENT_CONFIG = {
     return `upi://pay?${params.toString()}`
   },
 
-  // Rupee words converter with Hindi/Devanagari cultural touch
+  // Rupee words converter with Hindi/Devanagari cultural touch & global USD approximation
   numberToRupeeWords: (num) => {
     if (!num || isNaN(num) || num <= 0) return ''
     const n = Math.floor(num)
@@ -221,15 +239,8 @@ export const PAYMENT_CONFIG = {
       eng = `₹${num.toLocaleString('en-IN')} Rupees`
     }
 
-    // Convert digits to Devanagari script: 0123456789 -> ०१२३४५६७८९
-    const devanagariDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९']
-    const devanagariNum = n.toString().split('').map(d => devanagariDigits[parseInt(d, 10)] || d).join('')
-
-    // Auspicious Shagun check (+1)
-    const isShagun = n % 10 === 1 && n !== 11
-    const shagunTag = isShagun ? ' • शुभ शगुन' : ''
-
-    return `${eng} (₹${devanagariNum}${shagunTag})`
+    const usd = (num / 83.5).toFixed(2)
+    return `${eng} (~$${usd} USD)`
   },
 
   // Ready-to-use embed badges for GitHub READMEs & Websites (Neutral, zero-company branding)

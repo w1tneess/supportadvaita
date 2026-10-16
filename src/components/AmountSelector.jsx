@@ -23,17 +23,18 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
   }
 
   const words = PAYMENT_CONFIG.numberToRupeeWords(selectedAmount)
+  const usdVal = PAYMENT_CONFIG.inrToUsd(selectedAmount)
 
   return (
     <div className="space-y-4">
-      {/* Header with Monospace Step Indicator */}
+      {/* Header with Monospace Step Indicator & Currency Priority Badge */}
       <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-2 border-b border-black/[0.08] dark:border-neutral-800">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="font-mono text-xs font-bold text-[#B8860B] dark:text-[#C2956A]">01</span>
           <span className="text-xs font-mono uppercase tracking-wider text-neutral-800 dark:text-neutral-200 font-semibold">
             Select Contribution
           </span>
-          <span className="text-neutral-400 dark:text-neutral-600 font-mono text-xs">/ Sahyog</span>
+          <span className="text-neutral-400 dark:text-neutral-600 font-mono text-xs">/ INR (₹) 1st Priority</span>
         </div>
 
         {words && (
@@ -43,7 +44,7 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
         )}
       </div>
 
-      {/* Pro-Dev Sleek Tier Matrix (Zero Heavy Bubble Boxes) */}
+      {/* Pro-Dev Sleek Tier Matrix with Dual-Currency Precision */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
         {PAYMENT_CONFIG.tiers.map((tier) => {
           const IconComp = iconMap[tier.icon] || Coffee
@@ -57,13 +58,13 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
                 setIsCustom(false)
                 onSelectAmount(tier.amount)
               }}
-              className={`relative p-3 rounded-xl text-left transition-all cursor-pointer border flex flex-col justify-between min-h-[96px] active-press ${
+              className={`relative p-3 rounded-xl text-left transition-all cursor-pointer border flex flex-col justify-between min-h-[104px] active-press ${
                 isSelected
                   ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 border-neutral-900 dark:border-white shadow-xs'
                   : 'bg-transparent hover:bg-neutral-100/70 dark:hover:bg-neutral-900/60 border-neutral-200/90 dark:border-neutral-800 text-neutral-900 dark:text-neutral-100'
               }`}
             >
-              {/* Auspicious Shagun Tag */}
+              {/* Shagun Badge on Popular Tier */}
               {tier.popular && (
                 <span className={`absolute -top-2 right-2 px-1.5 py-0.2 rounded text-[9px] font-mono font-bold tracking-tight uppercase ${
                   isSelected
@@ -82,12 +83,17 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
                 </span>
               </div>
 
-              {/* Bottom Row: Amount & Category */}
+              {/* Bottom Row: Primary INR Amount + Global USD Approx + Title */}
               <div className="pt-2">
-                <div className="font-mono text-base font-bold tracking-tight leading-tight">
-                  ₹{tier.amount}
+                <div className="flex items-baseline gap-1.5 leading-tight">
+                  <span className="font-mono text-base font-bold tracking-tight">
+                    ₹{tier.amount}
+                  </span>
+                  <span className={`font-mono text-[10.5px] ${isSelected ? 'opacity-70' : 'text-neutral-400 dark:text-neutral-500'}`}>
+                    ~{tier.usdApprox}
+                  </span>
                 </div>
-                <div className={`text-[11px] font-medium truncate ${isSelected ? 'opacity-85' : 'text-neutral-500 dark:text-neutral-400'}`}>
+                <div className={`text-[11px] font-medium truncate mt-0.5 ${isSelected ? 'opacity-85' : 'text-neutral-500 dark:text-neutral-400'}`}>
                   {tier.label}
                 </div>
               </div>
@@ -96,7 +102,7 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
         })}
       </div>
 
-      {/* Pro-Dev Custom Amount Line */}
+      {/* Pro-Dev Custom Amount Line with Dual-Currency Context */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
         <div className="relative flex-1 sm:max-w-xs">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-400 dark:text-neutral-500 font-mono text-xs">
@@ -106,12 +112,17 @@ export default function AmountSelector({ selectedAmount, onSelectAmount, isCusto
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
-            placeholder="custom amount..."
+            placeholder="custom amount in INR..."
             value={isCustom ? selectedAmount : ''}
             onFocus={() => setIsCustom(true)}
             onChange={handleCustomChange}
-            className="w-full pl-7 pr-3 py-2 bg-transparent border border-neutral-200 dark:border-neutral-800 focus:border-neutral-900 dark:focus:border-white rounded-lg font-mono text-xs text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none transition-colors"
+            className="w-full pl-7 pr-16 py-2 bg-transparent border border-neutral-200 dark:border-neutral-800 focus:border-neutral-900 dark:focus:border-white rounded-lg font-mono text-xs text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none transition-colors"
           />
+          {selectedAmount > 0 && (
+            <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-neutral-400 font-mono text-[10px]">
+              ~${usdVal} USD
+            </div>
+          )}
         </div>
 
         {/* Quick Stepper Chips */}
