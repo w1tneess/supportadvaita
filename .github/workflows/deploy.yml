@@ -9,6 +9,10 @@ on:
       - master
   workflow_dispatch:
 
+# Least privilege by default; jobs opt in to anything more
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -17,15 +21,17 @@ jobs:
   build-and-test:
     name: Build & Verify Production Bundle
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    timeout-minutes: 10
 
     steps:
+      # Third-party actions pinned to full commit SHAs (tags are mutable)
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup Node.js 22
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: 'npm'
@@ -33,15 +39,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
       - name: Build Vite static assets
         run: npm run build
 
       - name: Verify build artifacts
         run: |
           test -f dist/index.html || exit 1
+          test -f dist/404.html || exit 1
           test -f dist/favicon.svg || exit 1
           test -f dist/og-image.png || exit 1
           test -f dist/_headers || exit 1
+          # Local-only test page must never ship
+          test ! -f dist/upi-test.html || { echo "dist/upi-test.html must not be deployed"; exit 1; }
+          # Sitemap must not start with a UTF-8 BOM
+          test "$(head -c 3 dist/sitemap.xml | od -An -tx1 | tr -d ' ')" != "efbbbf" || { echo "sitemap.xml has a BOM"; exit 1; }
           echo "Production build verified successfully!"
 
   deploy:
@@ -49,11 +63,14 @@ jobs:
     needs: build-and-test
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    timeout-minutes: 10
+    # Scope the Cloudflare secrets to a protected environment (Settings → Environments → production)
+    environment: production
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: 'npm'

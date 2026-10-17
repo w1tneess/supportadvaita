@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Custom standalone UPI payment page for Advaita Chandra to support independent software, research, photography, and philosophy projects.",
+  "description": "Static UPI page for voluntary personal support of Advaita Chandra's independent software, research, photography, and philosophy projects.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

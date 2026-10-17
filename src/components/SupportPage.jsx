@@ -6,38 +6,43 @@ import {
   Moon,
   QrCode,
   Share2,
-  ShieldCheck,
   Smartphone,
   Sun,
   Info,
-  Github
+  Github,
+  X
 } from 'lucide-react'
-import { PAYMENT_CONFIG } from '../config/payment.js'
+import { PAYMENT_CONFIG, MAX_AMOUNT, parseAmount, formatInr } from '../config/payment.js'
 import { generateQrSvg, generateQrPng } from '../lib/qrcode.js'
 
+const AMOUNT_ERROR = `Enter a whole amount between ₹1 and ${formatInr(MAX_AMOUNT)}.`
+
 /**
- * Editorial, Humanist Support & Sponsorship Page for Advaita Chandra
+ * Editorial, Humanist Support Page for Advaita Chandra
  * Designed with the minimal, high-craft ethos of Linear, Stripe Press, and Vercel.
  */
 export default function SupportPage({ theme, setTheme }) {
   const [amount, setAmount] = useState(150)
   const [customAmount, setCustomAmount] = useState('')
   const [isCustom, setIsCustom] = useState(false)
-  const [donorName, setDonorName] = useState('')
-  const [donorNote, setDonorNote] = useState('')
+  const [supporterName, setSupporterName] = useState('')
+  const [supporterNote, setSupporterNote] = useState('')
   const [qrSvg, setQrSvg] = useState('')
   const [copied, setCopied] = useState(false)
-  const [toastMessage, setToastMessage] = useState('')
+  const [toast, setToast] = useState(null)
 
-  // Determine active amount
-  const activeAmount = isCustom ? (parseFloat(customAmount) || 0) : amount
+  // Determine active amount. An invalid custom entry never falls back to a partial parse ("150abc" ≠ ₹150).
+  const customParsed = parseAmount(customAmount)
+  const amountInvalid = isCustom && customParsed === null
+  const activeAmount = isCustom ? (customParsed ?? 0) : amount
+  const amountLabel = activeAmount ? formatInr(activeAmount) : ''
 
   const fullNote = useMemo(() => {
-    const note = donorNote.trim()
-    const name = donorName.trim()
+    const note = supporterNote.trim()
+    const name = supporterName.trim()
     if (note) return name ? `${note} (${name})` : note
     return name ? `From ${name}` : 'Support Advaita Chandra'
-  }, [donorName, donorNote])
+  }, [supporterName, supporterNote])
 
   // Canonical UPI payment URI (amount preset) — used for the QR, where scans pass PSP risk checks
   const upiUri = useMemo(() => PAYMENT_CONFIG.buildUpiUri(activeAmount, fullNote), [activeAmount, fullNote])
@@ -65,7 +70,7 @@ export default function SupportPage({ theme, setTheme }) {
     // Not awaited: the copy starts inside the tap gesture, and intent navigation doesn't unload the page
     if (copyAmount && activeAmount) {
       writeClipboard(String(activeAmount)).then((ok) => {
-        if (ok) showToast(`₹${activeAmount} copied — paste it in the app`)
+        if (ok) showToast(`${amountLabel} copied — paste it in the app`)
       })
     }
   }
@@ -99,10 +104,10 @@ export default function SupportPage({ theme, setTheme }) {
     clearTimeout(copiedTimer.current)
   }, [])
 
-  const showToast = (msg) => {
-    setToastMessage(msg)
+  const showToast = (message, ok = true) => {
+    setToast({ message, ok })
     clearTimeout(toastTimer.current)
-    toastTimer.current = setTimeout(() => setToastMessage(''), 2500)
+    toastTimer.current = setTimeout(() => setToast(null), 2500)
   }
 
   // Async Clipboard API needs a secure context; fall back to execCommand for older/in-app browsers
@@ -134,17 +139,18 @@ export default function SupportPage({ theme, setTheme }) {
       copiedTimer.current = setTimeout(() => setCopied(false), 2000)
       showToast(message)
     } else {
-      showToast(`Copy failed. UPI ID: ${PAYMENT_CONFIG.upiId}`)
+      showToast(`Copy failed. UPI ID: ${PAYMENT_CONFIG.upiId}`, false)
     }
   }
 
   const handleDownloadQr = async () => {
+    if (amountInvalid) return
     const blob = await generateQrPng(upiUri, {
       title: PAYMENT_CONFIG.recipientName,
       subtitle: PAYMENT_CONFIG.upiId,
-      amount: activeAmount ? `₹${activeAmount}` : '',
+      amount: amountLabel,
     })
-    if (!blob) return showToast('Could not create the QR image')
+    if (!blob) return showToast('Could not create the QR image', false)
     const filename = `upi-qr-advaita-${activeAmount || 'custom'}.png`
 
     // iOS Safari ignores <a download> for images; the share sheet offers "Save Image" instead
@@ -168,13 +174,13 @@ export default function SupportPage({ theme, setTheme }) {
     a.click()
     document.body.removeChild(a)
     setTimeout(() => URL.revokeObjectURL(url), 1000)
-    showToast(isMobile ? 'QR saved — scan it from your gallery in any UPI app' : 'QR image downloaded')
+    showToast(isMobile ? 'QR saved — scan it from your gallery in your UPI app' : 'QR image downloaded')
   }
 
   const handleShare = async () => {
     const shareData = {
       title: 'Support Advaita Chandra',
-      text: `Support Advaita Chandra's independent research and open-source tools directly via UPI (${PAYMENT_CONFIG.upiId}).`,
+      text: `Support Advaita Chandra's independent research and open-source tools via UPI (${PAYMENT_CONFIG.upiId}).`,
       url: window.location.href,
     }
     if (navigator.share) {
@@ -188,13 +194,11 @@ export default function SupportPage({ theme, setTheme }) {
     }
   }
 
-  const usdValue = activeAmount ? PAYMENT_CONFIG.inrToUsd(activeAmount) : null
-
   const presetTiers = [
-    { value: 50, label: '₹50', usd: '$0.60' },
-    { value: 150, label: '₹150', usd: '$1.80', badge: 'Popular' },
-    { value: 500, label: '₹500', usd: '$6.00' },
-    { value: 1000, label: '₹1,000', usd: '$12.00' },
+    { value: 50, note: 'Chai' },
+    { value: 150, note: 'A book', badge: 'Suggested' },
+    { value: 500, note: 'Hosting' },
+    { value: 1000, note: 'Hardware' },
   ]
 
   const featuredProjects = [
@@ -241,38 +245,67 @@ export default function SupportPage({ theme, setTheme }) {
       category: 'Cloud Compute & Server Workers',
       purpose: 'Edge runtimes, lightweight backend workers, and static asset hosting',
       cost: '₹800 / mo',
-      usd: '~$9.60',
     },
     {
       category: 'Archival Storage & Redundancy',
       purpose: 'Public dataset backups, historical scan preservation, and media storage',
       cost: '₹450 / mo',
-      usd: '~$5.40',
     },
     {
       category: 'Research Books & Academic Texts',
       purpose: 'Primary editions, philosophy monographs, and technical literature',
       cost: '₹650 / mo',
-      usd: '~$7.80',
     },
     {
       category: 'Domain & Canonical Web Namespace',
       purpose: 'Annual renewal for advaitachandra.in and personal digital infrastructure',
       cost: '₹179 / mo',
-      usd: '~$2.15',
       note: '₹2,148/yr',
     },
   ]
 
+  const ctaClass = 'w-full py-4 px-6 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:bg-zinc-950 text-white dark:bg-zinc-50 dark:hover:bg-zinc-200 dark:active:bg-zinc-300 dark:text-zinc-950 font-semibold text-base flex items-center justify-between gap-3 text-left transition-all duration-150 shadow-md hover:shadow-lg active:scale-[0.99] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-zinc-900 dark:disabled:hover:bg-zinc-50 disabled:active:scale-100 disabled:shadow-none'
+  const ctaContent = (
+    <>
+      <span className="flex items-center gap-2.5">
+        <Smartphone className="w-5 h-5 shrink-0 text-zinc-300 dark:text-zinc-700" aria-hidden="true" />
+        <span>
+          {isMobile
+            ? `Pay ${amountLabel || 'any amount'} with a UPI app`
+            : `Scan the QR to pay${amountLabel ? ` ${amountLabel}` : ''} from your phone`}
+        </span>
+      </span>
+      <ArrowUpRight className="w-4 h-4 shrink-0" aria-hidden="true" />
+    </>
+  )
+
   return (
     <div>
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div role="status" aria-live="polite" className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] inset-x-4 sm:inset-x-auto sm:right-6 sm:bottom-6 z-50 flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#111827] dark:bg-[#14171A] text-white border border-neutral-700/80 shadow-xl text-xs font-medium">
-          <Check className="w-4 h-4 text-emerald-400" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
+      <a
+        href="#support"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-3 focus:py-2 focus:rounded-lg focus:bg-white focus:text-zinc-900 dark:focus:bg-zinc-900 dark:focus:text-zinc-100 focus:shadow-lg text-sm font-medium"
+      >
+        Skip to payment
+      </a>
+
+      {/* Toast Notification (live region stays mounted so screen readers announce each message) */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] inset-x-4 sm:inset-x-auto sm:right-6 sm:bottom-6 z-50 flex justify-center pointer-events-none"
+      >
+        {toast && (
+          <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#111827] dark:bg-[#14171A] text-white border border-neutral-700/80 shadow-xl text-xs font-medium">
+            {toast.ok ? (
+              <Check className="w-4 h-4 shrink-0 text-emerald-400" aria-hidden="true" />
+            ) : (
+              <Info className="w-4 h-4 shrink-0 text-amber-400" aria-hidden="true" />
+            )}
+            <span>{toast.message}</span>
+          </div>
+        )}
+      </div>
 
       {/* Top Editorial Nav Header */}
       <header className="border-b border-[#E5E7EB] dark:border-[#22262B] bg-[#FBFBFA]/80 dark:bg-[#0B0D0E]/80 backdrop-blur-md sticky top-0 z-40">
@@ -281,10 +314,10 @@ export default function SupportPage({ theme, setTheme }) {
             href="/"
             className="flex items-center gap-3 text-sm font-medium text-neutral-900 dark:text-neutral-100 hover:opacity-80 transition-opacity"
           >
-            <div className="w-8 h-8 rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-800">
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-800 shrink-0">
               <img
                 src={PAYMENT_CONFIG.avatar}
-                alt="Advaita Chandra" width="384" height="384" decoding="async" fetchPriority="high"
+                alt="" width="384" height="384" decoding="async" fetchPriority="high"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -292,7 +325,7 @@ export default function SupportPage({ theme, setTheme }) {
               <span className="font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 leading-none">
                 Advaita Chandra
               </span>
-              <span className="text-[11px] text-neutral-500 dark:text-neutral-400 font-normal mt-0.5">
+              <span className="text-[11px] text-neutral-600 dark:text-neutral-400 font-normal mt-0.5">
                 Independent Research & Code
               </span>
             </div>
@@ -302,31 +335,32 @@ export default function SupportPage({ theme, setTheme }) {
             <button
               type="button"
               onClick={() => handleCopy()}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono bg-neutral-100 dark:bg-[#14171A] hover:bg-neutral-200/70 dark:hover:bg-[#1C2024] text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-[#22262B] transition-colors cursor-pointer"
-              title="Click to copy UPI ID"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-mono bg-neutral-100 dark:bg-[#14171A] hover:bg-neutral-200/70 dark:hover:bg-[#1C2024] text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-[#22262B] transition-colors cursor-pointer"
+              title="Copy UPI ID"
             >
-              <span className="text-neutral-400">upi:</span>
+              <span className="sr-only">Copy UPI ID </span>
+              <span className="text-neutral-500 dark:text-neutral-400" aria-hidden="true">upi:</span>
               <span className="font-semibold text-neutral-900 dark:text-neutral-100">
                 {PAYMENT_CONFIG.upiId}
               </span>
               {copied ? (
-                <Check className="w-3.5 h-3.5 text-emerald-500" />
+                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
               ) : (
-                <Copy className="w-3.5 h-3.5 text-neutral-400" />
+                <Copy className="w-3.5 h-3.5 text-neutral-500" aria-hidden="true" />
               )}
             </button>
 
             <button
               type="button"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-lg text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-[#14171A] border border-transparent hover:border-neutral-200 dark:hover:border-[#22262B] transition-all cursor-pointer"
-              aria-label="Toggle theme"
+              className="w-10 h-10 inline-flex items-center justify-center rounded-lg text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-[#14171A] border border-transparent hover:border-neutral-200 dark:hover:border-[#22262B] transition-all cursor-pointer"
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
               title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             >
               {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-400" />
+                <Sun className="w-4 h-4 text-amber-400" aria-hidden="true" />
               ) : (
-                <Moon className="w-4 h-4 text-neutral-600" />
+                <Moon className="w-4 h-4 text-neutral-600" aria-hidden="true" />
               )}
             </button>
           </div>
@@ -339,7 +373,7 @@ export default function SupportPage({ theme, setTheme }) {
         {/* SECTION A: Hero & Narrative Header */}
         <section className="space-y-6">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif tracking-tight leading-tight sm:leading-[1.12] text-neutral-950 dark:text-neutral-50 max-w-3xl">
-            Sponsor public research, digital archives, and open software.
+            Support public research, digital archives, and open software.
           </h1>
 
           <p className="text-[15px] sm:text-base text-neutral-700 dark:text-neutral-300 max-w-2xl leading-relaxed font-normal">
@@ -353,40 +387,41 @@ export default function SupportPage({ theme, setTheme }) {
           </div>
         </section>
 
-        {/* SECTION B: Unified Support / Sponsorship Module (Split View) */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
-          
+        {/* SECTION B: Unified Support Module (Split View) */}
+        <section id="support" aria-labelledby="support-heading" className="scroll-mt-20 grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
+
           {/* Left Column: Contribution Configurator (7 cols on md+) */}
-          <div className="md:col-span-7 flex flex-col justify-between bg-white dark:bg-[#121214] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
+          <div className="md:col-span-7 flex flex-col justify-between bg-white dark:bg-[#121214] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 sm:p-7 space-y-6 shadow-xs">
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl sm:text-3xl font-serif text-zinc-900 dark:text-zinc-50 tracking-tight">
+                <h2 id="support-heading" className="text-2xl sm:text-3xl font-serif text-zinc-900 dark:text-zinc-50 tracking-tight">
                   Support the Research
                 </h2>
                 <p className="text-[15px] text-zinc-600 dark:text-zinc-400 mt-1 leading-relaxed">
-                  Choose a contribution tier or specify a custom amount. 100% directly funds infrastructure, books, and archive uptime with zero intermediary platform cuts.
+                  Choose an amount or enter your own. Voluntary personal support helps cover infrastructure, books, and archive hosting. No platform fee is charged by this website.
                 </p>
               </div>
 
               {/* Tiered Amount Selection (Responsive 2x2 grid on mobile, 4-col on desktop) */}
               <div className="space-y-3">
-                <label className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                <p id="amount-label" className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                   Select Amount (INR)
-                </label>
+                </p>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1.5">
+                <div role="group" aria-labelledby="amount-label" className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1.5">
                   {presetTiers.map((tier) => {
                     const isSelected = !isCustom && amount === tier.value
                     return (
                       <button
                         key={tier.value}
                         type="button"
+                        aria-pressed={isSelected}
                         onClick={() => {
                           setAmount(tier.value)
                           setIsCustom(false)
                           setCustomAmount('')
                         }}
-                        className={`relative p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[76px] focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 ${
+                        className={`relative p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[76px] ${
                           isSelected
                             ? 'border-zinc-900 bg-zinc-900 text-white dark:border-white dark:bg-white dark:text-zinc-950 shadow-sm'
                             : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#121214] hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 text-zinc-900 dark:text-zinc-100'
@@ -403,14 +438,14 @@ export default function SupportPage({ theme, setTheme }) {
                             {tier.badge}
                           </span>
                         )}
-                        <div className="text-lg font-semibold tracking-tight">{tier.label}</div>
-                        <div
-                          className={`text-xs mt-0.5 font-mono ${
-                            isSelected ? 'text-zinc-300 dark:text-zinc-700' : 'text-zinc-500 dark:text-zinc-400'
+                        <span className="text-lg font-semibold tracking-tight">{formatInr(tier.value)}</span>
+                        <span
+                          className={`text-xs mt-0.5 ${
+                            isSelected ? 'text-zinc-300 dark:text-zinc-700' : 'text-zinc-600 dark:text-zinc-400'
                           }`}
                         >
-                          ~{tier.usd} USD
-                        </div>
+                          {tier.note}
+                        </span>
                       </button>
                     )
                   })}
@@ -419,99 +454,111 @@ export default function SupportPage({ theme, setTheme }) {
                 {/* Custom Amount (always visible; typing selects it, picking a tier clears it) */}
                 <div className="pt-1">
                   <label htmlFor="custom-amount" className="block text-xs text-zinc-600 dark:text-zinc-400 mb-1.5">
-                    Or enter a custom amount
+                    Or enter a custom amount (whole rupees)
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 dark:text-zinc-400 font-medium">
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 dark:text-zinc-400 font-medium" aria-hidden="true">
                       ₹
                     </span>
+                    {/* type="text" so the raw value is validated as typed; type="number" hides "150abc"/"1e3" from JS */}
                     <input
                       id="custom-amount"
-                      type="number"
-                      inputMode="decimal"
-                      min="1"
-                      max="100000"
-                      placeholder="Any amount, e.g. 250"
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="off"
+                      placeholder="e.g. 250"
                       value={customAmount}
+                      aria-invalid={amountInvalid}
+                      aria-describedby="custom-amount-error"
                       onFocus={() => customAmount && setIsCustom(true)}
                       onChange={(e) => {
                         setCustomAmount(e.target.value)
                         setIsCustom(e.target.value !== '')
                       }}
-                      className={`w-full pl-8 pr-4 py-2.5 rounded-xl border bg-white dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600 ${
-                        isCustom ? 'border-zinc-900 dark:border-white' : 'border-zinc-200 dark:border-zinc-800'
+                      className={`w-full pl-8 pr-4 py-2.5 rounded-xl border bg-white dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 dark:placeholder:text-zinc-400 text-base sm:text-sm ${
+                        amountInvalid
+                          ? 'border-red-600 dark:border-red-400'
+                          : isCustom ? 'border-zinc-900 dark:border-white' : 'border-zinc-200 dark:border-zinc-800'
                       }`}
                     />
                   </div>
+                  <p id="custom-amount-error" aria-live="polite" className="text-xs text-red-700 dark:text-red-400 mt-1.5">
+                    {amountInvalid ? AMOUNT_ERROR : ''}
+                  </p>
                 </div>
               </div>
 
-              {/* Optional Donor Details (Inputs with distinct labels & focus rings) */}
+              {/* Optional Supporter Details */}
               <div className="space-y-2 pt-1">
-                <label className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                   Optional Note & Handle
-                </label>
+                </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   <div>
-                    <label htmlFor="donor-name" className="sr-only">Your Name or Handle</label>
+                    <label htmlFor="supporter-name" className="block text-xs text-zinc-600 dark:text-zinc-400 mb-1.5">Your name or handle</label>
                     <input
-                      id="donor-name"
+                      id="supporter-name"
                       type="text"
                       autoComplete="nickname"
-                      placeholder="Your Name or @handle"
-                      value={donorName}
-                      onChange={(e) => setDonorName(e.target.value)}
+                      placeholder="Optional"
+                      value={supporterName}
+                      onChange={(e) => setSupporterName(e.target.value)}
                       maxLength={30}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600 transition-shadow"
+                      aria-describedby="supporter-hint"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 dark:placeholder:text-zinc-400 text-base sm:text-sm"
                     />
                   </div>
                   <div>
-                    <label htmlFor="donor-note" className="sr-only">Short Note</label>
+                    <label htmlFor="supporter-note" className="block text-xs text-zinc-600 dark:text-zinc-400 mb-1.5">Short note</label>
                     <input
-                      id="donor-note"
+                      id="supporter-note"
                       type="text"
                       autoComplete="off"
-                      placeholder="Short note (optional)"
-                      value={donorNote}
-                      onChange={(e) => setDonorNote(e.target.value)}
+                      placeholder="Optional"
+                      value={supporterNote}
+                      onChange={(e) => setSupporterNote(e.target.value)}
                       maxLength={50}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600 transition-shadow"
+                      aria-describedby="supporter-hint"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 dark:placeholder:text-zinc-400 text-base sm:text-sm"
                     />
                   </div>
                 </div>
+                <p id="supporter-hint" className="text-xs text-zinc-600 dark:text-zinc-400">
+                  Added to the UPI payment note (up to 50 characters; symbols are removed).
+                </p>
               </div>
 
               {/* Dynamic Primary Execution Call-to-Action (desktop can't open upi:// — point to the QR) */}
               <div className="pt-2">
-                <a
-                  href={isMobile ? openUpiUri : '#scan-qr'}
-                  onClick={() => isMobile && markLaunch()}
-                  className="w-full py-4 px-6 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:bg-zinc-950 text-white dark:bg-zinc-50 dark:hover:bg-zinc-200 dark:active:bg-zinc-300 dark:text-zinc-950 font-semibold text-base flex items-center justify-between transition-all duration-150 shadow-md hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#121214] active:scale-[0.99] cursor-pointer"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Smartphone className="w-5 h-5 text-zinc-300 dark:text-zinc-700" />
-                    <span>
-                      {isMobile
-                        ? `Pay ${activeAmount ? `₹${activeAmount} INR` : 'Custom Amount'} via Any UPI App`
-                        : `Scan the QR to pay${activeAmount ? ` ₹${activeAmount}` : ''} from your phone`}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs opacity-90 font-mono">
-                    {usdValue && <span>(~${usdValue} USD)</span>}
-                    <ArrowUpRight className="w-4 h-4 ml-1" />
-                  </div>
-                </a>
+                {amountInvalid ? (
+                  <button type="button" disabled aria-describedby="custom-amount-error" className={ctaClass}>
+                    {ctaContent}
+                  </button>
+                ) : (
+                  <a
+                    href={isMobile ? openUpiUri : '#scan-qr'}
+                    onClick={() => isMobile && markLaunch()}
+                    className={ctaClass}
+                  >
+                    {ctaContent}
+                  </a>
+                )}
                 {isMobile && (
                   <div className="mt-2.5 flex items-center justify-between gap-3 text-xs text-zinc-600 dark:text-zinc-400">
                     <span>
-                      {activeAmount ? <>Opens your app — <span className="font-semibold text-zinc-900 dark:text-zinc-100">₹{activeAmount}</span> is copied, just paste it.</> : 'Opens your app — enter any amount.'}
+                      {amountInvalid
+                        ? 'Fix the amount above to continue.'
+                        : activeAmount
+                          ? <>Opens your UPI app — <span className="font-semibold text-zinc-900 dark:text-zinc-100">{amountLabel}</span> is copied, just paste it.</>
+                          : 'Opens your UPI app — enter any amount.'}
                     </span>
                     <button
                       type="button"
                       onClick={handleDownloadQr}
-                      className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer"
+                      disabled={amountInvalid}
+                      className="shrink-0 inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <QrCode className="w-3.5 h-3.5" />
+                      <QrCode className="w-3.5 h-3.5" aria-hidden="true" />
                       Save QR
                     </button>
                   </div>
@@ -524,15 +571,15 @@ export default function SupportPage({ theme, setTheme }) {
                   <div className="flex items-start justify-between gap-3">
                     <p className="leading-relaxed">
                       <span className="font-semibold text-zinc-900 dark:text-zinc-100">Payment declined in the app?</span>{' '}
-                      If a payment fails, nothing is debited. Try one of these:
+                      A failed UPI payment is normally not debited; if money left your account, contact your bank or UPI app. Try one of these:
                     </p>
                     <button
                       type="button"
                       onClick={() => setShowPayHelp(false)}
-                      className="shrink-0 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer"
-                      aria-label="Dismiss"
+                      className="shrink-0 -m-1.5 w-8 h-8 inline-flex items-center justify-center rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-amber-100 dark:hover:bg-amber-900/40 cursor-pointer"
+                      aria-label="Dismiss payment help"
                     >
-                      ✕
+                      <X className="w-4 h-4" aria-hidden="true" />
                     </button>
                   </div>
                   <ol className="space-y-2.5 list-decimal pl-4">
@@ -540,7 +587,8 @@ export default function SupportPage({ theme, setTheme }) {
                       <button
                         type="button"
                         onClick={handleDownloadQr}
-                        className="font-semibold underline underline-offset-2 text-zinc-900 dark:text-zinc-100 cursor-pointer"
+                        disabled={amountInvalid}
+                        className="font-semibold underline underline-offset-2 text-zinc-900 dark:text-zinc-100 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Save the QR
                       </button>
@@ -554,7 +602,7 @@ export default function SupportPage({ theme, setTheme }) {
                       >
                         Copy UPI ID
                       </button>
-                      <span> ({PAYMENT_CONFIG.upiId}) and pay it via "Pay to UPI ID" in any app.</span>
+                      <span> ({PAYMENT_CONFIG.upiId}) and pay it via "Pay to UPI ID" in your app.</span>
                     </li>
                     {activeAmount ? (
                       <li>
@@ -563,7 +611,7 @@ export default function SupportPage({ theme, setTheme }) {
                           onClick={() => markLaunch({ copyAmount: false })}
                           className="font-semibold underline underline-offset-2 text-zinc-900 dark:text-zinc-100"
                         >
-                          Open UPI app with ₹{activeAmount} pre-filled
+                          Open UPI app with {amountLabel} pre-filled
                         </a>
                         <span> (some apps block this for personal UPI IDs).</span>
                       </li>
@@ -574,7 +622,7 @@ export default function SupportPage({ theme, setTheme }) {
                 <button
                   type="button"
                   onClick={() => setShowPayHelp(true)}
-                  className="text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline underline-offset-4 cursor-pointer"
+                  className="py-1 text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline underline-offset-4 cursor-pointer"
                 >
                   Payment failed in the app?
                 </button>
@@ -582,49 +630,49 @@ export default function SupportPage({ theme, setTheme }) {
             </div>
 
             {/* Micro Trust Banner */}
-            <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800/80 text-xs text-zinc-500 dark:text-zinc-400 flex items-center justify-between">
-              <span>Direct P2P transfer</span>
-              <span>100% directly funds infrastructure • 0% fees</span>
+            <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800/80 text-xs text-zinc-600 dark:text-zinc-400 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+              <span>Voluntary personal support via UPI</span>
+              <span>No platform fee is charged by this website</span>
             </div>
           </div>
 
           {/* Right Column: Direct Scan & VPA Container (5 cols, stacked below on mobile) */}
-          <div id="scan-qr" className="scroll-mt-20 flex md:col-span-5 flex-col justify-between bg-white dark:bg-[#121214] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
-            
+          <div id="scan-qr" className="scroll-mt-20 flex md:col-span-5 flex-col justify-between bg-white dark:bg-[#121214] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 sm:p-7 space-y-6 shadow-xs">
+
             {/* Header & Copyable VPA */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                   {isMobile ? 'Pay by QR' : 'Scan to Pay'}
-                </span>
-                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  Verified UPI
+                </h3>
+                <span className="text-xs text-zinc-600 dark:text-zinc-400 font-medium">
+                  UPI · INR only
                 </span>
               </div>
 
               {/* Copyable UPI Bar with feedback */}
-              <div
+              <button
+                type="button"
                 onClick={() => handleCopy()}
-                className="flex items-center justify-between p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 cursor-pointer hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors group"
-                title="Click to copy UPI address"
+                className="w-full text-left flex items-center justify-between p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 cursor-pointer hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors group"
+                title="Copy UPI ID"
               >
-                <div className="flex flex-col min-w-0">
-                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-wider font-mono">
-                    Virtual Payment Address (VPA)
+                <span className="flex flex-col min-w-0">
+                  <span className="text-[10px] text-zinc-600 dark:text-zinc-400 uppercase tracking-wider font-mono">
+                    <span className="sr-only">Copy </span>UPI ID (VPA)
                   </span>
                   <span className="font-mono text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">
                     {PAYMENT_CONFIG.upiId}
                   </span>
-                </div>
-                <div className="p-2 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors shrink-0 ml-2">
+                </span>
+                <span className="p-2 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors shrink-0 ml-2">
                   {copied ? (
-                    <Check className="w-4 h-4 text-emerald-500" />
+                    <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                   ) : (
-                    <Copy className="w-4 h-4" />
+                    <Copy className="w-4 h-4" aria-hidden="true" />
                   )}
-                </div>
-              </div>
+                </span>
+              </button>
             </div>
 
             {/* High-contrast QR "pay card": always white so phone cameras read it in dark mode too */}
@@ -632,36 +680,40 @@ export default function SupportPage({ theme, setTheme }) {
               <div className="w-full flex items-baseline justify-between gap-2 px-4 pt-3.5">
                 <span className="text-sm font-semibold text-zinc-900 truncate">{PAYMENT_CONFIG.recipientName}</span>
                 <span className="text-base font-bold text-zinc-900 font-mono shrink-0">
-                  {activeAmount ? `₹${activeAmount}` : 'Any amount'}
+                  {amountInvalid ? '—' : amountLabel || 'Any amount'}
                 </span>
               </div>
-              <div className="p-3">
-                {qrSvg ? (
+              <div className="w-full flex justify-center p-3">
+                {amountInvalid ? (
+                  <div className="w-full max-w-56 aspect-square flex items-center justify-center text-center px-6 text-zinc-600 text-xs">
+                    Enter a valid amount to show the QR code.
+                  </div>
+                ) : qrSvg ? (
                   <div
                     role="img"
-                    aria-label={`UPI QR code to pay ${activeAmount ? `₹${activeAmount} ` : ''}to ${PAYMENT_CONFIG.upiId}`}
-                    className="w-56 h-56 sm:w-52 sm:h-52 flex items-center justify-center select-none"
+                    aria-label={`UPI QR code to pay ${amountLabel ? `${amountLabel} ` : ''}to ${PAYMENT_CONFIG.upiId}`}
+                    className="w-full max-w-56 aspect-square flex items-center justify-center select-none [&>svg]:w-full [&>svg]:h-full"
                     dangerouslySetInnerHTML={{ __html: qrSvg }}
                   />
                 ) : (
-                  <div className="w-56 h-56 sm:w-52 sm:h-52 flex items-center justify-center text-zinc-400 text-xs">
+                  <div className="w-full max-w-56 aspect-square flex items-center justify-center text-zinc-600 text-xs">
                     Generating QR…
                   </div>
                 )}
               </div>
-              <div className="w-full border-t border-zinc-100 px-4 py-2.5 text-center text-[11px] text-zinc-500">
-                Works with GPay, PhonePe, Paytm, BHIM, CRED & any bank app
-              </div>
+              <p className="w-full border-t border-zinc-100 px-4 py-2.5 text-center text-[11px] leading-relaxed text-zinc-600">
+                Works with most UPI apps. If the link does not open, scan the QR code or copy the UPI ID.
+              </p>
             </div>
 
             {/* How to scan — on a phone the QR has to come from the gallery */}
             <ol className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
               {(isMobile
-                ? ['Tap “Save QR to gallery” below', 'Open any UPI app → Scan → pick the image from gallery', 'Check the amount and pay']
-                : ['Open any UPI app on your phone', 'Tap Scan and point it at this QR', 'Check the amount and pay']
+                ? ['Tap “Save QR to gallery” below', 'Open your UPI app → Scan → pick the image from gallery', 'Check the payee, amount, and pay']
+                : ['Open a UPI app on your phone', 'Tap Scan and point it at this QR', 'Check the payee, amount, and pay']
               ).map((step, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="w-4 h-4 shrink-0 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 flex items-center justify-center">
+                  <span className="w-4 h-4 shrink-0 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 flex items-center justify-center" aria-hidden="true">
                     {i + 1}
                   </span>
                   <span>{step}</span>
@@ -669,43 +721,48 @@ export default function SupportPage({ theme, setTheme }) {
               ))}
             </ol>
 
-            {/* Direct Trust Statement & Action Row */}
+            {/* Action Row & Disclaimer */}
             <div className="space-y-3 pt-1">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={handleDownloadQr}
-                  className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+                  disabled={amountInvalid}
+                  className={`flex-1 min-h-11 py-2.5 px-3 rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
                     isMobile
                       ? 'bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-zinc-50 dark:hover:bg-zinc-200 dark:text-zinc-950'
                       : 'border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900'
                   }`}
                 >
-                  <QrCode className="w-3.5 h-3.5" />
+                  <QrCode className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>{isMobile ? 'Save QR to gallery' : 'Download QR'}</span>
                 </button>
                 <button
                   type="button"
                   onClick={handleShare}
-                  className="flex-1 py-2.5 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  className="flex-1 min-h-11 py-2.5 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <Share2 className="w-3.5 h-3.5" />
+                  <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>Share Page</span>
                 </button>
               </div>
 
-              {/* Footnote legal notice as clean, muted text without marker highlights */}
-              <div className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-1.5 border-t border-zinc-100 dark:border-zinc-800/80 pt-3">
-                <p className="flex items-start gap-1.5">
-                  <span className="text-emerald-500 mt-0.5">•</span>
-                  <span>Direct P2P transfer • 100% directly funds infrastructure • 0% platform fees.</span>
+              {/* Payment disclaimer: visible next to the QR, not buried in the footer */}
+              <div role="note" aria-labelledby="disclaimer-heading" className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 p-4 text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed space-y-1.5">
+                <p id="disclaimer-heading" className="flex items-center gap-1.5 font-semibold text-zinc-900 dark:text-zinc-100">
+                  <Info className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                  Voluntary personal support.
                 </p>
-                <p className="flex items-start gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-                  <Info className="w-3.5 h-3.5 shrink-0 mt-0.5 text-zinc-400 dark:text-zinc-500" />
-                  <span>
-                    International cards unavailable as Advaita is 16 and a legal minor. UPI serves as the primary direct interoperable rail.
-                  </span>
+                <p>
+                  Contributions are sent by UPI to a FamPay UPI ID operated by Advaita Chandra with parental/guardian permission and supervision. This is a voluntary personal contribution — not a charitable donation, purchase, or commercial transaction. No goods or services are provided in exchange. This website charges no platform fee. Your UPI app may apply its own limits, security checks, or policies. Payments are voluntary and non-refundable except where required by law. Questions or payment issues:{' '}
+                  <a
+                    href={`mailto:${PAYMENT_CONFIG.contactEmail}`}
+                    className="font-medium text-zinc-900 dark:text-zinc-100 underline underline-offset-2 whitespace-nowrap"
+                  >
+                    {PAYMENT_CONFIG.contactEmail}
+                  </a>
                 </p>
+                <p>Only UPI payments in Indian rupees (INR) are supported.</p>
               </div>
             </div>
 
@@ -727,10 +784,11 @@ export default function SupportPage({ theme, setTheme }) {
               href="https://github.com/w1tneess"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-neutral-100 inline-flex items-center gap-1"
+              className="py-1 text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-neutral-100 inline-flex items-center gap-1"
             >
               <span>View GitHub</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <span className="sr-only">(opens in new tab)</span>
+              <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
             </a>
           </div>
 
@@ -741,12 +799,12 @@ export default function SupportPage({ theme, setTheme }) {
                 className="p-6 sm:p-7 rounded-2xl border border-neutral-300 dark:border-[#262A30] bg-white dark:bg-[#14171A] hover:border-neutral-400 dark:hover:border-neutral-600 hover:shadow-md transition-all group flex flex-col justify-between"
               >
                 <div className="space-y-3.5">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-3">
                     <span className="text-xs font-mono uppercase tracking-wider text-neutral-600 dark:text-neutral-400 font-semibold">
                       {project.tag}
                     </span>
-                    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-neutral-700 dark:text-neutral-300">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-neutral-700 dark:text-neutral-300 shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
                       {project.status}
                     </span>
                   </div>
@@ -768,10 +826,10 @@ export default function SupportPage({ theme, setTheme }) {
                         href={project.repoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white transition-colors"
-                        title="View GitHub Repository"
+                        className="py-1 inline-flex items-center gap-1 text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white transition-colors"
+                        aria-label={`${project.title}: source code on GitHub (opens in new tab)`}
                       >
-                        <Github className="w-3.5 h-3.5" />
+                        <Github className="w-3.5 h-3.5" aria-hidden="true" />
                         <span className="text-xs font-medium">Code</span>
                       </a>
                     )}
@@ -780,11 +838,11 @@ export default function SupportPage({ theme, setTheme }) {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-neutral-950 dark:text-neutral-50 font-semibold hover:underline underline-offset-2 transition-all"
-                        title="View Live Platform"
+                        className="py-1 inline-flex items-center gap-1 text-neutral-950 dark:text-neutral-50 font-semibold hover:underline underline-offset-2 transition-all"
+                        aria-label={`${project.title}: live site (opens in new tab)`}
                       >
                         <span className="text-xs">Live</span>
-                        <ArrowUpRight className="w-3.5 h-3.5" />
+                        <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                       </a>
                     )}
                   </div>
@@ -806,7 +864,7 @@ export default function SupportPage({ theme, setTheme }) {
               </p>
             </div>
             <div className="text-left sm:text-right font-mono shrink-0">
-              <span className="text-xs uppercase tracking-wider text-neutral-500 block">Monthly Target</span>
+              <span className="text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400 block">Monthly Target</span>
               <span className="text-lg font-bold text-neutral-950 dark:text-neutral-50">₹2,079 / mo</span>
             </div>
           </div>
@@ -815,16 +873,17 @@ export default function SupportPage({ theme, setTheme }) {
           <div className="border border-neutral-300 dark:border-[#22262B] rounded-2xl overflow-hidden bg-white dark:bg-[#14171A] shadow-xs">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
+                <caption className="sr-only">Monthly infrastructure costs in Indian rupees</caption>
                 <thead>
                   <tr className="border-b border-neutral-200 dark:border-[#22262B] bg-neutral-50/80 dark:bg-[#0E1012] text-xs font-mono uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
-                    <th className="py-3 px-5 sm:px-6 font-semibold">Infrastructure Item</th>
-                    <th className="py-3 px-5 sm:px-6 font-semibold hidden sm:table-cell">Function & Scope</th>
-                    <th className="py-3 px-5 sm:px-6 font-semibold text-right">Monthly Cost</th>
+                    <th scope="col" className="py-3 px-5 sm:px-6 font-semibold">Infrastructure Item</th>
+                    <th scope="col" className="py-3 px-5 sm:px-6 font-semibold hidden sm:table-cell">Function & Scope</th>
+                    <th scope="col" className="py-3 px-5 sm:px-6 font-semibold text-right">Monthly Cost</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-200 dark:divide-[#22262B] text-sm">
                   {ledgerCosts.map((cost, idx) => (
-                    <tr 
+                    <tr
                       key={idx}
                       className="hover:bg-neutral-50/60 dark:hover:bg-[#1C2024]/40 transition-colors"
                     >
@@ -839,13 +898,15 @@ export default function SupportPage({ theme, setTheme }) {
                       <td className="py-4 px-5 sm:px-6 text-neutral-600 dark:text-neutral-400 text-xs hidden sm:table-cell leading-relaxed">
                         {cost.purpose}
                       </td>
-                      <td className="py-4 px-5 sm:px-6 text-right shrink-0">
+                      <td className="py-4 px-5 sm:px-6 text-right shrink-0 whitespace-nowrap">
                         <div className="font-mono text-sm font-bold text-neutral-950 dark:text-neutral-50">
                           {cost.cost}
                         </div>
-                        <div className="text-[11px] font-mono text-neutral-500">
-                          {cost.usd} USD
-                        </div>
+                        {cost.note && (
+                          <div className="text-[11px] font-mono text-neutral-600 dark:text-neutral-400">
+                            {cost.note}
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -858,19 +919,22 @@ export default function SupportPage({ theme, setTheme }) {
                 Baseline student operating infrastructure target
               </span>
               <span className="font-mono text-sm font-bold text-neutral-950 dark:text-neutral-50">
-                ₹2,079 / month (~$24.90 USD)
+                ₹2,079 / month
               </span>
             </div>
           </div>
         </section>
 
-        {/* SECTION E: Refined Editorial Footer */}
-        <footer className="border-t border-neutral-200 dark:border-[#22262B] pt-12 pb-16 space-y-10">
+      </main>
+
+      {/* SECTION E: Refined Editorial Footer */}
+      <footer className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="border-t border-neutral-200 dark:border-[#22262B] pt-12 pb-16 space-y-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 items-start">
-            
+
             {/* Col 1: Bio & Ethos (6 cols) */}
             <div className="md:col-span-6 space-y-3">
-              <div className="flex items-center gap-2.5">
+              <div className="flex flex-wrap items-center gap-2.5">
                 <div className="w-6 h-6 rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-800 shrink-0">
                   <img
                     src={PAYMENT_CONFIG.avatar}
@@ -881,92 +945,77 @@ export default function SupportPage({ theme, setTheme }) {
                 <span className="font-serif font-medium text-sm text-neutral-900 dark:text-neutral-100">
                   Advaita Chandra
                 </span>
-                <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-medium border border-emerald-500/20">
+                <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 font-medium border border-emerald-500/20">
                   Student Builder • Age 16
                 </span>
               </div>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-sm">
-                Independent research, open historical archives, and public software tools. 100% directly funded with zero platform intermediary cuts.
+              <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed max-w-sm">
+                Independent research, open historical archives, and public software tools, supported by voluntary personal contributions. No platform fee is charged by this website.
               </p>
-              <div className="text-[11px] text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 pt-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span>Direct P2P Settlement via FamPay UPI (<span className="font-mono text-neutral-600 dark:text-neutral-300">advaita@fam</span>)</span>
+              <div className="text-[11px] text-neutral-600 dark:text-neutral-400 flex items-center gap-1.5 pt-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" aria-hidden="true"></span>
+                <span>Receives UPI at <span className="font-mono text-neutral-700 dark:text-neutral-300">{PAYMENT_CONFIG.upiId}</span> (a FamPay UPI ID)</span>
               </div>
             </div>
 
             {/* Col 2: Navigation Links (3 cols) */}
-            <div className="md:col-span-3 space-y-2.5">
-              <span className="text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-200 block">
+            <nav aria-labelledby="footer-links-heading" className="md:col-span-3 space-y-2.5">
+              <h2 id="footer-links-heading" className="text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-200">
                 Ecosystem
-              </span>
-              <ul className="space-y-2 text-xs text-neutral-500 dark:text-neutral-400">
+              </h2>
+              <ul className="space-y-1 text-xs text-neutral-600 dark:text-neutral-400">
+                {[
+                  { href: 'https://advaitachandra.in', label: 'advaitachandra.in' },
+                  { href: 'https://github.com/w1tneess', label: 'GitHub Repositories' },
+                  { href: 'https://x.com/w1tneess_', label: 'Twitter / X (@w1tneess_)' },
+                ].map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="py-1 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-flex items-center gap-1 group"
+                    >
+                      <span>{link.label}</span>
+                      <span className="sr-only">(opens in new tab)</span>
+                      <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity" aria-hidden="true" />
+                    </a>
+                  </li>
+                ))}
                 <li>
                   <a
-                    href="https://advaitachandra.in"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-flex items-center gap-1 group"
+                    href={`mailto:${PAYMENT_CONFIG.contactEmail}`}
+                    className="py-1 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-flex items-center gap-1 group"
                   >
-                    <span>advaitachandra.in</span>
-                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/w1tneess"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-flex items-center gap-1 group"
-                  >
-                    <span>GitHub Repositories</span>
-                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://x.com/w1tneess_"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-flex items-center gap-1 group"
-                  >
-                    <span>Twitter / X (@w1tneess_)</span>
-                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="mailto:advaita974@gmail.com"
-                    className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors inline-flex items-center gap-1 group"
-                  >
-                    <span>Direct Email</span>
-                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span>Email ({PAYMENT_CONFIG.contactEmail})</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity" aria-hidden="true" />
                   </a>
                 </li>
               </ul>
-            </div>
+            </nav>
 
-            {/* Col 3: Direct Settlement (3 cols) */}
+            {/* Col 3: UPI ID (3 cols) */}
             <div className="md:col-span-3 space-y-2.5">
-              <span className="text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-200 block">
-                Direct Settlement
-              </span>
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-200">
+                UPI ID
+              </h2>
               <div className="space-y-2 text-xs">
                 <button
                   type="button"
                   onClick={() => handleCopy()}
                   className="w-full text-left py-2.5 px-3 rounded-lg border border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:bg-neutral-50 dark:hover:bg-[#1C2024] text-neutral-700 dark:text-neutral-300 transition-all flex items-center justify-between group cursor-pointer"
-                  title="Click to copy UPI ID"
+                  title="Copy UPI ID"
                 >
-                  <div className="flex flex-col">
-                    <span className="text-[10px] text-neutral-500 dark:text-neutral-400">Virtual Payment Address</span>
+                  <span className="flex flex-col">
+                    <span className="text-[10px] text-neutral-600 dark:text-neutral-400"><span className="sr-only">Copy </span>Virtual Payment Address</span>
                     <span className="font-mono text-xs font-semibold text-neutral-900 dark:text-neutral-100">
                       {PAYMENT_CONFIG.upiId}
                     </span>
-                  </div>
+                  </span>
                   {copied ? (
-                    <Check className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true" />
                   ) : (
-                    <Copy className="w-4 h-4 opacity-70 group-hover:opacity-100 shrink-0" />
+                    <Copy className="w-4 h-4 opacity-70 group-hover:opacity-100 shrink-0" aria-hidden="true" />
                   )}
                 </button>
               </div>
@@ -974,24 +1023,33 @@ export default function SupportPage({ theme, setTheme }) {
 
           </div>
 
+          {/* Privacy disclosure (kept accurate to the code: no analytics, no cookies, one localStorage key) */}
+          <section aria-labelledby="privacy-heading" className="max-w-2xl space-y-1.5">
+            <h2 id="privacy-heading" className="text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-200">
+              Privacy
+            </h2>
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              This website does not use analytics, advertising trackers, or third-party cookies. Any name or note you enter is used only to create your UPI payment reference and is not stored on this website’s server. It stays in your browser until you open your UPI app, which receives it as the payment note (visible to you and the recipient). Your light/dark theme choice is saved in your browser’s local storage. Cloudflare, which hosts this site, may keep standard request logs (such as IP address) for security.
+            </p>
+          </section>
+
           {/* Sub-footer Bar with Copyright & Privacy Standards */}
-          <div className="pt-6 border-t border-neutral-200/80 dark:border-[#22262B]/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-neutral-500 dark:text-neutral-400">
-            <div className="flex items-center gap-2 flex-wrap">
+          <div className="pt-6 border-t border-neutral-200/80 dark:border-[#22262B]/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-neutral-600 dark:text-neutral-400">
+            <div className="flex items-center justify-center gap-2 flex-wrap">
               <span>© {new Date().getFullYear()} Advaita Chandra</span>
-              <span>•</span>
+              <span aria-hidden="true">•</span>
               <span>Class 10 CBSE Student Builder</span>
-              <span>•</span>
+              <span aria-hidden="true">•</span>
               <span>West Bengal, India</span>
             </div>
-            <div className="flex items-center gap-3">
-              <span>Zero tracking cookies</span>
-              <span>•</span>
-              <span>Open-source client</span>
+            <div className="flex items-center justify-center gap-3 flex-wrap text-center">
+              <span>No analytics or tracking cookies</span>
+              <span aria-hidden="true">•</span>
+              <span>Not affiliated with or endorsed by FamPay or any UPI app</span>
             </div>
           </div>
-        </footer>
-
-      </main>
+        </div>
+      </footer>
     </div>
   )
 }
