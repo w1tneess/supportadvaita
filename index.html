@@ -13,19 +13,21 @@
     <meta property="og:url" content="https://support.advaitachandra.in" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Advaita Chandra" />
-    <meta property="og:image" content="https://support.advaitachandra.in/og-image.svg" />
+    <meta property="og:image" content="https://support.advaitachandra.in/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Support Advaita Chandra — direct UPI support for independent research and code" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@w1tneess_" />
     <meta name="twitter:creator" content="@w1tneess_" />
-    <meta name="twitter:image" content="https://support.advaitachandra.in/og-image.svg" />
+    <meta name="twitter:image" content="https://support.advaitachandra.in/og-image.png" />
 
     <!-- Icons & Manifest -->
+    <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#FBFBFA" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0B0D0E" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
 
     <!-- Google Fonts for Apple/Samsung Editorial Polish -->
@@ -33,25 +35,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Instant Theme Detection Script (Zero FOUC) -->
-    <script>
-      (function() {
-        try {
-          var saved = localStorage.getItem('supportadvaita_theme') || localStorage.getItem('paytoadvaita_theme');
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if (saved === 'dark' || ((!saved || saved === 'system') && prefersDark)) {
-            document.documentElement.classList.add('dark');
-            document.documentElement.style.colorScheme = 'dark';
-          } else {
-            document.documentElement.classList.remove('dark');
-            document.documentElement.style.colorScheme = 'light';
-          }
-        } catch (e) {}
-      })();
-    </script>
+    <!-- Applies saved theme before first paint (no flash) -->
+    <script src="/theme-init.js"></script>
   </head>
   <body class="bg-[#FBFBFA] dark:bg-[#0B0D0E] text-[#111827] dark:text-[#F3F4F6] antialiased selection:bg-[#F59E0B]/20 selection:text-[#F59E0B] min-h-dvh transition-colors duration-200">
     <div id="root"></div>
+    <noscript>
+      <p style="padding:2rem;font-family:system-ui,sans-serif">JavaScript is required for this page. You can still pay by UPI: <strong>advaita@fam</strong></p>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

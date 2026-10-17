@@ -1,237 +1,44 @@
+// UPI apps don't decode '+' as space (use %20) and some mishandle %40, so keep '@' literal in the VPA
+const toQuery = (params) => [...params].map(([k, v]) => `${k}=${encodeURIComponent(v).replace(/%40/g, '@')}`).join('&')
+
+const USD_TO_INR = 83.5 // rough display-only approximation
+
 export const PAYMENT_CONFIG = {
-  appName: 'supportadvaita',
   upiId: 'advaita@fam',
-  provider: 'FamPay (Student / Minor Account • Age 16)',
-  paymentRail: 'NPCI UPI (Open Interoperability — Works with Any UPI App)',
-  supportedApps: ['Google Pay', 'PhonePe', 'Paytm', 'BHIM', 'Cred', 'Navi', 'Any Bank App'],
   recipientName: 'Advaita Chandra',
-  nickname: 'Wit',
-  age: 16,
-  grade: 'Class 10 (CBSE)',
-  location: 'West Bengal, India',
-  currency: 'INR',
-  currencySymbol: '₹',
-  secondaryCurrency: 'USD',
-  fxRateUsdToInr: 83.5, // 1 USD ≈ 83.5 INR for global mental approximation
+  avatar: '/pfp.webp',
 
-  avatar: '/pfp.png',
-  website: 'https://advaitachandra.in',
-  email: 'advaita974@gmail.com',
-  github: 'https://github.com/w1tneess',
-  twitter: 'https://x.com/w1tneess_',
-  instagram: 'https://instagram.com/adva1ta_',
-
-  // Authentic narrative and ethos
-  bio: "I am a 16-year-old student, independent researcher, and software developer. Outside Class 10 coursework, I build open-source developer tools, investigate historical and philosophical questions, and maintain public digital archives.",
-  subBio: "All my public tools and research are free of advertisements, tracking scripts, and paywalls. Contributions directly fund cloud infrastructure, domain renewals, technical research literature, and hardware upkeep.",
-
-  // Philosophical foundation
-  quote: {
-    text: "The absurd is the friction produced when the human longing for clarity collides with an unanswering world. Rather than leaping into certainty, one must maintain the tension without illusion.",
-    author: "Albert Camus",
-    source: "The Myth of Sisyphus",
-    note: "The epistemic principle guiding my research, software, and writing."
-  },
-
-  // Key platform metrics
-  metrics: [
-    { label: 'Settlement', value: 'Direct P2P' },
-    { label: 'Platform Fee', value: '0% (Zero Cut)' },
-    { label: 'Open Source', value: '4 Maintained' },
-    { label: 'Identity', value: 'Student Builder' },
-  ],
-
-  financialBreakdown: [
-    { item: 'Cloud Compute & Server Workers', cost: '₹800 / mo', desc: 'Edge runtimes, lightweight backend workers, and static asset hosting' },
-    { item: 'Archival Storage & Redundancy', cost: '₹450 / mo', desc: 'Public dataset backups, historical scan preservation, and media storage' },
-    { item: 'Research Books & Academic Texts', cost: '₹650 / mo', desc: 'Primary editions, philosophy monographs, and technical literature' },
-    { item: 'Domain & Canonical Web Namespace', cost: '₹179 / mo', desc: 'Annual renewal for advaitachandra.in and personal digital infrastructure (₹2,148/yr)' }
-  ],
-
-  // Professional developer contribution tiers
-  tiers: [
-    {
-      id: 'supporter',
-      amount: 50,
-      usdApprox: '$0.60',
-      label: 'Supporter',
-      desc: 'Quick appreciation for open-source tools',
-      icon: 'Coffee',
-      popular: false,
-    },
-    {
-      id: 'backer',
-      amount: 150,
-      usdApprox: '$1.80',
-      label: 'Research & Books',
-      desc: 'Contributes to technical research & literature',
-      icon: 'BookOpen',
-      popular: true,
-      tag: 'Recommended',
-    },
-    {
-      id: 'infrastructure',
-      amount: 500,
-      usdApprox: '$6.00',
-      label: 'Infrastructure',
-      desc: 'Covers domain uptime & cloud workers',
-      icon: 'Server',
-      popular: false,
-    },
-    {
-      id: 'sponsor',
-      amount: 1000,
-      usdApprox: '$12.00',
-      label: 'Developer Sponsor',
-      desc: 'Funds dev tooling & hardware upkeep',
-      icon: 'Sparkles',
-      popular: false,
-    },
-    {
-      id: 'patron',
-      amount: 2500,
-      usdApprox: '$30.00',
-      label: 'Core Patron',
-      desc: 'Direct backing for long-term independent projects',
-      icon: 'GraduationCap',
-      popular: false,
-    },
-  ],
-
-  // Quick increment buttons with clean, round amounts
-  quickIncrements: [
-    { value: 50, label: '+₹50' },
-    { value: 100, label: '+₹100' },
-    { value: 250, label: '+₹250' },
-    { value: 500, label: '+₹500' },
-    { value: 1000, label: '+₹1,000' },
-  ],
-
-  // Real projects built and maintained by Advaita
-  projects: [
-    {
-      id: 'advaitachandra-in',
-      name: 'advaitachandra.in',
-      category: 'Personal Space & Digital Garden',
-      summary: 'Public digital notebook, philosophical essays, data architecture notes, and street photography.',
-      details: 'Built with React 19, Tailwind CSS, Lucide, Framer Motion, and pre-rendered SSG for fast offline-first reading.',
-      url: 'https://advaitachandra.in',
-      repoUrl: 'https://github.com/w1tneess',
-      type: 'Website',
-      status: 'Active',
-      tech: ['React 19', 'Tailwind', 'Philosophy', 'Photography'],
-    },
-    {
-      id: 'osho-documentary',
-      name: 'Osho Archival Documentary',
-      category: 'Investigative Web Archive',
-      summary: 'An impartial, evidence-graded archival platform deconstructing Osho and Rajneeshpuram.',
-      details: 'Built from 5,000+ audio discourses, FBI vault files, and Wasco County court records with interactive map & timeline.',
-      url: 'https://github.com/w1tneess/osho-documentary',
-      repoUrl: 'https://github.com/w1tneess/osho-documentary',
-      type: 'Repository',
-      status: 'Public',
-      tech: ['Next.js', 'TypeScript', 'Primary Sources', 'Archive'],
-    },
-    {
-      id: 'declutter',
-      name: 'declutter',
-      category: 'System Utility (Python)',
-      summary: 'Windows application that safely declutters messy directories without permanent data loss.',
-      details: 'Categorizes by filetype, detects duplicate hashes, flags stale/large files, and previews every operation first.',
-      url: 'https://github.com/w1tneess/declutter',
-      repoUrl: 'https://github.com/w1tneess/declutter',
-      type: 'Repository',
-      status: 'Public',
-      tech: ['Python', 'Automation', 'CLI', 'Windows'],
-    },
-    {
-      id: 'terrorism-dataviz',
-      name: 'Terrorism in India (1947–2026)',
-      category: 'Data Reconciliation & Analysis',
-      summary: 'Python data visualization project examining incident reports across seven decades.',
-      details: 'Reconciles conflicting sources and marks reporting gaps explicitly instead of smoothing over historical absences.',
-      url: 'https://advaitachandra.in/projects',
-      repoUrl: null,
-      type: 'Research',
-      status: 'Completed',
-      tech: ['Python', 'Matplotlib', 'Data Ethics', 'History'],
-    },
-  ],
-
-  // Social Links
-  socials: [
-    { name: 'Website', handle: 'advaitachandra.in', url: 'https://advaitachandra.in', icon: 'Globe' },
-    { name: 'GitHub', handle: 'w1tneess', url: 'https://github.com/w1tneess', icon: 'Github' },
-    { name: 'Twitter / X', handle: '@w1tneess_', url: 'https://x.com/w1tneess_', icon: 'Twitter' },
-    { name: 'Instagram', handle: '@adva1ta_', url: 'https://instagram.com/adva1ta_', icon: 'Instagram' },
-  ],
-
-  // Global USD approximation calculator
+  // Display-only USD approximation
   inrToUsd: (amount) => {
     const num = parseFloat(amount)
     if (isNaN(num) || num <= 0) return ''
-    return (num / 83.5).toFixed(2)
+    return (num / USD_TO_INR).toFixed(2)
   },
 
-  // UPI link generator with strict parameter injection prevention and NPCI bounds
-  buildUpiUri: (amount, note) => {
+  // Shared UPI query builder. Per the NPCI linking spec only `pa` is mandatory; `mc`/`tr` are
+  // merchant-only and deliberately omitted for this personal VPA. Amount is optional (payer can edit).
+  buildUpiQuery: (amount, note) => {
     const numAmount = parseFloat(amount)
-    let cleanAmount = ''
-    // Enforce NPCI UPI limits: positive number up to ₹1,00,000
-    if (!isNaN(numAmount) && numAmount >= 1 && numAmount <= 100000) {
-      cleanAmount = numAmount.toFixed(2)
-    }
-
-    // Sanitize transaction note strictly to prevent UPI URI parameter pollution
-    let cleanNote = 'Support Advaita Chandra'
-    if (typeof note === 'string' && note.trim().length > 0) {
-      const sanitized = note
-        .trim()
-        .replace(/[^\w\s.,!?-]/gi, '') // Strip any &, =, ?, #, %, ;, etc.
-        .replace(/\s+/g, ' ')
-        .slice(0, 50) // NPCI tn character limit
-      if (sanitized.length > 0) {
-        cleanNote = sanitized
-      }
-    }
-
-    // Build canonical params safely
     const params = new URLSearchParams()
-    params.set('pa', 'advaita@fam')
-    params.set('pn', 'Advaita Chandra')
+    params.set('pa', PAYMENT_CONFIG.upiId)
+    params.set('pn', PAYMENT_CONFIG.recipientName)
     params.set('cu', 'INR')
-    if (cleanAmount) params.set('am', cleanAmount)
-    params.set('tn', cleanNote)
+    // UPI per-transaction limit: ₹1 to ₹1,00,000
+    if (!isNaN(numAmount) && numAmount >= 1 && numAmount <= 100000) params.set('am', numAmount.toFixed(2))
 
-    return `upi://pay?${params.toString()}`
+    // Strip &, =, ?, #, %, ; etc. to prevent parameter pollution; tn max 50 chars
+    const cleanNote = typeof note === 'string'
+      ? note.replace(/[^\w\s.,!?-]/g, '').replace(/\s+/g, ' ').trim().slice(0, 50)
+      : ''
+    params.set('tn', cleanNote || 'Support Advaita Chandra')
+    return toQuery(params)
   },
 
-  // Generates dedicated app-specific deep links (Android Chrome Intent & native schemes)
+  buildUpiUri: (amount, note) => `upi://pay?${PAYMENT_CONFIG.buildUpiQuery(amount, note)}`,
+
+  // Generates dedicated app-specific deep links (Android Chrome Intent & native iOS schemes)
   buildAppPayLinks: (amount, note) => {
-    const numAmount = parseFloat(amount)
-    let cleanAmount = ''
-    if (!isNaN(numAmount) && numAmount >= 1 && numAmount <= 100000) {
-      cleanAmount = numAmount.toFixed(2)
-    }
-
-    let cleanNote = 'Support Advaita Chandra'
-    if (typeof note === 'string' && note.trim().length > 0) {
-      const sanitized = note
-        .trim()
-        .replace(/[^\w\s.,!?-]/gi, '')
-        .replace(/\s+/g, ' ')
-        .slice(0, 50)
-      if (sanitized.length > 0) cleanNote = sanitized
-    }
-
-    const params = new URLSearchParams()
-    params.set('pa', 'advaita@fam')
-    params.set('pn', 'Advaita Chandra')
-    params.set('cu', 'INR')
-    if (cleanAmount) params.set('am', cleanAmount)
-    params.set('tn', cleanNote)
-    const queryString = params.toString()
+    const queryString = PAYMENT_CONFIG.buildUpiQuery(amount, note)
 
     return [
       {
@@ -240,7 +47,7 @@ export const PAYMENT_CONFIG = {
         shortName: 'GPay',
         color: '#4285F4',
         androidIntent: `intent://pay?${queryString}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end`,
-        scheme: `tez://upi/pay?${queryString}`,
+        scheme: `gpay://upi/pay?${queryString}`,
         dotClass: 'bg-[#4285F4]',
         badge: 'Android & iOS',
       },
@@ -280,7 +87,7 @@ export const PAYMENT_CONFIG = {
         shortName: 'CRED',
         color: '#111111',
         androidIntent: `intent://pay?${queryString}#Intent;scheme=upi;package=com.dreamplug.androidapp;end`,
-        scheme: `cred://pay?${queryString}`,
+        scheme: `upi://pay?${queryString}`,
         dotClass: 'bg-neutral-900 dark:bg-white',
         badge: 'Members',
       },
@@ -290,44 +97,10 @@ export const PAYMENT_CONFIG = {
         shortName: 'FamPay',
         color: '#FF8A00',
         androidIntent: `intent://pay?${queryString}#Intent;scheme=upi;package=com.fampay.in;end`,
-        scheme: `fampay://pay?${queryString}`,
+        scheme: `upi://pay?${queryString}`,
         dotClass: 'bg-[#FF8A00]',
         badge: 'Issuer',
       },
     ]
   },
-
-  // Rupee words converter with Hindi/Devanagari cultural touch & global USD approximation
-  numberToRupeeWords: (num) => {
-    if (!num || isNaN(num) || num <= 0) return ''
-    const n = Math.floor(num)
-    const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen']
-    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']
-
-    let eng = ''
-    if (n < 20) eng = `${ones[n]} Rupees`
-    else if (n < 100) eng = `${tens[Math.floor(n / 10)]}${n % 10 ? ' ' + ones[n % 10] : ''} Rupees`
-    else if (n < 1000) {
-      const rem = n % 100
-      eng = `${ones[Math.floor(n / 100)]} Hundred${rem ? ' ' + (rem < 20 ? ones[rem] : tens[Math.floor(rem / 10)] + (rem % 10 ? ' ' + ones[rem % 10] : '')) : ''} Rupees`
-    } else if (n < 100000) {
-      const th = Math.floor(n / 1000)
-      const rem = n % 1000
-      const thStr = th < 20 ? ones[th] : tens[Math.floor(th / 10)] + (th % 10 ? ' ' + ones[th % 10] : '')
-      eng = `${thStr} Thousand${rem ? ' ' + PAYMENT_CONFIG.numberToRupeeWords(rem).replace(' Rupees', '') : ''} Rupees`
-    } else {
-      eng = `₹${num.toLocaleString('en-IN')} Rupees`
-    }
-
-    const usd = (num / 83.5).toFixed(2)
-    return `${eng} (~$${usd} USD)`
-  },
-
-  // Ready-to-use embed badges for GitHub READMEs & Websites (Neutral, zero-company branding)
-  embedBadges: {
-    markdown: `[![Support Advaita Chandra](https://img.shields.io/badge/Patron-Advaita_Chandra-C2956A?style=for-the-badge&logoColor=white)](https://support.advaitachandra.in)`,
-    html: `<a href="https://support.advaitachandra.in" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Patron-Advaita_Chandra-C2956A?style=for-the-badge&logoColor=white" alt="Support Advaita Chandra" /></a>`,
-    shieldUrl: `https://img.shields.io/badge/Patron-Advaita_Chandra-C2956A?style=for-the-badge&logoColor=white`,
-    textLink: `[Support my independent work on support.advaitachandra.in](https://support.advaitachandra.in)`
-  }
 }

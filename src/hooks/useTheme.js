@@ -1,68 +1,51 @@
 import { useState, useEffect } from 'react'
 
-export function useTheme() {
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return (
-        localStorage.getItem('supportadvaita_theme') ||
-        localStorage.getItem('paytoadvaita_theme') ||
-        'system'
-      )
-    }
-    return 'system'
-  })
+const STORAGE_KEY = 'supportadvaita_theme'
+const THEMES = ['system', 'light', 'dark']
 
+// Storage can throw (Safari private mode, blocked cookies, sandboxed webviews)
+const readStored = () => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    return THEMES.includes(saved) ? saved : 'system'
+  } catch {
+    return 'system'
+  }
+}
+
+const systemDark = () => window.matchMedia('(prefers-color-scheme: dark)').matches
+
+export function useTheme() {
+  const [theme, setTheme] = useState(readStored)
   const [resolvedTheme, setResolvedTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved =
-        localStorage.getItem('supportadvaita_theme') ||
-        localStorage.getItem('paytoadvaita_theme')
-      if (saved === 'dark') return 'dark'
-      if (saved === 'light') return 'light'
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    }
-    return 'dark'
+    const t = readStored()
+    return t === 'system' ? (systemDark() ? 'dark' : 'light') : t
   })
 
   useEffect(() => {
     const root = document.documentElement
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
-    const applyTheme = (currentTheme) => {
-      let isDark = false
-      if (currentTheme === 'dark') {
-        isDark = true
-      } else if (currentTheme === 'light') {
-        isDark = false
-      } else {
-        isDark = mediaQuery.matches
-      }
-
-      if (isDark) {
-        root.classList.add('dark')
-        root.style.colorScheme = 'dark'
-      } else {
-        root.classList.remove('dark')
-        root.style.colorScheme = 'light'
-      }
+    const applyTheme = () => {
+      const isDark = theme === 'dark' || (theme === 'system' && mediaQuery.matches)
+      root.classList.toggle('dark', isDark)
+      root.style.colorScheme = isDark ? 'dark' : 'light'
       setResolvedTheme(isDark ? 'dark' : 'light')
     }
 
-    applyTheme(theme)
-
-    const handleChange = () => {
-      if (theme === 'system') {
-        applyTheme('system')
-      }
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
+    applyTheme()
+    if (theme !== 'system') return undefined
+    mediaQuery.addEventListener('change', applyTheme)
+    return () => mediaQuery.removeEventListener('change', applyTheme)
   }, [theme])
 
   const changeTheme = (newTheme) => {
     setTheme(newTheme)
-    localStorage.setItem('supportadvaita_theme', newTheme)
+    try {
+      localStorage.setItem(STORAGE_KEY, newTheme)
+    } catch {
+      // preference just won't persist
+    }
   }
 
   return { theme, resolvedTheme, setTheme: changeTheme }

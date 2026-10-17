@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import {
   ArrowUpRight,
   Check,
@@ -26,7 +26,7 @@ import { AppIconRenderer } from './AppIcons.jsx'
  * Editorial, Humanist Support & Sponsorship Page for Advaita Chandra
  * Designed with the minimal, high-craft ethos of Linear, Stripe Press, and Vercel.
  */
-export default function SupportPage({ theme, setTheme, onOpenBadges }) {
+export default function SupportPage({ theme, setTheme }) {
   const [amount, setAmount] = useState(150)
   const [customAmount, setCustomAmount] = useState('')
   const [isCustom, setIsCustom] = useState(false)
@@ -39,29 +39,18 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
   // Determine active amount
   const activeAmount = isCustom ? (parseFloat(customAmount) || 0) : amount
 
+  const fullNote = useMemo(() => {
+    const note = donorNote.trim()
+    const name = donorName.trim()
+    if (note) return name ? `${note} (${name})` : note
+    return name ? `From ${name}` : 'Support Advaita Chandra'
+  }, [donorName, donorNote])
+
   // Canonical UPI payment URI
-  const upiUri = useMemo(() => {
-    let fullNote = 'Support Advaita Chandra'
-    if (donorNote && donorNote.trim()) {
-      fullNote = donorNote.trim()
-      if (donorName && donorName.trim()) fullNote += ` (${donorName.trim()})`
-    } else if (donorName && donorName.trim()) {
-      fullNote = `From ${donorName.trim()}`
-    }
-    return PAYMENT_CONFIG.buildUpiUri(activeAmount, fullNote)
-  }, [activeAmount, donorName, donorNote])
+  const upiUri = useMemo(() => PAYMENT_CONFIG.buildUpiUri(activeAmount, fullNote), [activeAmount, fullNote])
 
   // Direct app paylinks
-  const appPayLinks = useMemo(() => {
-    let fullNote = 'Support Advaita Chandra'
-    if (donorNote && donorNote.trim()) {
-      fullNote = donorNote.trim()
-      if (donorName && donorName.trim()) fullNote += ` (${donorName.trim()})`
-    } else if (donorName && donorName.trim()) {
-      fullNote = `From ${donorName.trim()}`
-    }
-    return PAYMENT_CONFIG.buildAppPayLinks(activeAmount, fullNote)
-  }, [activeAmount, donorName, donorNote])
+  const appPayLinks = useMemo(() => PAYMENT_CONFIG.buildAppPayLinks(activeAmount, fullNote), [activeAmount, fullNote])
 
   // Detect Android for Intent links
   const isAndroid = typeof navigator !== 'undefined' && /android/i.test(navigator.userAgent)
@@ -78,18 +67,49 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
     }
   }, [upiUri])
 
+  const toastTimer = useRef(null)
+  const copiedTimer = useRef(null)
+  useEffect(() => () => {
+    clearTimeout(toastTimer.current)
+    clearTimeout(copiedTimer.current)
+  }, [])
+
   const showToast = (msg) => {
     setToastMessage(msg)
-    setTimeout(() => setToastMessage(''), 2500)
+    clearTimeout(toastTimer.current)
+    toastTimer.current = setTimeout(() => setToastMessage(''), 2500)
   }
 
-  const handleCopy = (text) => {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(text).then(() => {
-        setCopied(true)
-        showToast('UPI ID copied to clipboard')
-        setTimeout(() => setCopied(false), 2000)
-      })
+  // Async Clipboard API needs a secure context; fall back to execCommand for older/in-app browsers
+  const writeClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      return true
+    } catch {
+      const ta = document.createElement('textarea')
+      ta.value = text
+      ta.setAttribute('readonly', '')
+      ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0'
+      document.body.appendChild(ta)
+      ta.select()
+      try {
+        return document.execCommand('copy')
+      } catch {
+        return false
+      } finally {
+        document.body.removeChild(ta)
+      }
+    }
+  }
+
+  const handleCopy = async (text = PAYMENT_CONFIG.upiId, message = 'UPI ID copied to clipboard') => {
+    if (await writeClipboard(text)) {
+      setCopied(true)
+      clearTimeout(copiedTimer.current)
+      copiedTimer.current = setTimeout(() => setCopied(false), 2000)
+      showToast(message)
+    } else {
+      showToast(`Copy failed. UPI ID: ${PAYMENT_CONFIG.upiId}`)
     }
   }
 
@@ -114,12 +134,11 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
     if (navigator.share) {
       try {
         await navigator.share(shareData)
-      } catch (err) {
-        // User dismissed
+      } catch {
+        // User dismissed the share sheet
       }
     } else {
-      handleCopy(window.location.href)
-      showToast('Page link copied to clipboard')
+      handleCopy(window.location.href, 'Page link copied to clipboard')
     }
   }
 
@@ -203,7 +222,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
     <div className="min-h-screen bg-[#FBFBFA] dark:bg-[#0B0D0E] text-[#111827] dark:text-[#F3F4F6] transition-colors selection:bg-[#F59E0B]/20 selection:text-[#F59E0B]">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#111827] dark:bg-[#14171A] text-white border border-neutral-700/80 shadow-xl text-xs font-medium animate-in fade-in slide-in-from-bottom-2">
+        <div role="status" aria-live="polite" className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#111827] dark:bg-[#14171A] text-white border border-neutral-700/80 shadow-xl text-xs font-medium">
           <Check className="w-4 h-4 text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
@@ -219,7 +238,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
             <div className="w-8 h-8 rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-800">
               <img
                 src={PAYMENT_CONFIG.avatar}
-                alt="Advaita Chandra"
+                alt="Advaita Chandra" width="384" height="384" decoding="async"
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.target.src = 'https://avatars.githubusercontent.com/u/108343743?v=4'
@@ -239,7 +258,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               type="button"
-              onClick={() => handleCopy(PAYMENT_CONFIG.upiId)}
+              onClick={() => handleCopy()}
               className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono bg-neutral-100 dark:bg-[#14171A] hover:bg-neutral-200/70 dark:hover:bg-[#1C2024] text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-[#22262B] transition-colors cursor-pointer"
               title="Click to copy UPI ID"
             >
@@ -501,7 +520,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
 
               {/* Copyable UPI Bar with feedback */}
               <div
-                onClick={() => handleCopy(PAYMENT_CONFIG.upiId)}
+                onClick={() => handleCopy()}
                 className="flex items-center justify-between p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 cursor-pointer hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors group"
                 title="Click to copy UPI address"
               >
@@ -748,7 +767,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
                 <div className="w-6 h-6 rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-800 shrink-0">
                   <img
                     src={PAYMENT_CONFIG.avatar}
-                    alt="Advaita Chandra"
+                    alt="Advaita Chandra" width="384" height="384" decoding="async"
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.target.src = 'https://avatars.githubusercontent.com/u/108343743?v=4'
@@ -830,7 +849,7 @@ export default function SupportPage({ theme, setTheme, onOpenBadges }) {
               <div className="space-y-2 text-xs">
                 <button
                   type="button"
-                  onClick={() => handleCopy(PAYMENT_CONFIG.upiId)}
+                  onClick={() => handleCopy()}
                   className="w-full text-left py-2.5 px-3 rounded-lg border border-neutral-200 dark:border-[#22262B] bg-white dark:bg-[#14171A] hover:bg-neutral-50 dark:hover:bg-[#1C2024] text-neutral-700 dark:text-neutral-300 transition-all flex items-center justify-between group cursor-pointer"
                   title="Click to copy UPI ID"
                 >
