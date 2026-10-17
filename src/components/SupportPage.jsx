@@ -3,24 +3,17 @@ import {
   ArrowUpRight,
   Check,
   Copy,
-  ExternalLink,
-  Heart,
   Moon,
   QrCode,
   Share2,
   ShieldCheck,
   Smartphone,
   Sun,
-  Sparkles,
-  BookOpen,
-  Server,
-  Terminal,
   Info,
   Github
 } from 'lucide-react'
 import { PAYMENT_CONFIG } from '../config/payment.js'
 import { generateQrSvg, generateQrPng } from '../lib/qrcode.js'
-import { AppIconRenderer } from './AppIcons.jsx'
 
 /**
  * Editorial, Humanist Support & Sponsorship Page for Advaita Chandra
@@ -46,14 +39,46 @@ export default function SupportPage({ theme, setTheme }) {
     return name ? `From ${name}` : 'Support Advaita Chandra'
   }, [donorName, donorNote])
 
-  // Canonical UPI payment URI
+  // Canonical UPI payment URI (amount preset) — used for the QR, where scans pass PSP risk checks
   const upiUri = useMemo(() => PAYMENT_CONFIG.buildUpiUri(activeAmount, fullNote), [activeAmount, fullNote])
+  // Mobile tap links default to open-amount: web-initiated P2P intents with a preset amount are
+  // often declined by PSP risk engines, so the payer types (or pastes) the amount in-app instead
+  const openUpiUri = useMemo(() => PAYMENT_CONFIG.buildUpiUri(activeAmount, fullNote, { withAmount: false }), [activeAmount, fullNote])
 
-  // Direct app paylinks
-  const appPayLinks = useMemo(() => PAYMENT_CONFIG.buildAppPayLinks(activeAmount, fullNote), [activeAmount, fullNote])
+  // iPadOS reports a Mac UA, so also check for touch
+  const { isAndroid, isIOS } = useMemo(() => {
+    if (typeof navigator === 'undefined') return { isAndroid: false, isIOS: false }
+    const ua = navigator.userAgent
+    return {
+      isAndroid: /android/i.test(ua),
+      isIOS: /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1),
+    }
+  }, [])
+  const isMobile = isAndroid || isIOS
 
-  // Detect Android for Intent links
-  const isAndroid = typeof navigator !== 'undefined' && /android/i.test(navigator.userAgent)
+  // After a pay link hands off to an app and the user comes back, offer fallbacks:
+  // a declined in-app payment can't be detected from the browser.
+  const [showPayHelp, setShowPayHelp] = useState(false)
+  const launchedAt = useRef(0)
+  const markLaunch = ({ copyAmount = true } = {}) => {
+    launchedAt.current = Date.now()
+    // Not awaited: the copy starts inside the tap gesture, and intent navigation doesn't unload the page
+    if (copyAmount && activeAmount) {
+      writeClipboard(String(activeAmount)).then((ok) => {
+        if (ok) showToast(`₹${activeAmount} copied — paste it in the app`)
+      })
+    }
+  }
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === 'visible' && launchedAt.current && Date.now() - launchedAt.current > 1500) {
+        launchedAt.current = 0
+        setShowPayHelp(true)
+      }
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [])
 
   // Re-render QR code dynamically whenever URI or theme changes
   useEffect(() => {
@@ -114,15 +139,36 @@ export default function SupportPage({ theme, setTheme }) {
   }
 
   const handleDownloadQr = async () => {
-    const png = await generateQrPng(upiUri, theme === 'dark' ? 'dark' : 'light')
-    if (!png) return
+    const blob = await generateQrPng(upiUri, {
+      title: PAYMENT_CONFIG.recipientName,
+      subtitle: PAYMENT_CONFIG.upiId,
+      amount: activeAmount ? `₹${activeAmount}` : '',
+    })
+    if (!blob) return showToast('Could not create the QR image')
+    const filename = `upi-qr-advaita-${activeAmount || 'custom'}.png`
+
+    // iOS Safari ignores <a download> for images; the share sheet offers "Save Image" instead
+    if (isIOS) {
+      const file = new File([blob], filename, { type: 'image/png' })
+      if (navigator.canShare?.({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file] })
+        } catch {
+          // User dismissed the share sheet
+        }
+        return
+      }
+    }
+
+    const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
-    a.href = png
-    a.download = `upi-qr-advaita-${activeAmount || 'custom'}.png`
+    a.href = url
+    a.download = filename
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
-    showToast('High-res QR image downloaded')
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+    showToast(isMobile ? 'QR saved — scan it from your gallery in any UPI app' : 'QR image downloaded')
   }
 
   const handleShare = async () => {
@@ -219,10 +265,10 @@ export default function SupportPage({ theme, setTheme }) {
   ]
 
   return (
-    <div className="min-h-screen bg-[#FBFBFA] dark:bg-[#0B0D0E] text-[#111827] dark:text-[#F3F4F6] transition-colors selection:bg-[#F59E0B]/20 selection:text-[#F59E0B]">
+    <div>
       {/* Toast Notification */}
       {toastMessage && (
-        <div role="status" aria-live="polite" className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#111827] dark:bg-[#14171A] text-white border border-neutral-700/80 shadow-xl text-xs font-medium">
+        <div role="status" aria-live="polite" className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] inset-x-4 sm:inset-x-auto sm:right-6 sm:bottom-6 z-50 flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#111827] dark:bg-[#14171A] text-white border border-neutral-700/80 shadow-xl text-xs font-medium">
           <Check className="w-4 h-4 text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
@@ -238,11 +284,8 @@ export default function SupportPage({ theme, setTheme }) {
             <div className="w-8 h-8 rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-800">
               <img
                 src={PAYMENT_CONFIG.avatar}
-                alt="Advaita Chandra" width="384" height="384" decoding="async"
+                alt="Advaita Chandra" width="384" height="384" decoding="async" fetchPriority="high"
                 className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.target.src = 'https://avatars.githubusercontent.com/u/108343743?v=4'
-                }}
               />
             </div>
             <div className="flex flex-col">
@@ -341,6 +384,7 @@ export default function SupportPage({ theme, setTheme }) {
                         onClick={() => {
                           setAmount(tier.value)
                           setIsCustom(false)
+                          setCustomAmount('')
                         }}
                         className={`relative p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[76px] focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 ${
                           isSelected
@@ -372,48 +416,33 @@ export default function SupportPage({ theme, setTheme }) {
                   })}
                 </div>
 
-                {/* Custom Amount Button & Input */}
+                {/* Custom Amount (always visible; typing selects it, picking a tier clears it) */}
                 <div className="pt-1">
-                  {!isCustom ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsCustom(true)
-                        setCustomAmount('')
+                  <label htmlFor="custom-amount" className="block text-xs text-zinc-600 dark:text-zinc-400 mb-1.5">
+                    Or enter a custom amount
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 dark:text-zinc-400 font-medium">
+                      ₹
+                    </span>
+                    <input
+                      id="custom-amount"
+                      type="number"
+                      inputMode="decimal"
+                      min="1"
+                      max="100000"
+                      placeholder="Any amount, e.g. 250"
+                      value={customAmount}
+                      onFocus={() => customAmount && setIsCustom(true)}
+                      onChange={(e) => {
+                        setCustomAmount(e.target.value)
+                        setIsCustom(e.target.value !== '')
                       }}
-                      className="text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline underline-offset-4 cursor-pointer"
-                    >
-                      + Or enter a custom amount
-                    </button>
-                  ) : (
-                    <div className="flex items-center gap-2 mt-2">
-                      <div className="relative flex-1">
-                        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 dark:text-zinc-400 font-medium">
-                          ₹
-                        </span>
-                        <input
-                          type="number"
-                          min="1"
-                          max="100000"
-                          placeholder="Enter custom amount (e.g. 250)"
-                          value={customAmount}
-                          onChange={(e) => setCustomAmount(e.target.value)}
-                          className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
-                          autoFocus
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsCustom(false)
-                          setAmount(150)
-                        }}
-                        className="px-3 py-2.5 rounded-xl text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer"
-                      >
-                        Reset
-                      </button>
-                    </div>
-                  )}
+                      className={`w-full pl-8 pr-4 py-2.5 rounded-xl border bg-white dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600 ${
+                        isCustom ? 'border-zinc-900 dark:border-white' : 'border-zinc-200 dark:border-zinc-800'
+                      }`}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -424,9 +453,11 @@ export default function SupportPage({ theme, setTheme }) {
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   <div>
-                    <label className="sr-only">Your Name or Handle</label>
+                    <label htmlFor="donor-name" className="sr-only">Your Name or Handle</label>
                     <input
+                      id="donor-name"
                       type="text"
+                      autoComplete="nickname"
                       placeholder="Your Name or @handle"
                       value={donorName}
                       onChange={(e) => setDonorName(e.target.value)}
@@ -435,9 +466,11 @@ export default function SupportPage({ theme, setTheme }) {
                     />
                   </div>
                   <div>
-                    <label className="sr-only">Short Note</label>
+                    <label htmlFor="donor-note" className="sr-only">Short Note</label>
                     <input
+                      id="donor-note"
                       type="text"
+                      autoComplete="off"
                       placeholder="Short note (optional)"
                       value={donorNote}
                       onChange={(e) => setDonorNote(e.target.value)}
@@ -448,16 +481,19 @@ export default function SupportPage({ theme, setTheme }) {
                 </div>
               </div>
 
-              {/* Dynamic Primary Execution Call-to-Action */}
+              {/* Dynamic Primary Execution Call-to-Action (desktop can't open upi:// — point to the QR) */}
               <div className="pt-2">
                 <a
-                  href={upiUri}
+                  href={isMobile ? openUpiUri : '#scan-qr'}
+                  onClick={() => isMobile && markLaunch()}
                   className="w-full py-4 px-6 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:bg-zinc-950 text-white dark:bg-zinc-50 dark:hover:bg-zinc-200 dark:active:bg-zinc-300 dark:text-zinc-950 font-semibold text-base flex items-center justify-between transition-all duration-150 shadow-md hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#121214] active:scale-[0.99] cursor-pointer"
                 >
                   <div className="flex items-center gap-2.5">
                     <Smartphone className="w-5 h-5 text-zinc-300 dark:text-zinc-700" />
                     <span>
-                      Pay {activeAmount ? `₹${activeAmount} INR` : 'Custom Amount'} via Any UPI App
+                      {isMobile
+                        ? `Pay ${activeAmount ? `₹${activeAmount} INR` : 'Custom Amount'} via Any UPI App`
+                        : `Scan the QR to pay${activeAmount ? ` ₹${activeAmount}` : ''} from your phone`}
                     </span>
                   </div>
                   <div className="flex items-center gap-1 text-xs opacity-90 font-mono">
@@ -465,35 +501,84 @@ export default function SupportPage({ theme, setTheme }) {
                     <ArrowUpRight className="w-4 h-4 ml-1" />
                   </div>
                 </a>
+                {isMobile && (
+                  <div className="mt-2.5 flex items-center justify-between gap-3 text-xs text-zinc-600 dark:text-zinc-400">
+                    <span>
+                      {activeAmount ? <>Opens your app — <span className="font-semibold text-zinc-900 dark:text-zinc-100">₹{activeAmount}</span> is copied, just paste it.</> : 'Opens your app — enter any amount.'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleDownloadQr}
+                      className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer"
+                    >
+                      <QrCode className="w-3.5 h-3.5" />
+                      Save QR
+                    </button>
+                  </div>
+                )}
               </div>
 
-              {/* Direct 1-Tap App Launcher Row (Neutral rounded chips) */}
-              <div className="space-y-2 pt-1">
-                <div className="flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400">
-                  <span>Or open directly in your preferred app:</span>
-                  <span className="text-[11px] font-mono">1-tap launch</span>
-                </div>
-                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                  {appPayLinks.map((app) => {
-                    const href = isAndroid ? app.androidIntent : app.scheme
-                    return (
-                      <a
-                        key={app.id}
-                        href={href}
-                        className="px-1.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700/60 bg-zinc-50 dark:bg-zinc-800/60 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 flex flex-col items-center justify-center gap-2 transition-all text-center group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 hover:-translate-y-0.5"
-                        title={`Launch and pay in ${app.name}`}
+              {/* Recovery options for app-side declines (shown after returning from an app, or on demand) */}
+              {isMobile && (showPayHelp ? (
+                <div role="region" aria-label="Payment troubleshooting" className="rounded-xl border border-amber-300/70 dark:border-amber-700/50 bg-amber-50 dark:bg-amber-950/30 p-4 space-y-3 text-xs text-zinc-700 dark:text-zinc-300">
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="leading-relaxed">
+                      <span className="font-semibold text-zinc-900 dark:text-zinc-100">Payment declined in the app?</span>{' '}
+                      If a payment fails, nothing is debited. Try one of these:
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setShowPayHelp(false)}
+                      className="shrink-0 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer"
+                      aria-label="Dismiss"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <ol className="space-y-2.5 list-decimal pl-4">
+                    <li>
+                      <button
+                        type="button"
+                        onClick={handleDownloadQr}
+                        className="font-semibold underline underline-offset-2 text-zinc-900 dark:text-zinc-100 cursor-pointer"
                       >
-                        <div className="w-10 h-10 rounded-[10px] overflow-hidden shrink-0 ring-1 ring-black/10 dark:ring-white/15 shadow-sm">
-                          <AppIconRenderer appId={app.id} className="w-full h-full" />
-                        </div>
-                        <span className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 truncate w-full">
-                          {app.shortName}
-                        </span>
-                      </a>
-                    )
-                  })}
+                        Save the QR
+                      </button>
+                      <span>, then in your UPI app tap Scan → upload from gallery.</span>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() => handleCopy()}
+                        className="font-semibold underline underline-offset-2 text-zinc-900 dark:text-zinc-100 cursor-pointer"
+                      >
+                        Copy UPI ID
+                      </button>
+                      <span> ({PAYMENT_CONFIG.upiId}) and pay it via "Pay to UPI ID" in any app.</span>
+                    </li>
+                    {activeAmount ? (
+                      <li>
+                        <a
+                          href={upiUri}
+                          onClick={() => markLaunch({ copyAmount: false })}
+                          className="font-semibold underline underline-offset-2 text-zinc-900 dark:text-zinc-100"
+                        >
+                          Open UPI app with ₹{activeAmount} pre-filled
+                        </a>
+                        <span> (some apps block this for personal UPI IDs).</span>
+                      </li>
+                    ) : null}
+                  </ol>
                 </div>
-              </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowPayHelp(true)}
+                  className="text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline underline-offset-4 cursor-pointer"
+                >
+                  Payment failed in the app?
+                </button>
+              ))}
             </div>
 
             {/* Micro Trust Banner */}
@@ -504,13 +589,13 @@ export default function SupportPage({ theme, setTheme }) {
           </div>
 
           {/* Right Column: Direct Scan & VPA Container (5 cols, stacked below on mobile) */}
-          <div className="flex md:col-span-5 flex-col justify-between bg-white dark:bg-[#121214] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
+          <div id="scan-qr" className="scroll-mt-20 flex md:col-span-5 flex-col justify-between bg-white dark:bg-[#121214] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
             
             {/* Header & Copyable VPA */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
-                  Scan to Pay (Desktop / QR)
+                  {isMobile ? 'Pay by QR' : 'Scan to Pay'}
                 </span>
                 <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5" />
@@ -525,7 +610,7 @@ export default function SupportPage({ theme, setTheme }) {
                 title="Click to copy UPI address"
               >
                 <div className="flex flex-col min-w-0">
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">
+                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-wider font-mono">
                     Virtual Payment Address (VPA)
                   </span>
                   <span className="font-mono text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">
@@ -542,29 +627,47 @@ export default function SupportPage({ theme, setTheme }) {
               </div>
             </div>
 
-            {/* Sharp, High-Contrast Dynamic QR Container: isolated white container */}
-            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-white border border-zinc-200 dark:border-zinc-700 shadow-sm">
-              <div className="p-3 bg-white rounded-lg flex items-center justify-center">
+            {/* High-contrast QR "pay card": always white so phone cameras read it in dark mode too */}
+            <div className="flex flex-col items-center rounded-xl bg-white border border-zinc-200 dark:border-zinc-700 shadow-sm overflow-hidden">
+              <div className="w-full flex items-baseline justify-between gap-2 px-4 pt-3.5">
+                <span className="text-sm font-semibold text-zinc-900 truncate">{PAYMENT_CONFIG.recipientName}</span>
+                <span className="text-base font-bold text-zinc-900 font-mono shrink-0">
+                  {activeAmount ? `₹${activeAmount}` : 'Any amount'}
+                </span>
+              </div>
+              <div className="p-3">
                 {qrSvg ? (
                   <div
-                    className="w-48 h-48 sm:w-52 sm:h-52 flex items-center justify-center select-none"
+                    role="img"
+                    aria-label={`UPI QR code to pay ${activeAmount ? `₹${activeAmount} ` : ''}to ${PAYMENT_CONFIG.upiId}`}
+                    className="w-56 h-56 sm:w-52 sm:h-52 flex items-center justify-center select-none"
                     dangerouslySetInnerHTML={{ __html: qrSvg }}
                   />
                 ) : (
-                  <div className="w-48 h-48 flex items-center justify-center text-zinc-400 text-xs">
-                    Generating dynamic QR...
+                  <div className="w-56 h-56 sm:w-52 sm:h-52 flex items-center justify-center text-zinc-400 text-xs">
+                    Generating QR…
                   </div>
                 )}
               </div>
-              <div className="mt-2 text-center pb-1">
-                <span className="text-xs font-semibold text-zinc-900">
-                  Dynamic UPI QR for {activeAmount ? `₹${activeAmount}` : 'Custom'}
-                </span>
-                <p className="text-[11px] text-zinc-500 mt-0.5">
-                  Scan with GPay, PhonePe, Paytm, BHIM, or any banking app
-                </p>
+              <div className="w-full border-t border-zinc-100 px-4 py-2.5 text-center text-[11px] text-zinc-500">
+                Works with GPay, PhonePe, Paytm, BHIM, CRED & any bank app
               </div>
             </div>
+
+            {/* How to scan — on a phone the QR has to come from the gallery */}
+            <ol className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+              {(isMobile
+                ? ['Tap “Save QR to gallery” below', 'Open any UPI app → Scan → pick the image from gallery', 'Check the amount and pay']
+                : ['Open any UPI app on your phone', 'Tap Scan and point it at this QR', 'Check the amount and pay']
+              ).map((step, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="w-4 h-4 shrink-0 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 flex items-center justify-center">
+                    {i + 1}
+                  </span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
 
             {/* Direct Trust Statement & Action Row */}
             <div className="space-y-3 pt-1">
@@ -572,10 +675,14 @@ export default function SupportPage({ theme, setTheme }) {
                 <button
                   type="button"
                   onClick={handleDownloadQr}
-                  className="flex-1 py-2.5 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+                    isMobile
+                      ? 'bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-zinc-50 dark:hover:bg-zinc-200 dark:text-zinc-950'
+                      : 'border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900'
+                  }`}
                 >
                   <QrCode className="w-3.5 h-3.5" />
-                  <span>Download QR</span>
+                  <span>{isMobile ? 'Save QR to gallery' : 'Download QR'}</span>
                 </button>
                 <button
                   type="button"
@@ -767,11 +874,8 @@ export default function SupportPage({ theme, setTheme }) {
                 <div className="w-6 h-6 rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-800 shrink-0">
                   <img
                     src={PAYMENT_CONFIG.avatar}
-                    alt="Advaita Chandra" width="384" height="384" decoding="async"
+                    alt="" width="384" height="384" decoding="async" loading="lazy"
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.target.src = 'https://avatars.githubusercontent.com/u/108343743?v=4'
-                    }}
                   />
                 </div>
                 <span className="font-serif font-medium text-sm text-neutral-900 dark:text-neutral-100">
@@ -784,7 +888,7 @@ export default function SupportPage({ theme, setTheme }) {
               <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-sm">
                 Independent research, open historical archives, and public software tools. 100% directly funded with zero platform intermediary cuts.
               </p>
-              <div className="text-[11px] text-neutral-400 dark:text-neutral-500 flex items-center gap-1.5 pt-1">
+              <div className="text-[11px] text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 pt-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                 <span>Direct P2P Settlement via FamPay UPI (<span className="font-mono text-neutral-600 dark:text-neutral-300">advaita@fam</span>)</span>
               </div>
@@ -854,7 +958,7 @@ export default function SupportPage({ theme, setTheme }) {
                   title="Click to copy UPI ID"
                 >
                   <div className="flex flex-col">
-                    <span className="text-[10px] text-neutral-400">Virtual Payment Address</span>
+                    <span className="text-[10px] text-neutral-500 dark:text-neutral-400">Virtual Payment Address</span>
                     <span className="font-mono text-xs font-semibold text-neutral-900 dark:text-neutral-100">
                       {PAYMENT_CONFIG.upiId}
                     </span>
@@ -871,7 +975,7 @@ export default function SupportPage({ theme, setTheme }) {
           </div>
 
           {/* Sub-footer Bar with Copyright & Privacy Standards */}
-          <div className="pt-6 border-t border-neutral-200/80 dark:border-[#22262B]/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-neutral-400 dark:text-neutral-500">
+          <div className="pt-6 border-t border-neutral-200/80 dark:border-[#22262B]/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-neutral-500 dark:text-neutral-400">
             <div className="flex items-center gap-2 flex-wrap">
               <span>© {new Date().getFullYear()} Advaita Chandra</span>
               <span>•</span>

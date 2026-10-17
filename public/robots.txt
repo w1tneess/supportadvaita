@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://support.advaitachandra.in/sitemap.xml

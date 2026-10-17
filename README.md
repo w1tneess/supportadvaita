@@ -71,8 +71,8 @@ Here is what your support fuels:
 
 - Single-page, fully responsive layout (320px phones → desktop). QR card stacks under the payment widget on mobile.
 - Light / Dark / System theming (class-based `dark` variant, no flash on load, `theme-color` meta for mobile browser UI).
-- Dynamic UPI deep links and QR code that update with the selected amount and note.
-- UPI app icons are SVGs from the Figma community pack *UPI Apps • 60+ Logos • SVG (vector)*, stored in `public/icons/upi/`.
+- Dynamic UPI QR code that updates with the selected amount and note; on phones it can be saved to the gallery and scanned from any UPI app.
+- The mobile "Pay via any UPI app" link omits the amount (copied to clipboard instead), since UPI apps often decline website links to personal UPI IDs that arrive with a pre-filled amount.
 
 ```bash
 npm install
@@ -81,7 +81,7 @@ npm run build    # production build -> dist/
 npm run preview  # serve the production build
 ```
 
-Key files: `src/components/SupportPage.jsx` (page), `src/components/AppIcons.jsx` (UPI app icons), `src/config/payment.js` (UPI ID, tiers, deep-link builders), `src/hooks/useTheme.js` (theme).
+Key files: `src/components/SupportPage.jsx` (page), `src/config/payment.js` (UPI ID, UPI link builder), `src/lib/qrcode.js` (QR SVG + downloadable pay card), `src/hooks/useTheme.js` (theme).
 
 Deploys to Vercel (`vercel.json`) or Cloudflare (`wrangler.jsonc`).
 
