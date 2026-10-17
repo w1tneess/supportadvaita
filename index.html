@@ -2,25 +2,30 @@
 <html lang="en-IN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Support Advaita Chandra — Independent Research, Code & Philosophy</title>
-    <meta name="description" content="Direct, zero-commission patron support for Advaita Chandra's independent software tools, historical research, photography, and essays. Direct peer-to-peer UPI." />
-    <link rel="canonical" href="https://support.advaitachandra.in" />
+    <meta name="description" content="Voluntary personal support for Advaita Chandra's independent software, historical research, photography, and essays. Pay by UPI QR code or UPI ID (advaita@fam). No platform fee is charged by this website." />
+    <link rel="canonical" href="https://support.advaitachandra.in/" />
 
     <!-- Open Graph & Social Cards -->
-    <meta property="og:title" content="Support Advaita Chandra — support.advaitachandra.in" />
-    <meta property="og:description" content="Direct peer-to-peer patron support for independent research, coding, and writing. Direct UPI to advaita@fam." />
-    <meta property="og:url" content="https://support.advaitachandra.in" />
+    <meta property="og:title" content="Support Advaita Chandra" />
+    <meta property="og:description" content="Voluntary personal support for independent research, code, and writing by Advaita Chandra, via UPI." />
+    <meta property="og:url" content="https://support.advaitachandra.in/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Advaita Chandra" />
+    <meta property="og:locale" content="en_IN" />
     <meta property="og:image" content="https://support.advaitachandra.in/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Support Advaita Chandra — direct UPI support for independent research and code" />
+    <meta property="og:image:alt" content="Support Advaita Chandra — independent research and code" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@w1tneess_" />
     <meta name="twitter:creator" content="@w1tneess_" />
+    <meta name="twitter:title" content="Support Advaita Chandra" />
+    <meta name="twitter:description" content="Voluntary personal support for independent research, code, and writing by Advaita Chandra, via UPI." />
     <meta name="twitter:image" content="https://support.advaitachandra.in/og-image.png" />
+    <meta name="twitter:image:alt" content="Support Advaita Chandra — independent research and code" />
 
     <!-- Icons & Manifest -->
     <meta name="color-scheme" content="light dark" />
@@ -30,13 +35,37 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
 
+    <!-- Structured data: a data block (not executed), so it is unaffected by script-src 'self' -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Support Advaita Chandra",
+        "url": "https://support.advaitachandra.in/",
+        "inLanguage": "en-IN",
+        "author": {
+          "@type": "Person",
+          "name": "Advaita Chandra",
+          "url": "https://www.advaitachandra.in/",
+          "sameAs": ["https://github.com/w1tneess", "https://x.com/w1tneess_"]
+        }
+      }
+    </script>
+
     <!-- Applies saved theme before first paint (no flash) -->
     <script src="/theme-init.js"></script>
   </head>
-  <body class="bg-[#FBFBFA] dark:bg-[#0B0D0E] text-[#111827] dark:text-[#F3F4F6] antialiased selection:bg-[#F59E0B]/20 selection:text-[#F59E0B] min-h-dvh transition-colors duration-200">
+  <body class="bg-[#FBFBFA] dark:bg-[#0B0D0E] text-[#111827] dark:text-[#F3F4F6] antialiased selection:bg-[#F59E0B]/20 min-h-dvh transition-colors duration-200">
     <div id="root"></div>
+    <!-- Styled with Tailwind classes (the stylesheet still loads without JS), so the CSP needs no 'unsafe-inline' -->
     <noscript>
-      <p style="padding:2rem;font-family:system-ui,sans-serif">JavaScript is required for this page. You can still pay by UPI: <strong>advaita@fam</strong></p>
+      <div class="max-w-xl mx-auto px-4 py-10 space-y-3 font-sans text-sm leading-relaxed">
+        <h1 class="text-2xl font-serif">Support Advaita Chandra</h1>
+        <p>This page needs JavaScript for the QR code, but you can still pay from any UPI app using the UPI ID:</p>
+        <p class="font-mono text-lg font-semibold">advaita@fam</p>
+        <p>Voluntary personal support. Contributions are sent by UPI to a FamPay UPI ID operated by Advaita Chandra with parental/guardian permission and supervision. This is a voluntary personal contribution — not a charitable donation, purchase, or commercial transaction. No goods or services are provided in exchange. This website charges no platform fee. Your UPI app may apply its own limits, security checks, or policies. Payments are voluntary and non-refundable except where required by law.</p>
+        <p>Questions or payment issues: <a class="underline" href="mailto:advaita974@gmail.com">advaita974@gmail.com</a></p>
+      </div>
     </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>

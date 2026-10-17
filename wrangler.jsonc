@@ -2,9 +2,11 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "supportadvaita",
   "compatibility_date": "2026-03-01",
+  // Used only by `wrangler deploy` (Workers static assets). CI deploys with `wrangler pages deploy`,
+  // where Pages serves public/404.html with a real 404 status for unknown paths.
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application",
+    "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
   }
 }

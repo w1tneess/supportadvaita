@@ -25,6 +25,8 @@ export default defineConfig({
   plugins: [react(), tailwindcss(), preloadFonts()],
   build: {
     sourcemap: false, // don't ship source maps publicly
+    // Never inline fonts as data: URIs — the CSP's font-src 'self' blocks them (small subsets were silently failing)
+    assetsInlineLimit: (file) => (/\.(woff2?|ttf|otf)$/.test(file) ? false : undefined),
     reportCompressedSize: true,
   },
   server: { port: 5173, open: false },

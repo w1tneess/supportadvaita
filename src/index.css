@@ -33,21 +33,13 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Accessible high-contrast focus rings */
+  /* Accessible focus rings: >= 3:1 against both page backgrounds (WCAG 1.4.11). The old #C2956A was ~2.6:1 on light. */
   :focus-visible {
-    outline: 2px solid #C2956A;
+    outline: 2px solid #B45309;
     outline-offset: 2px;
   }
-
-  /* Hide number-input spinners on the custom amount field */
-  input[type='number'] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-  }
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  .dark :focus-visible {
+    outline-color: #D4A373;
   }
 }
 

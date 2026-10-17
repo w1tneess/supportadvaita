@@ -6,21 +6,25 @@ Hi, I'm **Advaita Chandra** (known online as **Wit**). I am a 16-year-old studen
 
 I spend most of my time outside school building software, experimenting with web technologies and AI, reading existential philosophy, and documenting the world through street and everyday photography.
 
-This repository powers **supportadvaita** — my personal, zero-fee direct support portal.
+This repository powers **supportadvaita** — a static page for voluntary personal support via UPI. No platform fee is charged by this website.
 
 ---
 
-## ⚡ Direct Support (UPI)
+## ⚡ Voluntary Personal Support (UPI)
 
-Since I am 16 and live in India, I don't use high-commission international payment gateways that take 5–10% cuts. Every rupee sent via UPI reaches me directly with **0% middleman fees**.
+Support is sent by UPI in Indian rupees. This website does not use a payment gateway and charges no platform fee; your UPI app or bank may apply its own limits, checks, or policies.
 
 | Detail | Information |
 | :--- | :--- |
 | **UPI ID** | `advaita@fam` |
-| **Provider** | FamPay / FamApp |
-| **Beneficiary** | Advaita Chandra |
-| **Interactive Payment App** | [supportadvaita](https://support.advaitachandra.in) |
-| **Accepted Apps** | Google Pay, PhonePe, Paytm, BHIM, FamPay, Cred, any UPI app |
+| **Provider** | FamPay / FamApp UPI ID (FamPay is not affiliated with, and does not endorse, this website) |
+| **Beneficiary** | Advaita Chandra (minor; FamPay account operated with parental/guardian permission and supervision) |
+| **Payment page** | [support.advaitachandra.in](https://support.advaitachandra.in) |
+| **Apps** | Works with most UPI apps. If the link does not open, scan the QR code or copy the UPI ID. |
+| **Amounts** | Whole rupees, ₹1 to ₹1,00,000 |
+| **Questions / payment issues** | [advaita974@gmail.com](mailto:advaita974@gmail.com) |
+
+> **Voluntary personal support.** Contributions are sent by UPI to a FamPay UPI ID operated by Advaita Chandra with parental/guardian permission and supervision. This is a voluntary personal contribution — not a charitable donation, purchase, or commercial transaction. No goods or services are provided in exchange. This website charges no platform fee. Your UPI app may apply its own limits, security checks, or policies. Payments are voluntary and non-refundable except where required by law. Questions or payment issues: advaita974@gmail.com
 
 ---
 
@@ -33,13 +37,13 @@ Building things on the internet while being a high school student comes with rea
 3. **Hardware & Photography Gear**: Developing software, testing builds, and capturing photography requires hardware upkeep, storage disks, and equipment maintenance.
 4. **No Intrusive Ads or Paywalls**: I refuse to put annoying pop-up ads, affiliate clickbait, or artificial paywalls on my websites. I believe the internet should be quiet, beautifully crafted, and open to all.
 
-Because I don't have a salaried job or corporate backing, **patron support from people who appreciate what I build is what keeps me going**.
+Because I don't have a salaried job or corporate backing, **voluntary support from people who appreciate what I build is what keeps me going**.
 
 ---
 
 ## 🍵 What Your Contribution Fuels
 
-Every contribution, whether small or large, has an immediate tangible impact on my ability to create:
+Contributions are voluntary and nothing is provided in exchange; here is roughly how support gets used:
 
 - **₹50 — *A Cup of Chai***  
   Fuel for late-night coding, debugging sessions, and quiet reflection after a long day of school.
@@ -47,7 +51,7 @@ Every contribution, whether small or large, has an immediate tangible impact on 
   Helps me buy a physical copy of a philosophical text, literature, or programming book.
 - **₹500 — *Domain & Server Lifeline***  
   Funds domain renewals, cloud compute, or API tokens to keep my software experiments live on the internet.
-- **₹1,000+ — *Patron of the Craft***  
+- **₹1,000+ — *Hardware & Storage***  
   Substantial backing that relieves financial stress, helping me afford necessary hardware repairs, photography storage, and focus on ambitious open-source projects.
 - **Custom Amount**  
   Any amount you feel comfortable contributing. Everything is appreciated.
@@ -71,7 +75,9 @@ Here is what your support fuels:
 
 - Single-page, fully responsive layout (320px phones → desktop). QR card stacks under the payment widget on mobile.
 - Light / Dark / System theming (class-based `dark` variant, no flash on load, `theme-color` meta for mobile browser UI).
-- Dynamic UPI QR code that updates with the selected amount and note; on phones it can be saved to the gallery and scanned from any UPI app.
+- Dynamic UPI QR code that updates with the selected amount and note; on phones it can be saved to the gallery and scanned from a UPI app.
+- Custom amounts are validated strictly (whole rupees, ₹1–₹1,00,000); pay, QR download, and copy-amount are disabled until the amount is valid.
+- No analytics, trackers, or cookies. The only browser storage is the theme preference (`localStorage`). Name/note never leave the browser except inside the UPI link.
 - The mobile "Pay via any UPI app" link omits the amount (copied to clipboard instead), since UPI apps often decline website links to personal UPI IDs that arrive with a pre-filled amount.
 
 ```bash
@@ -83,13 +89,13 @@ npm run preview  # serve the production build
 
 Key files: `src/components/SupportPage.jsx` (page), `src/config/payment.js` (UPI ID, UPI link builder), `src/lib/qrcode.js` (QR SVG + downloadable pay card), `src/hooks/useTheme.js` (theme).
 
-Deploys to Vercel (`vercel.json`) or Cloudflare (`wrangler.jsonc`).
+Production is Cloudflare Pages (`.github/workflows/deploy.yml`, headers in `public/_headers`). `vercel.json` / `wrangler.jsonc` are kept as alternatives. `public/404.html` makes unknown paths return a real 404.
 
 ---
 
 ## 📬 Leave a Note / Get in Touch
 
-If you send a contribution, please feel free to reach out with a book recommendation, feedback on my projects, or just to say hello:
+If you send support, please feel free to reach out with a book recommendation, feedback on my projects, or just to say hello:
 
 - **Email**: [advaita974@gmail.com](mailto:advaita974@gmail.com)
 - **Twitter / X**: [@w1tneess_](https://x.com/w1tneess_)
