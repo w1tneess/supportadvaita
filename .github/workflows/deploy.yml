@@ -17,9 +17,8 @@ jobs:
   build-and-test:
     name: Build & Verify Production Bundle
     runs-on: ubuntu-latest
-    env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -45,7 +44,24 @@ jobs:
           test -f dist/_headers || exit 1
           echo "Production build verified successfully!"
 
-      - name: Deploy to Cloudflare Pages (if secrets configured)
-        if: env.CLOUDFLARE_API_TOKEN != '' && github.ref == 'refs/heads/master'
+  deploy:
+    name: Deploy to Cloudflare Pages
+    needs: build-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - run: npm ci && npm run build
+      - name: Deploy (skipped when secrets are not configured)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then echo "No Cloudflare secrets; skipping deploy"; exit 0; fi
           npx wrangler pages deploy dist --project-name=supportadvaita --branch=master
