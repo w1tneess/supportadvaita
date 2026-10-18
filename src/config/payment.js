@@ -16,6 +16,21 @@ export const parseAmount = (input) => {
 // Indian digit grouping: 100000 -> "1,00,000"
 export const formatInr = (amount) => `₹${amount.toLocaleString('en-IN')}`
 
+// UPI `tn` is at most 50 characters
+const MAX_NOTE_LENGTH = 50
+
+// Keeps letters, combining marks (Bengali vowel signs and the virama are \p{M}, not \p{L}), digits,
+// '_', whitespace and . , ! ? -. Everything else (& = # % ; quotes, emoji, ...) is dropped to prevent
+// parameter pollution. NFC makes equivalent Bengali sequences identical; the limit counts code points,
+// so a surrogate pair is never cut in half (encodeURIComponent throws on a lone surrogate).
+export const sanitizeNote = (note) =>
+  typeof note === 'string'
+    ? [...note.normalize('NFC').replace(/[^\p{L}\p{M}\p{N}_\s.,!?-]/gu, '').replace(/\s+/g, ' ').trim()]
+        .slice(0, MAX_NOTE_LENGTH)
+        .join('')
+        .trim()
+    : ''
+
 export const PAYMENT_CONFIG = {
   upiId: 'advaita@fam',
   recipientName: 'Advaita Chandra',
@@ -35,11 +50,7 @@ export const PAYMENT_CONFIG = {
     params.set('cu', 'INR')
     if (withAmount && validAmount) params.set('am', validAmount.toFixed(2))
 
-    // Strip &, =, ?, #, %, ; etc. to prevent parameter pollution; tn max 50 chars
-    const cleanNote = typeof note === 'string'
-      ? note.replace(/[^\w\s.,!?-]/g, '').replace(/\s+/g, ' ').trim().slice(0, 50)
-      : ''
-    params.set('tn', cleanNote || 'Support Advaita Chandra')
+    params.set('tn', sanitizeNote(note) || 'Support Advaita Chandra')
     return toQuery(params)
   },
 
