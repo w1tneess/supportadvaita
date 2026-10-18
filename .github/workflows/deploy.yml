@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run unit tests
+        run: npm test
+
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high
 
@@ -58,6 +61,15 @@ jobs:
           test "$(head -c 3 dist/sitemap.xml | od -An -tx1 | tr -d ' ')" != "efbbbf" || { echo "sitemap.xml has a BOM"; exit 1; }
           echo "Production build verified successfully!"
 
+      # The deploy job ships exactly this verified bundle; it never rebuilds
+      - name: Upload verified bundle
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist
+          path: dist
+          if-no-files-found: error
+          retention-days: 7
+
   deploy:
     name: Deploy to Cloudflare Pages
     needs: build-and-test
@@ -74,7 +86,16 @@ jobs:
         with:
           node-version: 22
           cache: 'npm'
-      - run: npm ci && npm run build
+      # Installs the lockfile-pinned wrangler only; the site itself is not rebuilt here
+      - run: npm ci
+      - name: Download verified bundle
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: dist
+      - name: Confirm the bundle is the verified one
+        run: |
+          test -f dist/index.html && test -f dist/404.html && test -f dist/_headers || { echo "Downloaded bundle is incomplete"; exit 1; }
       - name: Deploy (skipped when secrets are not configured)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
