@@ -85,11 +85,14 @@ npm install
 npm run dev      # local dev server
 npm run build    # production build -> dist/
 npm run preview  # serve the production build
+npm test         # unit tests for the UPI link builder and note sanitizer
 ```
 
 Key files: `src/components/SupportPage.jsx` (page), `src/config/payment.js` (UPI ID, UPI link builder), `src/lib/qrcode.js` (QR SVG + downloadable pay card), `src/hooks/useTheme.js` (theme).
 
-Production is Cloudflare Pages (`.github/workflows/deploy.yml`, headers in `public/_headers`). `vercel.json` / `wrangler.jsonc` are kept as alternatives. `public/404.html` makes unknown paths return a real 404.
+Production is built and deployed by **Cloudflare Workers Builds** (Worker `paytoadvaita`, configured by `wrangler.jsonc`); headers come from `public/_headers`. `.github/workflows/deploy.yml` only verifies the build and uploads the verified bundle; its Cloudflare Pages deploy step does nothing unless `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` are set. No Vercel deployment exists; `vercel.json` is a leftover whose headers duplicate `public/_headers`. `public/404.html` makes unknown paths return a real 404.
+
+Notes are limited to letters (including Bengali), digits and basic punctuation. Before changing how the note (`tn`) is built, test a non-ASCII note in real UPI apps (GPay, PhonePe, Paytm, BHIM, FamApp): the unit tests prove the encoding, not that every app displays it.
 
 ---
 
